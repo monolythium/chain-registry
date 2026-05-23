@@ -26,7 +26,7 @@ them top-to-bottom for first-touch.
 | `url` | string | yes | Full URL including scheme + port. HTTPS preferred for public networks. |
 | `provider` | string | yes | Operator identifier. `monolythium-foundation` for foundation nodes; community operators use a self-chosen slug. |
 | `region` | string | no | Hetzner region code (`fsn1`, `nbg1`, `hel1`, `ash`, `sin`) or human region (`us-east`, `eu-west`). Used for latency-aware client routing. |
-| `tier` | enum | yes | `official` (foundation-operated) or `community` (third-party). Clients prefer `official` for first-touch. |
+| `tier` | enum | yes | `official` (foundation-operated, healthy), `degraded` (foundation-operated but currently unhealthy — e.g. resyncing, partial state), or `community` (third-party). Clients prefer `official` for first-touch and SHOULD skip `degraded` for routing unless explicitly asked. |
 | `archive` | bool | no | `true` if the node serves full historical state. Default `false` (head-only). |
 | `ws_url` | string | no | WebSocket endpoint if separate from `url`. |
 | `notes` | string | no | Free-form. Document rate limits, SLA, contact. |

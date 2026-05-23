@@ -49,15 +49,15 @@ notes    = "operator-5"
 url      = "http://87.99.145.48:8545"
 provider = "monolythium-foundation"
 region   = "ash"
-tier     = "official"
-notes    = "operator-6; US east"
+tier     = "degraded"
+notes    = "operator-6; US east. Currently serving genesis-only state (eth_blockNumber == 0 against a live chain at ~#690k as of 2026-05-23). Re-promote to official once it catches up — `monolythium-node status` on the box, then re-test with eth_blockNumber."
 
 [[rpc]]
 url      = "http://5.223.85.76:8545"
 provider = "monolythium-foundation"
 region   = "sin"
-tier     = "official"
-notes    = "operator-7; APAC"
+tier     = "degraded"
+notes    = "operator-7; APAC. Currently serving genesis-only state (eth_blockNumber == 0 against a live chain at ~#690k as of 2026-05-23). Re-promote to official once it catches up — `monolythium-node status` on the box, then re-test with eth_blockNumber."
 
 # ---- P2P seeds ----
 # libp2p multiaddrs for the foundation operators advertised here. Port 29898 is
