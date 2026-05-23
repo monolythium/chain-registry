@@ -9,7 +9,7 @@ genesis_hash = "0x325057e476b7be3730a22c92b9289f4a14a3414a2a081bd279b43eeba36b00
 
 # Short SHA of the mono-core commit each advertised foundation operator
 # was built from. Track production releases at
-# https://github.com/monolythium-vision/mono-core
+# https://github.com/monolythium/mono-core
 binary_sha   = "44a9ec4"
 
 # ---- Foundation RPC endpoints ----

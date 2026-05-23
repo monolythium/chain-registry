@@ -15,7 +15,7 @@ A small, structured catalog of Monolythium networks: chain id, genesis hash, pub
 - **Wallet authors** wiring "Add Monolythium network" buttons.
 - **Infrastructure operators** scripting node bootstraps (`monolythium node start --network testnet-69420`).
 - **dApp developers** picking an RPC URL without spelunking through Discord pins.
-- **The official SDK** ([`monolythium-core-sdk`](https://github.com/monolythium-vision/mono-core-sdk)) which vendors a snapshot at release time + offers an opt-in runtime fetch from this repo.
+- **The official SDK** ([`monolythium-core-sdk`](https://github.com/monolythium/mono-core-sdk)) which vendors a snapshot at release time + offers an opt-in runtime fetch from this repo.
 
 If you're a power user with a single private node, you don't need this — pass your URL directly to the SDK.
 
@@ -24,7 +24,7 @@ If you're a power user with a single private node, you don't need this — pass 
 ### Curl + jq
 
 ```bash
-curl -s https://raw.githubusercontent.com/monolythium-vision/chain-registry/main/chains/testnet-69420.toml | head
+curl -s https://raw.githubusercontent.com/monolythium/chain-registry/master/chains/testnet-69420.toml | head
 ```
 
 ### Programmatic (Rust)
