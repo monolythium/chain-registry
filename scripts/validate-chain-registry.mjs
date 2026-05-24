@@ -8,6 +8,7 @@ const ML_DSA_65_PUBLIC_KEY_BYTES = 1952;
 const BLS_PUBLIC_KEY_BYTES = 48;
 const HASH_BYTES = 32;
 const SIGNER_ID_BYTES = 20;
+const RPC_TIERS = new Set(["official", "degraded", "community"]);
 
 const ROOT_KEYS = new Set([
   "chain_id",
@@ -345,8 +346,8 @@ function validateRpc(rpc, label, errors) {
     }
   }
   requireString(rpc.provider, `${label}.provider`, errors);
-  if (rpc.tier !== "official" && rpc.tier !== "community") {
-    errors.push(`${label}.tier must be official or community`);
+  if (!RPC_TIERS.has(rpc.tier)) {
+    errors.push(`${label}.tier must be official, degraded, or community`);
   }
   if (rpc.archive !== undefined && typeof rpc.archive !== "boolean") {
     errors.push(`${label}.archive must be boolean when present`);

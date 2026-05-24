@@ -59,7 +59,7 @@ After connection the client uses the on-chain `node-registry` precompile (`0x100
 
 ## Adding or updating a network
 
-For now, only foundation-operated nodes are listed (`tier = "official"`). Once mainnet ships and community-run RPCs come online we'll accept PRs adding `tier = "community"` entries — see [CONTRIBUTING.md](./CONTRIBUTING.md) when it's published.
+For now, only foundation-operated nodes are listed (`tier = "official"` or `tier = "degraded"` while an endpoint is unhealthy/resyncing). Once mainnet ships and community-run RPCs come online we'll accept PRs adding `tier = "community"` entries — see [CONTRIBUTING.md](./CONTRIBUTING.md) when it's published.
 
 Before opening a PR, run the local validator:
 
