@@ -12,6 +12,43 @@ genesis_hash = "0x325057e476b7be3730a22c92b9289f4a14a3414a2a081bd279b43eeba36b00
 # https://github.com/monolythium/mono-core
 binary_sha   = "44a9ec4"
 
+# ---- Native receipt proof trust policy ----
+# Optional trust metadata for SDK-side native receipt proof verification.
+# This testnet entry intentionally does not publish active signer keys yet.
+# Do not uncomment placeholders; publish only real, intended-active keys.
+#
+# [receipt_proof_trust.archive]
+# signature_threshold = 2
+# valid_from_height = 0
+# valid_to_height = 12345
+#
+# [[receipt_proof_trust.archive.signers]]
+# public_key = "0x..."
+# signer_id = "0x..."
+# valid_from_height = 0
+# valid_to_height = 12345
+# notes = "placeholder only"
+#
+# [receipt_proof_trust.finality]
+# mode = "cluster"
+# chain_id = 69420
+# threshold = 5
+# committee_size = 7
+# cluster_public_key = "0x..."
+# valid_from_round = 0
+# valid_to_round = 12345
+#
+# # Alternative finality policy shape, instead of cluster mode:
+# # [receipt_proof_trust.finality]
+# # mode = "multisig"
+# # threshold = 5
+# # [[receipt_proof_trust.finality.signers]]
+# # authority_index = 0
+# # public_key = "0x..."
+# # valid_from_round = 0
+# # valid_to_round = 12345
+# # notes = "placeholder only"
+
 # ---- Foundation RPC endpoints ----
 # Order = first-touch preference. Clients walk top-to-bottom and pick
 # the first reachable endpoint. After connection the SDK switches to

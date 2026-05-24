@@ -67,9 +67,23 @@ Every chain TOML file has the same shape. See [`schemas/chain.schema.md`](./sche
 
 Mandatory top-level fields: `chain_id`, `network`, `genesis_hash`, `binary_sha`. At least one `[[rpc]]` and one `[[p2p]]` block. Explorers are optional but encouraged.
 
+Chain files may also publish an optional `[receipt_proof_trust]`
+policy. When present, it describes SDK-side trust metadata for native
+receipt proof verification: archive ML-DSA signer public keys and
+signature threshold, plus a finality BLS policy using either cluster or
+multisig mode. Height and round validity bounds are optional.
+
 ## Trust model
 
 This repo is **not** a substitute for cryptographic verification. The on-chain genesis hash and the binary `binary_sha` are the only authoritative pins; an RPC URL listed here can be MITM'd, censored, or rate-limited at any time. Treat the registry as a starting list, not a trust anchor.
+
+Native receipt proof trust metadata, if present, is only input material
+for SDK verification. It is not proof that archive nodes are live, that a
+receipt exists, or that a chain state is final by itself. Clients must
+verify the receipt proof, signatures, thresholds, key validity bounds,
+and finality transcript, and must fail closed when required trust
+metadata is missing, malformed, expired, or outside its configured
+height/round bounds.
 
 If a listed endpoint is misbehaving, open an issue — we'll mark it stale or remove it.
 

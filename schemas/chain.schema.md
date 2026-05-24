@@ -50,6 +50,87 @@ Block explorers / Monoscan instances. Optional but encouraged.
 | `name` | string | yes | Display name. |
 | `kind` | enum | no | `monoscan` (canonical), `etherscan-fork`, `custom`. Default `monoscan`. |
 
+## `[receipt_proof_trust]`
+
+Optional trust metadata for SDK verification of native receipt proofs.
+If absent, the registry advertises no native receipt proof trust policy
+for the network; clients that require one MUST fail closed or obtain the
+policy from another authenticated source.
+
+When present, the table MUST include both
+`[receipt_proof_trust.archive]` and
+`[receipt_proof_trust.finality]`.
+
+Registry data is not proof of live availability, receipt existence, or
+finality by itself. Clients still have to verify the proof payload,
+archive signatures, finality signatures/transcripts, thresholds, and
+validity bounds.
+
+### `[receipt_proof_trust.archive]`
+
+Archive receipt attestations use ML-DSA-65 signer public keys and a
+signature threshold over the active signer set after height validity
+bounds are applied.
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `signature_threshold` | `u32` | yes | Minimum number of valid archive ML-DSA-65 signatures required. Must be at least 1 and no greater than the active signer count. |
+| `valid_from_height` | `u64` | no | First block height for which the archive policy is valid, inclusive. Missing means unbounded from genesis. |
+| `valid_to_height` | `u64` | no | Last block height for which the archive policy is valid, inclusive. Missing means no height upper bound. |
+
+#### `[[receipt_proof_trust.archive.signers]]`
+
+At least one signer is required when the archive policy is present.
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `public_key` | hex string (`0x...`) | yes | 1952-byte ML-DSA-65 public key. |
+| `signer_id` | hex string (`0x...`) | no | 20-byte canonical signer id for diagnostics and key rotation. |
+| `valid_from_height` | `u64` | no | First block height for which the signer is valid, inclusive. Missing means unbounded from genesis. |
+| `valid_to_height` | `u64` | no | Last block height for which the signer is valid, inclusive. Missing means no height upper bound. |
+| `notes` | string | no | Free-form operator notes. Do not put secrets here. |
+
+Duplicate signer `public_key` values are invalid. Duplicate non-empty
+`signer_id` values are invalid.
+
+### `[receipt_proof_trust.finality]`
+
+Finality verification uses one of two mutually exclusive BLS policy
+modes:
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `mode` | enum | yes | `cluster` or `multisig`. |
+| `chain_id` | `u64` | no | Chain id override for finality verification. SDK helpers default this to the top-level `chain_id`. |
+| `threshold` | `u32` | yes | Minimum number of finality signatures required. Must be at least 1 and no greater than `committee_size` in cluster mode or the active signer count in multisig mode. |
+| `committee_size` | `u32` | mode-dependent | Required only when `mode = "cluster"`. Total cluster committee size. |
+| `cluster_public_key` | hex string (`0x...`) | mode-dependent | Required only when `mode = "cluster"`. 48-byte BLS cluster public key. |
+| `valid_from_round` | `u64` | no | First consensus round for which the finality policy is valid, inclusive. Missing means unbounded from round 0. |
+| `valid_to_round` | `u64` | no | Last consensus round for which the finality policy is valid, inclusive. Missing means no round upper bound. |
+
+For `cluster`, `committee_size` and `cluster_public_key` are required
+and the multisig signer roster MUST be absent. For `multisig`, at least
+one signer is required and `committee_size` and `cluster_public_key`
+MUST be absent.
+
+#### `[[receipt_proof_trust.finality.signers]]`
+
+Only valid when `mode = "multisig"`.
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `authority_index` | `u32` | yes | Authority index used by the finality transcript in multisig mode. Unique within the finality roster. |
+| `public_key` | hex string (`0x...`) | yes | 48-byte BLS public key. |
+| `valid_from_round` | `u64` | no | First consensus round for which the signer is valid, inclusive. Missing means unbounded from round 0. |
+| `valid_to_round` | `u64` | no | Last consensus round for which the signer is valid, inclusive. Missing means no round upper bound. |
+| `notes` | string | no | Free-form operator notes. Do not put secrets here. |
+
+Duplicate `authority_index` or `public_key` values are invalid.
+
+If a configured validity bound cannot be checked against a proof, the
+client MUST reject the proof. Validators SHOULD reject entries where a
+`valid_to_*` value is less than the matching `valid_from_*` value.
+
 ## Reserved fields
 
 The following keys are reserved for future use and MUST NOT be set today:
