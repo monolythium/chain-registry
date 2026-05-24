@@ -4,6 +4,11 @@ Every file under [`../chains/`](../chains) follows this shape. Validators
 that reject extra fields are encouraged but not required — additive
 fields land in patch versions.
 
+Run `node scripts/validate-chain-registry.mjs` from the repository root
+before publishing registry changes. The validator is the current
+machine-readable acceptance gate for v1 chain files and receipt proof
+trust metadata.
+
 ## Top-level fields
 
 | Field | Type | Required | Description |

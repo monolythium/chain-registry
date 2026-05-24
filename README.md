@@ -61,6 +61,16 @@ After connection the client uses the on-chain `node-registry` precompile (`0x100
 
 For now, only foundation-operated nodes are listed (`tier = "official"`). Once mainnet ships and community-run RPCs come online we'll accept PRs adding `tier = "community"` entries — see [CONTRIBUTING.md](./CONTRIBUTING.md) when it's published.
 
+Before opening a PR, run the local validator:
+
+```bash
+node scripts/validate-chain-registry.mjs
+```
+
+The validator is dependency-free and checks every `chains/*.toml` file,
+including native receipt proof trust policy completeness, key lengths,
+thresholds, duplicate signer rows, and validity bounds.
+
 ## Schema
 
 Every chain TOML file has the same shape. See [`schemas/chain.schema.md`](./schemas/chain.schema.md) for the full reference.
