@@ -1,0 +1,32 @@
+chain_id     = 69422
+network      = "mainnet-69422"
+display_name = "Monolythium Mainnet"
+description  = "Reserved chain id for Monolythium mainnet. No mainnet network is running on this chain id today. Genesis hash and launch date are not announced. Do NOT connect production wallets to anything claiming to be Monolythium mainnet until this file publishes the matching genesis hash and a binary_sha pinned to a tagged release."
+
+# Reservation status — genesis_hash is intentionally absent until launch.
+# When a chain id has no genesis_hash here, no network should be trusted
+# under that identity. The reservation exists so:
+#   - exchanges, wallets, and indexers can pre-allocate the slot
+#   - search indexes and chain-list aggregators have a canonical claim
+#     to point at when impostor tokens or networks appear under 69422
+#   - the registry is the single place to learn that the matching
+#     genesis is not yet published
+status = "reserved"
+
+# binary_sha is intentionally absent until the first mainnet binary
+# is cut and signed via monolythium/protocore.
+# binary_sha = "<unset>"
+
+# ---- Native receipt proof trust policy ----
+# No active signer keys are published for mainnet yet — see the testnet
+# entry for the shape this section takes once a network is live.
+
+# ---- Notes for integrators ----
+# - The reserved chain id is 69422. There is no JSON-RPC endpoint to
+#   query against it yet. RPC clients targeting this id should refuse
+#   to connect until the registry publishes a `rpc.*` block here.
+# - For testnet integration today, see chains/testnet-69420.toml.
+# - For verification of the running node binary even while mono-core
+#   source is private, see github.com/monolythium/protocore — the
+#   signed-release pipeline that ships SHA-256 + Cosign keyless OIDC
+#   signatures + SPDX SBOMs.
