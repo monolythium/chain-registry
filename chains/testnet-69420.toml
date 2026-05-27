@@ -10,7 +10,7 @@ genesis_hash = "0xad64b785debc17aef3fb4a8d944c2c7c9156394bb08d5ab576ec85782732f8
 # Short SHA of the mono-core commit each advertised foundation operator
 # was built from. Track production releases at
 # https://github.com/monolythium/mono-core
-binary_sha   = "058c883"
+binary_sha   = "253cac0b"
 
 # ---- Native receipt proof trust policy ----
 # Optional trust metadata for SDK-side native receipt proof verification.
