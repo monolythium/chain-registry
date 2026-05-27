@@ -5,12 +5,12 @@ description  = "Live development testnet for Monolythium v4.0 / LythiumDAG-BFT. 
 
 # Pinned to the genesis the live cluster is currently running. Any
 # wipe + regenesis flips this hash and bumps the registry entry.
-genesis_hash = "0x170ecd2de3b0fa91460db47bec347395c3d9400c58ea2705283e44ce5c1163c8"
+genesis_hash = "0x8d7faa5f8fdf2a70db4deadb30ef61d77a3f7bc608d6e9aa3b3cff89db3662ec"
 
 # Short SHA of the mono-core commit each advertised foundation operator
 # was built from. Track production releases at
 # https://github.com/monolythium/mono-core
-binary_sha   = "396afaee"
+binary_sha   = "7951a6bd"
 
 # ---- Native receipt proof trust policy ----
 # Optional trust metadata for SDK-side native receipt proof verification.
