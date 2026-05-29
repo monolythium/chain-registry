@@ -1,7 +1,7 @@
 chain_id     = 69420
 network      = "testnet-69420"
 display_name = "Monolythium Testnet"
-description  = "Live development testnet for Monolythium v4.0 / LythiumDAG-BFT. Foundation-operated. Wipe + regenesis is allowed without notice — do NOT store value on this network."
+description  = "Live development testnet for Monolythium / LythiumDAG-BFT. Foundation-operated. Wipe + regenesis is allowed without notice — do NOT store value on this network."
 
 # Pinned to the genesis the live cluster is currently running. Any
 # wipe + regenesis flips this hash and bumps the registry entry.
