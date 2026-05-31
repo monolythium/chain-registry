@@ -56,6 +56,18 @@ binary_sha   = "9338995a"
 # Order = first-touch preference. Clients walk top-to-bottom and pick
 # the first reachable endpoint. After connection the SDK switches to
 # on-chain `node-registry` (precompile 0x1005) for live peer selection.
+#
+# Open public RPC is enabled on every foundation node (all 12 operators +
+# 2 relays). Each protocore process listens on 0.0.0.0:8545; the cost-based
+# RPC rate-limiter is the DoS mitigation. Reachability of each endpoint below
+# was confirmed by an external eth_chainId probe returning 0x10f2c.
+
+[[rpc]]
+url      = "http://178.105.12.9:8545"
+provider = "monolythium-foundation"
+region   = "fsn1"
+tier     = "official"
+notes    = "operator-1"
 
 [[rpc]]
 url      = "http://178.105.15.216:8545"
@@ -98,6 +110,55 @@ provider = "monolythium-foundation"
 region   = "sin"
 tier     = "official"
 notes    = "operator-7; APAC"
+
+[[rpc]]
+url      = "http://142.132.180.99:8545"
+provider = "monolythium-foundation"
+region   = "fsn1"
+tier     = "official"
+notes    = "operator-8"
+
+[[rpc]]
+url      = "http://162.55.54.198:8545"
+provider = "monolythium-foundation"
+region   = "nbg1"
+tier     = "official"
+notes    = "operator-9"
+
+[[rpc]]
+url      = "http://95.217.156.190:8545"
+provider = "monolythium-foundation"
+region   = "hel1"
+tier     = "official"
+notes    = "operator-10"
+
+[[rpc]]
+url      = "http://5.223.65.201:8545"
+provider = "monolythium-foundation"
+region   = "sin"
+tier     = "official"
+notes    = "operator-11; APAC"
+
+[[rpc]]
+url      = "http://128.140.125.5:8545"
+provider = "monolythium-foundation"
+region   = "fsn1"
+tier     = "official"
+notes    = "operator-12"
+
+[[rpc]]
+url      = "http://178.105.45.210:8545"
+provider = "monolythium-foundation"
+region   = "nbg1"
+tier     = "official"
+notes    = "relay-1"
+
+[[rpc]]
+url      = "http://65.21.252.34:8545"
+provider = "monolythium-foundation"
+region   = "hel1"
+tier     = "official"
+notes    = "relay-2"
 
 # ---- P2P seeds ----
 # libp2p multiaddrs for the foundation operators advertised here. Port 29898 is
