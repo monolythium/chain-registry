@@ -5,12 +5,12 @@ description  = "Live development testnet for Monolythium / LythiumDAG-BFT. Found
 
 # Pinned to the genesis the live cluster is currently running. Any
 # wipe + regenesis flips this hash and bumps the registry entry.
-genesis_hash = "0x7f7d256448dab87a3512840ecd0a9c013e78d796c75cfeefe9599f388c0e7ca0"
+genesis_hash = "0xcbbec41804859aa24b71274b60a2eece5a6990a868fdcd308aece369a386b74d"
 
 # Short SHA of the mono-core commit each advertised foundation operator
 # was built from. Track production releases at
 # https://github.com/monolythium/mono-core
-binary_sha   = "dc919df8"
+binary_sha   = "6af59e44"
 
 # ---- Native receipt proof trust policy ----
 # Optional trust metadata for SDK-side native receipt proof verification.
@@ -103,27 +103,27 @@ notes    = "operator-7; APAC"
 # the mesh as a non-foundation peer needs to be added there too.
 
 [[p2p]]
-multiaddr = "/ip4/178.105.15.216/tcp/29898/p2p/12D3KooWGJcPAe8GcCGHMeny5pYCxEFTCMJwPgHbs9jafbaHxxwo"
+multiaddr = "/ip4/178.105.15.216/tcp/29898/p2p/12D3KooWPSgqGT9Ks9Svs6SyC4Qppcv2QfsWmoGeQHndkQhdZDPe"
 region    = "fsn1"
 
 [[p2p]]
-multiaddr = "/ip4/178.104.233.182/tcp/29898/p2p/12D3KooWG8DYeaCACbCMytw9isGH7zmoZZNUez66RkYUe1n58qWy"
+multiaddr = "/ip4/178.104.233.182/tcp/29898/p2p/12D3KooWHeKCBmzrWyFY1GzJeMQHY5caPMeqHNKiCMeUpW7FARmt"
 region    = "nbg1"
 
 [[p2p]]
-multiaddr = "/ip4/65.108.94.1/tcp/29898/p2p/12D3KooWHTVv5kyxMS5caT3G7AdmTbw8GULGmoTEpwjLVHdP5Gae"
+multiaddr = "/ip4/65.108.94.1/tcp/29898/p2p/12D3KooWLBz38neCVbMsz1aKUtsdDbVd23pX5vmSb3Z6rKqvFr7D"
 region    = "hel1"
 
 [[p2p]]
-multiaddr = "/ip4/95.216.154.155/tcp/29898/p2p/12D3KooWLWeLFxNfYxm64oCW9ooZtZTFsxpAb54YysyMMRgXMsUU"
+multiaddr = "/ip4/95.216.154.155/tcp/29898/p2p/12D3KooWF1n8MWb8BzHMvuba6dGm2Yto6PvZv843gcbyfhP5Gqzo"
 region    = "hel1"
 
 [[p2p]]
-multiaddr = "/ip4/87.99.145.48/tcp/29898/p2p/12D3KooWAhxDZKb5iV54vxpaGeVdtGUsY3SfK7gct7VU8vdLEonR"
+multiaddr = "/ip4/87.99.145.48/tcp/29898/p2p/12D3KooWAZNZ26vXVVmT6hUb7Hxe9414WekE4FLygqzJsGcmui1f"
 region    = "ash"
 
 [[p2p]]
-multiaddr = "/ip4/5.223.85.76/tcp/29898/p2p/12D3KooWKZWN937qqRPT6Xmz4wUU1LoSFzrDQLKAK9DXYvnuzR5X"
+multiaddr = "/ip4/5.223.85.76/tcp/29898/p2p/12D3KooWHpeD2vy6mxsQaETeQGEY5RtuxaaEHRn3Tkw4iKU1GhvT"
 region    = "sin"
 
 # ---- Explorers ----
