@@ -5,12 +5,15 @@ description  = "Live development testnet for Monolythium / LythiumDAG-BFT. Found
 
 # Pinned to the genesis the live cluster is currently running. Any
 # wipe + regenesis flips this hash and bumps the registry entry.
-genesis_hash = "0x687f97c5334d479a0959ec0854b863b3491a93332983d8cde3d302a3228f2a5e"
+genesis_hash = "0x1769ae4a741e3f326a6f6b2886abe118a10560688c365a654dc5805397d64e14"
 
 # Short SHA of the mono-core commit each advertised foundation operator
 # was built from. Track production releases at
 # https://github.com/monolythium/mono-core
-binary_sha   = "a4054e80"
+# Signed node release the foundation operators are running:
+# protocore v0.0.24-testnet — tag + tarball at
+# https://github.com/monolythium/protocore/releases
+binary_sha   = "9338995a"
 
 # ---- Native receipt proof trust policy ----
 # Optional trust metadata for SDK-side native receipt proof verification.
@@ -103,27 +106,27 @@ notes    = "operator-7; APAC"
 # the mesh as a non-foundation peer needs to be added there too.
 
 [[p2p]]
-multiaddr = "/ip4/178.105.15.216/tcp/29898/p2p/12D3KooWSfZeqhPKMDbC8KjddswydFrEVHW1oyAgk3WvTrtzhEdy"
+multiaddr = "/ip4/178.105.15.216/tcp/29898/p2p/12D3KooWAt4jz3gempTvZNfdfz58jyZuA4gpVMyae9pTknzx4x7q"
 region    = "fsn1"
 
 [[p2p]]
-multiaddr = "/ip4/178.104.233.182/tcp/29898/p2p/12D3KooWLAePhxqqwH4WAdLXdT5VoBVWgP1G7upbzi4YWNCXy5rX"
+multiaddr = "/ip4/178.104.233.182/tcp/29898/p2p/12D3KooWRxEsAJKTv5mxCvLWxNCcYr2ZGqfyvrszWvAZqnp5MNh4"
 region    = "nbg1"
 
 [[p2p]]
-multiaddr = "/ip4/65.108.94.1/tcp/29898/p2p/12D3KooWRsDkWAxKpb1sojwv35LnAASQkaqzYW4FCdXeiiyD7DKq"
+multiaddr = "/ip4/65.108.94.1/tcp/29898/p2p/12D3KooWBemaWWFktztKYL3FQegTN8LLPACa5shn8HDpvmGZ9cjb"
 region    = "hel1"
 
 [[p2p]]
-multiaddr = "/ip4/95.216.154.155/tcp/29898/p2p/12D3KooWCFJdYsTWoXy9nBsHJFHEE4o2GXWLQhDmQtt9QXpnajo8"
+multiaddr = "/ip4/95.216.154.155/tcp/29898/p2p/12D3KooWHQLzNgQs9hNLixPbb42fgN6fhDxnDQzZW34bHTS3g1eJ"
 region    = "hel1"
 
 [[p2p]]
-multiaddr = "/ip4/87.99.145.48/tcp/29898/p2p/12D3KooWPEKV2u965BUpebFh1ALyDDABSmoHNwGNESiy4eaTicJL"
+multiaddr = "/ip4/87.99.145.48/tcp/29898/p2p/12D3KooWPcnEAhLMfeW7JrRoDWyQ7ThGJw8iVkG7RVnAoWtrnA9C"
 region    = "ash"
 
 [[p2p]]
-multiaddr = "/ip4/5.223.85.76/tcp/29898/p2p/12D3KooWKBL3vguAKwWejDp7Br7C4xEtiQjpDSZhCTEMHLvruon6"
+multiaddr = "/ip4/5.223.85.76/tcp/29898/p2p/12D3KooWQ5aTSijMN79YxvX9uFw5w9Qn3QNFWCX8b7rDWdFLAB1m"
 region    = "sin"
 
 # ---- Explorers ----
