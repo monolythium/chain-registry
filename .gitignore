@@ -25,6 +25,9 @@ TODO.md
 secrets/
 credentials/
 
+# Node tooling (validator dependency — restored via `npm ci`)
+node_modules/
+
 # OS / editor cruft
 .DS_Store
 Thumbs.db

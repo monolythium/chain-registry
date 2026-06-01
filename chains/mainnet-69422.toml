@@ -17,6 +17,21 @@ status = "reserved"
 # is cut and signed via monolythium/protocore.
 # binary_sha = "<unset>"
 
+# ---- Dynamic genesis resolution (no mainnet genesis exists yet) ----
+# When mainnet launches, this entry will publish genesis_hash + genesis_url +
+# genesis_sha256 (the same dynamic-resolution fields documented on the testnet
+# entry) PLUS the mainnet-only hardening fields below, which break the circular
+# testnet trust model by adding factors the registry writer does not control.
+# These are documented placeholders only — they are intentionally absent until
+# a signed mainnet genesis is cut. See README.md "Dynamic genesis resolution".
+#
+# genesis_url          = "<https URL of chains/genesis/mainnet-69422.genesis.toml>"
+# genesis_sha256       = "<sha256 of the genesis blob>"
+# genesis_sig_url      = "<https URL of the cosign-signed genesis blob signature>"
+# genesis_cert_identity = "<cosign certificate identity / SAN regex, image-baked>"
+# genesis_cert_issuer   = "<cosign OIDC issuer URL, image-baked>"
+# registry_rev          = "<full 40-char commit SHA of this registry, image-baked>"
+
 # ---- Native receipt proof trust policy ----
 # No active signer keys are published for mainnet yet — see the testnet
 # entry for the shape this section takes once a network is live.

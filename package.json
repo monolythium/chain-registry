@@ -1,0 +1,22 @@
+{
+  "name": "chain-registry",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Public peer / RPC / explorer / genesis index for every Monolythium network. One TOML file per network, version-controlled so wallets, dApps, infrastructure operators, and the official SDK can pin a known-good list.",
+  "type": "commonjs",
+  "scripts": {
+    "validate": "node scripts/validate-chain-registry.mjs",
+    "validate:selftest": "node scripts/validate-chain-registry.mjs --self-test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/monolythium/chain-registry.git"
+  },
+  "license": "Apache-2.0",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@noble/hashes": "1.8.0"
+  }
+}

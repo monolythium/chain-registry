@@ -1,7 +1,9 @@
 #!/usr/bin/env node
-import { readdirSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
+import { createHash } from "node:crypto";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { keccak_256 } from "@noble/hashes/sha3";
 
 const U64_MAX = (1n << 64n) - 1n;
 const ML_DSA_65_PUBLIC_KEY_BYTES = 1952;
@@ -14,6 +16,8 @@ const ROOT_KEYS = new Set([
   "chain_id",
   "network",
   "genesis_hash",
+  "genesis_url",
+  "genesis_sha256",
   "binary_sha",
   "display_name",
   "description",
@@ -47,7 +51,21 @@ const FINALITY_SIGNER_KEYS = new Set([
   "valid_to_round",
   "notes",
 ]);
-const RESERVED_ROOT_KEYS = new Set(["cluster_id", "cluster_name", "bridge_assets", "bridges"]);
+const RESERVED_ROOT_KEYS = new Set([
+  "cluster_id",
+  "cluster_name",
+  "bridge_assets",
+  "bridges",
+  // MAINNET-ONLY genesis hardening groundwork — documented as commented
+  // placeholders only (see chains/*.toml and README "Dynamic genesis
+  // resolution"). The mainnet trust model + signed-genesis pipeline are not
+  // implemented yet, so setting an ACTIVE value here today is a hard
+  // rejection until the verification path exists to enforce it.
+  "genesis_sig_url",
+  "genesis_cert_identity",
+  "genesis_cert_issuer",
+  "registry_rev",
+]);
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -134,7 +152,71 @@ cluster_public_key = "0x12"
       invalidErrors.some((error) => error.includes("finality.cluster_public_key must be 48 bytes")),
     `invalid fixture did not fail as expected: ${invalidErrors.join("; ")}`,
   );
+
+  runGenesisResolutionSelfTest();
   console.log("Self-test passed.");
+}
+
+// Exercises the dynamic-genesis security gate against the real committed
+// genesis content (chains/genesis/testnet-69420.genesis.toml). Both checks are
+// derived from the on-disk bytes, so this stays correct across any future
+// re-genesis (a wrong genesis_hash/genesis_sha256 still fails).
+function runGenesisResolutionSelfTest() {
+  const localRel = "chains/genesis/testnet-69420.genesis.toml";
+  const fullPath = path.join(repoRoot, localRel);
+  if (!existsSync(fullPath)) {
+    console.error(`genesis self-test skipped: ${localRel} is missing`);
+    process.exit(1);
+  }
+  const bytes = readFileSync(fullPath);
+  const realHash = "0x" + Buffer.from(keccak_256(bytes)).toString("hex");
+  const realSha = createHash("sha256").update(bytes).digest("hex");
+  const url = `https://raw.githubusercontent.com/monolythium/chain-registry/master/${localRel}`;
+
+  const okErrors = [];
+  validateGenesisResolution(
+    { genesis_url: url, genesis_sha256: realSha, genesis_hash: realHash },
+    "genesis-selftest-ok.toml",
+    okErrors,
+  );
+  assertSelfTest(okErrors.length === 0, `genesis-resolution valid case failed: ${okErrors.join("; ")}`);
+
+  const badHash = "0x" + "00".repeat(HASH_BYTES);
+  const badHashErrors = [];
+  validateGenesisResolution(
+    { genesis_url: url, genesis_sha256: realSha, genesis_hash: badHash },
+    "genesis-selftest-badhash.toml",
+    badHashErrors,
+  );
+  assertSelfTest(
+    badHashErrors.some((error) => error.includes("does not match genesis_hash")),
+    `genesis-resolution mismatched keccak did not fail as expected: ${badHashErrors.join("; ")}`,
+  );
+
+  const badShaErrors = [];
+  validateGenesisResolution(
+    { genesis_url: url, genesis_sha256: "0".repeat(64), genesis_hash: realHash },
+    "genesis-selftest-badsha.toml",
+    badShaErrors,
+  );
+  assertSelfTest(
+    badShaErrors.some((error) => error.includes("genesis_sha256 mismatch")),
+    `genesis-resolution mismatched sha256 did not fail as expected: ${badShaErrors.join("; ")}`,
+  );
+
+  const missingFileErrors = [];
+  validateGenesisResolution(
+    {
+      genesis_url: "https://raw.githubusercontent.com/monolythium/chain-registry/master/chains/genesis/does-not-exist.toml",
+      genesis_hash: realHash,
+    },
+    "genesis-selftest-missing.toml",
+    missingFileErrors,
+  );
+  assertSelfTest(
+    missingFileErrors.some((error) => error.includes("does not exist in this repo")),
+    `genesis-resolution missing-file case did not fail as expected: ${missingFileErrors.join("; ")}`,
+  );
 }
 
 function assertSelfTest(condition, message) {
@@ -331,6 +413,7 @@ function validateChainInfo(info, file) {
     if (info.rpc.length === 0) errors.push(`${file}: at least one [[rpc]] entry is required`);
     if (info.p2p.length === 0) errors.push(`${file}: at least one [[p2p]] entry is required`);
   }
+  validateGenesisResolution(info, file, errors);
   info.rpc.forEach((rpc, index) => validateRpc(rpc, `${file}: rpc[${index}]`, errors));
   info.p2p.forEach((p2p, index) => validateP2p(p2p, `${file}: p2p[${index}]`, errors));
   info.explorer.forEach((explorer, index) => validateExplorer(explorer, `${file}: explorer[${index}]`, errors));
@@ -338,6 +421,108 @@ function validateChainInfo(info, file) {
     validateReceiptProofTrust(info.receipt_proof_trust, `${file}: receipt_proof_trust`, errors);
   }
   return errors;
+}
+
+// Security gate for dynamic genesis resolution.
+//
+// A node bakes WHO to trust (this registry path) rather than WHAT to run, then
+// fetches the full genesis from genesis_url and requires
+// keccak256(raw on-disk bytes) == genesis_hash BEFORE init. This validator
+// enforces the same invariant at PR/push time for any genesis content
+// committed to this repo, so a human cannot merge a registry entry whose
+// pinned genesis_hash (and optional genesis_sha256) does not match the bytes
+// actually served from chains/genesis/. The keccak primitive here MUST match
+// the node's: standard keccak256 over the RAW file bytes (not a reserialized
+// or UTF-8-text variant), via the audited @noble/hashes implementation.
+function validateGenesisResolution(info, file, errors) {
+  const hasUrl = info.genesis_url !== undefined;
+  const hasSha = info.genesis_sha256 !== undefined;
+
+  if (hasSha) {
+    if (typeof info.genesis_sha256 !== "string" || !/^[0-9a-f]{64}$/u.test(info.genesis_sha256)) {
+      errors.push(`${file}: genesis_sha256 must be a 64-character lowercase hex string (no 0x prefix)`);
+    }
+  }
+
+  if (!hasUrl) {
+    // genesis_url is optional; genesis_sha256 alone is not meaningful.
+    if (hasSha) {
+      errors.push(`${file}: genesis_sha256 is set but genesis_url is missing`);
+    }
+    return;
+  }
+
+  if (typeof info.genesis_url !== "string") {
+    errors.push(`${file}: genesis_url must be a string`);
+    return;
+  }
+  let url;
+  try {
+    url = new URL(info.genesis_url);
+  } catch {
+    errors.push(`${file}: genesis_url must be a valid URL`);
+    return;
+  }
+  if (url.protocol !== "https:") {
+    errors.push(`${file}: genesis_url must use https`);
+    return;
+  }
+
+  // Map the canonical raw.githubusercontent.com URL for THIS repo back to a
+  // local path so the committed content can be verified offline in CI. Only a
+  // genesis_url that points at chains/genesis/*.toml in this registry is
+  // checked against on-disk bytes; any other host is left to a network-time
+  // check (out of scope for the offline validator).
+  const localRel = localGenesisPath(url);
+  if (!localRel) {
+    return;
+  }
+  if (!/^chains\/genesis\/[A-Za-z0-9._-]+\.toml$/u.test(localRel)) {
+    errors.push(`${file}: genesis_url must reference chains/genesis/*.toml, got ${localRel}`);
+    return;
+  }
+
+  const fullPath = path.join(repoRoot, localRel);
+  if (!existsSync(fullPath)) {
+    errors.push(`${file}: genesis_url references ${localRel} which does not exist in this repo`);
+    return;
+  }
+
+  const bytes = readFileSync(fullPath);
+
+  if (hasSha) {
+    const sha = createHash("sha256").update(bytes).digest("hex");
+    if (sha !== info.genesis_sha256) {
+      errors.push(
+        `${file}: genesis_sha256 mismatch for ${localRel}: declared ${info.genesis_sha256}, computed ${sha}`,
+      );
+    }
+  }
+
+  if (typeof info.genesis_hash === "string" && /^0x[0-9a-fA-F]{64}$/u.test(info.genesis_hash)) {
+    const computed = "0x" + Buffer.from(keccak_256(bytes)).toString("hex");
+    if (computed.toLowerCase() !== info.genesis_hash.toLowerCase()) {
+      errors.push(
+        `${file}: keccak256 of ${localRel} does not match genesis_hash: ` +
+          `declared ${info.genesis_hash}, computed ${computed}`,
+      );
+    }
+  } else {
+    errors.push(`${file}: genesis_url is set but genesis_hash is missing or malformed`);
+  }
+}
+
+// Returns the repo-relative path encoded by a raw.githubusercontent.com URL for
+// the monolythium/chain-registry repo, or null if the URL is not such a URL.
+// Form: https://raw.githubusercontent.com/monolythium/chain-registry/<ref>/<path>
+function localGenesisPath(url) {
+  if (url.hostname !== "raw.githubusercontent.com") return null;
+  const parts = url.pathname.replace(/^\/+/u, "").split("/");
+  // [org, repo, ref, ...path]
+  if (parts.length < 4) return null;
+  const [org, repo] = parts;
+  if (org !== "monolythium" || repo !== "chain-registry") return null;
+  return parts.slice(3).join("/");
 }
 
 function validateRpc(rpc, label, errors) {

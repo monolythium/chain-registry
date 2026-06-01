@@ -15,12 +15,48 @@ trust metadata.
 |---|---|---|---|
 | `chain_id` | `u64` | yes | Numeric chain id used in `eth_chainId` and tx replay protection. |
 | `network` | string | yes | Slug matching the file name (without `.toml`). Lowercase, ASCII letters / digits / hyphens, 3–32 chars. |
-| `genesis_hash` | hex string (`0x...`) | yes | 32-byte keccak hash of the canonical genesis block. The only authoritative chain-identity pin. |
+| `genesis_hash` | hex string (`0x...`) | yes | 32-byte keccak256 hash over the **raw on-disk bytes** of the canonical genesis file. The authoritative chain-identity pin and the on-chain genesis hash. |
+| `genesis_url` | string (`https://`) | no | HTTPS URL of the full genesis content for dynamic resolution (see "Dynamic genesis resolution" below). When it points at this repo's `chains/genesis/<network>.genesis.toml`, the validator verifies the on-disk bytes against `genesis_hash` (and `genesis_sha256`) offline. |
+| `genesis_sha256` | hex string (64 chars, no `0x`) | no | SHA-256 of the genesis bytes served at `genesis_url`. A cheap content pre-check; `sha256sum`-style lowercase hex. Requires `genesis_url`. NOT the chain-identity pin (`genesis_hash` is). |
 | `binary_sha` | git short SHA | yes | mono-core commit the active validator binary was built from. Lets a reader verify the chain is running known software. |
 | `display_name` | string | no | Human-readable network name for UI ("Monolythium Testnet"). Falls back to `network` if absent. |
 | `description` | string | no | One-line purpose statement. |
 | `created` | RFC-3339 date | no | When the network first launched. |
 | `status` | string | no | `reserved` for a claimed chain id with no live network yet. Reserved entries intentionally omit `genesis_hash`, `binary_sha`, `[[rpc]]`, and `[[p2p]]` until launch. |
+
+## Dynamic genesis resolution
+
+`genesis_url` + `genesis_sha256` let a node resolve the **full** genesis at
+boot instead of running a genesis baked into its OS image, so a re-genesis is
+picked up on the next boot with no image rebuild. The image bakes *who* to
+trust (this registry path), not *what* to run.
+
+A node fetches the registry entry, fetches the genesis from `genesis_url`,
+recomputes **keccak256 over the raw on-disk bytes**, and requires it to equal
+`genesis_hash` **before** init. The same invariant is enforced offline at
+PR/push time by `scripts/validate-chain-registry.mjs` for any genesis committed
+to this repo (`chains/genesis/*.toml`): the file must exist, its sha256 must
+equal `genesis_sha256` (when set), and `keccak256(raw bytes) == genesis_hash`.
+
+**Testnet trust model.** On testnet, `genesis_hash` is the authoritative pin
+and the only integrity check. The expected hash and the served content share a
+single trust root (this repo / GitHub), so the keccak match is **circular** —
+it proves the content matches a number the same writer chose. It is **not**
+cryptographic integrity against a registry or GitHub compromise. This is
+acceptable only because testnet is value-less and wiped without notice.
+
+**Mainnet-only genesis hardening (groundwork — not used on testnet).** The
+fields below break that circularity by adding factors the registry writer does
+not control. They are documented placeholders only: they are commented out in
+the chain files and are a **hard rejection** if set as active values today
+(no verification path enforces them yet). A node MUST ignore them on testnet.
+
+| Field | Type | Used by | Description |
+|---|---|---|---|
+| `genesis_sig_url` | string (`https://`) | mainnet | HTTPS URL of the detached cosign signature (`.sig`) over the genesis blob. Verified with `cosign verify-blob` **before** the keccak hash check. |
+| `genesis_cert_identity` | string | mainnet | Expected cosign certificate identity (OIDC SAN regex). **Image-baked**, never trusted from the registry — the image pins *who* may sign genesis. |
+| `genesis_cert_issuer` | string | mainnet | Expected cosign OIDC issuer URL (e.g. the GitHub Actions OIDC issuer). Image-baked, used with `genesis_cert_identity`. |
+| `registry_rev` | string (40-char commit SHA) | mainnet | Commit-SHA pin for this registry, baked per signed image instead of the moving `master` ref, so a registry-account compromise or stale CDN edge cannot silently redirect `genesis_hash` / `genesis_url`. |
 
 ## `[[rpc]]`
 
@@ -143,9 +179,10 @@ The following keys are reserved for future use and MUST NOT be set today:
 
 - `cluster_id`, `cluster_name` — reserved for the cluster-name registry view (Law §5.9).
 - `bridge_assets`, `bridges` — reserved for bridge / IBC integration metadata (will move into a sibling `bridges/` tree, not inline in chain files).
+- `genesis_sig_url`, `genesis_cert_identity`, `genesis_cert_issuer`, `registry_rev` — mainnet-only genesis hardening groundwork (see "Dynamic genesis resolution"). Documented as commented placeholders only; rejected as active values until the mainnet verification path exists to enforce them.
 
-Setting a reserved field is a hard rejection at validation time once a
-schema validator ships.
+Setting a reserved field is a hard rejection at validation time
+(`scripts/validate-chain-registry.mjs`).
 
 ## Versioning
 

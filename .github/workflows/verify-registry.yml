@@ -1,0 +1,44 @@
+name: verify-registry
+
+# Security gate for the chain registry.
+#
+# This workflow runs the registry validator on every push and pull request. The
+# validator enforces the dynamic-genesis invariant: for any chain entry whose
+# genesis_url points at committed genesis content under chains/genesis/, the
+# referenced file MUST exist and keccak256 over its raw bytes MUST equal the
+# pinned genesis_hash (and sha256 MUST equal genesis_sha256 when present). A
+# human must not be able to merge a genesis whose content does not match the
+# pinned hash, so this job is required to pass before merge.
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      # Use the pinned, integrity-checked lockfile. The only dependency is the
+      # audited @noble/hashes keccak256 used as the security gate's hash
+      # primitive (same primitive the node uses: keccak256 over raw file bytes).
+      - name: Install pinned dependencies
+        run: npm ci
+
+      - name: Validator self-test
+        run: npm run validate:selftest
+
+      - name: Validate registry + genesis content hashes
+        run: npm run validate

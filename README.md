@@ -64,12 +64,20 @@ For now, only foundation-operated nodes are listed (`tier = "official"` or `tier
 Before opening a PR, run the local validator:
 
 ```bash
-node scripts/validate-chain-registry.mjs
+npm ci                                    # installs the pinned @noble/hashes keccak256
+node scripts/validate-chain-registry.mjs  # or: npm run validate
 ```
 
-The validator is dependency-free and checks every `chains/*.toml` file,
-including native receipt proof trust policy completeness, key lengths,
-thresholds, duplicate signer rows, and validity bounds.
+The validator checks every `chains/*.toml` file: native receipt proof trust
+policy completeness, key lengths, thresholds, duplicate signer rows, validity
+bounds, and — for any entry with a `genesis_url` pointing at committed
+`chains/genesis/*.toml` content — that the genesis file exists and its
+`keccak256(raw bytes) == genesis_hash` (and `sha256 == genesis_sha256` when
+set). Its only dependency is the audited `@noble/hashes` keccak256, pinned via
+`package-lock.json`. The same check runs in CI
+(`.github/workflows/verify-registry.yml`) on every push and PR and is required
+to pass before merge — a human must not be able to merge a genesis whose
+content does not match the pinned hash.
 
 ## Schema
 
@@ -82,6 +90,70 @@ policy. When present, it describes SDK-side trust metadata for native
 receipt proof verification: archive ML-DSA signer public keys and
 signature threshold, plus a finality BLS policy using either cluster or
 multisig mode. Height and round validity bounds are optional.
+
+## Dynamic genesis resolution
+
+The registry can serve the **full** genesis content, not just the hash. Each
+live network may publish `genesis_url` (the committed
+`chains/genesis/<network>.genesis.toml`) and `genesis_sha256` alongside its
+`genesis_hash`.
+
+A node uses these to resolve genesis at first boot instead of running a genesis
+baked into its OS image:
+
+1. Fetch the network's registry entry (this repo, over HTTPS).
+2. Fetch the full genesis from `genesis_url` (over HTTPS).
+3. Recompute **keccak256 over the raw on-disk bytes** of the fetched genesis.
+4. Require it to equal the entry's `genesis_hash` **before** init. On mismatch,
+   fail closed.
+
+The OS image therefore bakes **who to trust** (the registry path), not **what
+to run** (no baked genesis hash). A Foundation re-genesis flips `genesis_hash`
++ `genesis_url` in this repo and is picked up on the next boot — the image
+survives re-genesis with no rebuild.
+
+### Trust model — be honest about what the hash-match proves
+
+**Testnet (live now).** `genesis_hash` is the authoritative pin, and the gate
+is: HTTPS fetch of the registry entry + HTTPS fetch of the full genesis, with
+`keccak256(raw bytes) == genesis_hash`. This is **not** cryptographic integrity
+against a registry or GitHub compromise. The expected hash and the served
+content come from the **same trust root** (this repo / a single GitHub write),
+so the hash-match is **circular** — it only proves the content matches a number
+the same writer chose. A compromised Foundation account, a malicious
+maintainer, a leaked token, or a GitHub-side incident could swap the genesis
+and its hash together and the check would still pass. This is acceptable
+**only** because testnet is value-less and wiped without notice (see the
+testnet description in `chains/testnet-69420.toml`). Do not mistake the testnet
+hash-match for integrity.
+
+**Mainnet hardening (required before mainnet — tracked groundwork).** Before
+any value-bearing launch, the trust order becomes
+**image-baked cert-identity > cosign-signed genesis > registry `genesis_hash`
+pin > HTTPS transport**, breaking the circularity with factors the
+registry-writer does not control:
+
+- **Cosign-signed genesis.** Genesis is published as a cosign-signed asset and
+  `cosign verify-blob`'d **before** the keccak check, against an **image-baked**
+  cert-identity / OIDC issuer (`genesis_sig_url`, `genesis_cert_identity`,
+  `genesis_cert_issuer`).
+- **Commit-SHA-pinned registry.** The registry is pinned to a specific commit
+  SHA baked **per image** (`registry_rev`), not the moving `master` ref, so a
+  registry-account compromise or a stale/poisoned CDN edge cannot silently
+  redirect `genesis_hash`.
+- **Baked into the signed image.** `genesis_hash` / `registry_rev` are baked
+  into the signed dm-verity-measured image, restoring "the image pins what it
+  runs". Mainnet re-genesis = a new signed image (acceptable cadence); dynamic
+  master-ref auto-pickup stays testnet-only.
+- **Multi-origin fetch.** Genesis is fetched from more than one origin (signed
+  release asset + raw URL + a Foundation mirror) so GitHub is not a
+  chain-restart single point of failure.
+
+Those mainnet-only fields (`genesis_sig_url`, `genesis_cert_identity`,
+`genesis_cert_issuer`, `registry_rev`) are present today **only** as commented
+placeholders in the chain files and are documented in
+[`schemas/chain.schema.md`](./schemas/chain.schema.md). They are rejected as
+active values until the mainnet verification path exists to enforce them.
 
 ## Trust model
 
