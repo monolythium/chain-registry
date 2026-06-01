@@ -215,9 +215,10 @@ multiaddr = "/ip4/128.140.125.5/tcp/29898/p2p/12D3KooWNAc4EWkWWprKvqoF5aiq1ByqsL
 region    = "fsn1"
 
 # ---- Explorers ----
-# Monoscan link lands once 8.D ships in Session 8. Holding the slot.
+# Live block explorer for the foundation testnet. Serves account, anchor,
+# and transaction views over chain-69420.
 
-# [[explorer]]
-# url  = "https://testnet.monoscan.example"
-# name = "Monoscan (testnet)"
-# kind = "monoscan"
+[[explorer]]
+url  = "https://monoscan.xyz"
+name = "Monoscan (testnet)"
+kind = "monoscan"
