@@ -5,15 +5,15 @@ description  = "Live development testnet for Monolythium / LythiumDAG-BFT. Found
 
 # Pinned to the genesis the live cluster is currently running. Any
 # wipe + regenesis flips this hash and bumps the registry entry.
-genesis_hash = "0x1769ae4a741e3f326a6f6b2886abe118a10560688c365a654dc5805397d64e14"
+genesis_hash = "0xe67cf82131fc63e335ce61afeae53299283eaa3a692830a618911aa840245031"
 
 # Short SHA of the mono-core commit each advertised foundation operator
 # was built from. Track production releases at
 # https://github.com/monolythium/mono-core
 # Signed node release the foundation operators are running:
-# protocore v0.0.24-testnet — tag + tarball at
+# protocore v0.0.25-testnet — tag + tarball at
 # https://github.com/monolythium/protocore/releases
-binary_sha   = "9338995a"
+binary_sha   = "e4697f9b"
 
 # ---- Native receipt proof trust policy ----
 # Optional trust metadata for SDK-side native receipt proof verification.
@@ -167,28 +167,52 @@ notes    = "relay-2"
 # the mesh as a non-foundation peer needs to be added there too.
 
 [[p2p]]
-multiaddr = "/ip4/178.105.15.216/tcp/29898/p2p/12D3KooWAt4jz3gempTvZNfdfz58jyZuA4gpVMyae9pTknzx4x7q"
+multiaddr = "/ip4/178.105.12.9/tcp/29898/p2p/12D3KooWPv4ctqZX9faHicr8dJifyBwrpPA4oBev7w2WZStejMKa"
 region    = "fsn1"
 
 [[p2p]]
-multiaddr = "/ip4/178.104.233.182/tcp/29898/p2p/12D3KooWRxEsAJKTv5mxCvLWxNCcYr2ZGqfyvrszWvAZqnp5MNh4"
+multiaddr = "/ip4/178.105.15.216/tcp/29898/p2p/12D3KooWFZqKgAbve2dsAm9kKomychF4dyhtJYHL13mzh3D62d1r"
+region    = "fsn1"
+
+[[p2p]]
+multiaddr = "/ip4/178.104.233.182/tcp/29898/p2p/12D3KooWMG1tbP4hcvqdPP8QmnnPjaJCs4M1GUskzAJsL15ZFcVX"
 region    = "nbg1"
 
 [[p2p]]
-multiaddr = "/ip4/65.108.94.1/tcp/29898/p2p/12D3KooWBemaWWFktztKYL3FQegTN8LLPACa5shn8HDpvmGZ9cjb"
+multiaddr = "/ip4/65.108.94.1/tcp/29898/p2p/12D3KooWR5cz3fR4YkDDoPmQ6Qe7fmsXA7zo5AqdHY5Enmk5bKyT"
 region    = "hel1"
 
 [[p2p]]
-multiaddr = "/ip4/95.216.154.155/tcp/29898/p2p/12D3KooWHQLzNgQs9hNLixPbb42fgN6fhDxnDQzZW34bHTS3g1eJ"
+multiaddr = "/ip4/95.216.154.155/tcp/29898/p2p/12D3KooWFJHH3zgAaPtSBXPkCEKeGNCWQTn1QYcm4YCr5VFT3GbC"
 region    = "hel1"
 
 [[p2p]]
-multiaddr = "/ip4/87.99.145.48/tcp/29898/p2p/12D3KooWPcnEAhLMfeW7JrRoDWyQ7ThGJw8iVkG7RVnAoWtrnA9C"
+multiaddr = "/ip4/87.99.145.48/tcp/29898/p2p/12D3KooWSDQdjgoiEbvsLErphM52u8tETdBtgyr4mbHQC5pT6HQz"
 region    = "ash"
 
 [[p2p]]
-multiaddr = "/ip4/5.223.85.76/tcp/29898/p2p/12D3KooWQ5aTSijMN79YxvX9uFw5w9Qn3QNFWCX8b7rDWdFLAB1m"
+multiaddr = "/ip4/5.223.85.76/tcp/29898/p2p/12D3KooWKHgMQnBtSfZqUknJdhGK8niKKbLXy81ifHV2khRgAYFX"
 region    = "sin"
+
+[[p2p]]
+multiaddr = "/ip4/142.132.180.99/tcp/29898/p2p/12D3KooWBx29V8iNQL22jk2CSVbvhodtXy4uTXVG7AgobxNcUuyP"
+region    = "fsn1"
+
+[[p2p]]
+multiaddr = "/ip4/162.55.54.198/tcp/29898/p2p/12D3KooWJK2w6xzRFJMHWMxVuXpBHZE7PtDNGahEp9rq86AuhNRk"
+region    = "nbg1"
+
+[[p2p]]
+multiaddr = "/ip4/95.217.156.190/tcp/29898/p2p/12D3KooWLD8kzKHPVexZv2pMTvpjcEPTVZxr5qMxCeVB2QR6NNa6"
+region    = "hel1"
+
+[[p2p]]
+multiaddr = "/ip4/5.223.65.201/tcp/29898/p2p/12D3KooWAHC1cCiVsyVqrg4ofS2EQmu6Pv6G9Rc1t5btmoW6YicJ"
+region    = "sin"
+
+[[p2p]]
+multiaddr = "/ip4/128.140.125.5/tcp/29898/p2p/12D3KooWNAc4EWkWWprKvqoF5aiq1ByqsLQjSN7r9ZTwYgGW365r"
+region    = "fsn1"
 
 # ---- Explorers ----
 # Monoscan link lands once 8.D ships in Session 8. Holding the slot.

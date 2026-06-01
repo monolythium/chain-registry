@@ -75,7 +75,7 @@ thresholds, duplicate signer rows, and validity bounds.
 
 Every chain TOML file has the same shape. See [`schemas/chain.schema.md`](./schemas/chain.schema.md) for the full reference.
 
-Mandatory top-level fields: `chain_id`, `network`, `genesis_hash`, `binary_sha`. At least one `[[rpc]]` and one `[[p2p]]` block. Explorers are optional but encouraged.
+Mandatory top-level fields for live networks: `chain_id`, `network`, `genesis_hash`, `binary_sha`. At least one `[[rpc]]` and one `[[p2p]]` block. Reserved chain-id entries set `status = "reserved"` and intentionally omit live-network pins until launch. Explorers are optional but encouraged.
 
 Chain files may also publish an optional `[receipt_proof_trust]`
 policy. When present, it describes SDK-side trust metadata for native

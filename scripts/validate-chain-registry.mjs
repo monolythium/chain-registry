@@ -18,6 +18,7 @@ const ROOT_KEYS = new Set([
   "display_name",
   "description",
   "created",
+  "status",
 ]);
 const RPC_KEYS = new Set(["url", "provider", "region", "tier", "archive", "ws_url", "notes"]);
 const P2P_KEYS = new Set(["multiaddr", "region"]);
@@ -318,12 +319,18 @@ function validateChainInfo(info, file) {
   if (typeof info.network === "string" && !/^[a-z0-9-]{3,32}$/u.test(info.network)) {
     errors.push(`${file}: network must be 3-32 lowercase ASCII letters/digits/hyphens`);
   }
-  requireHexBytes(info.genesis_hash, HASH_BYTES, `${file}: genesis_hash`, errors);
-  if (typeof info.binary_sha !== "string" || !/^[0-9a-f]{7,40}$/u.test(info.binary_sha)) {
-    errors.push(`${file}: binary_sha must be a 7-40 character lowercase git SHA`);
+  if (info.status !== undefined && info.status !== "reserved") {
+    errors.push(`${file}: status must be reserved when present`);
   }
-  if (info.rpc.length === 0) errors.push(`${file}: at least one [[rpc]] entry is required`);
-  if (info.p2p.length === 0) errors.push(`${file}: at least one [[p2p]] entry is required`);
+  const reserved = info.status === "reserved";
+  if (!reserved) {
+    requireHexBytes(info.genesis_hash, HASH_BYTES, `${file}: genesis_hash`, errors);
+    if (typeof info.binary_sha !== "string" || !/^[0-9a-f]{7,40}$/u.test(info.binary_sha)) {
+      errors.push(`${file}: binary_sha must be a 7-40 character lowercase git SHA`);
+    }
+    if (info.rpc.length === 0) errors.push(`${file}: at least one [[rpc]] entry is required`);
+    if (info.p2p.length === 0) errors.push(`${file}: at least one [[p2p]] entry is required`);
+  }
   info.rpc.forEach((rpc, index) => validateRpc(rpc, `${file}: rpc[${index}]`, errors));
   info.p2p.forEach((p2p, index) => validateP2p(p2p, `${file}: p2p[${index}]`, errors));
   info.explorer.forEach((explorer, index) => validateExplorer(explorer, `${file}: explorer[${index}]`, errors));

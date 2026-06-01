@@ -20,6 +20,7 @@ trust metadata.
 | `display_name` | string | no | Human-readable network name for UI ("Monolythium Testnet"). Falls back to `network` if absent. |
 | `description` | string | no | One-line purpose statement. |
 | `created` | RFC-3339 date | no | When the network first launched. |
+| `status` | string | no | `reserved` for a claimed chain id with no live network yet. Reserved entries intentionally omit `genesis_hash`, `binary_sha`, `[[rpc]]`, and `[[p2p]]` until launch. |
 
 ## `[[rpc]]`
 
