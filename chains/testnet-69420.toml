@@ -5,7 +5,7 @@ description  = "Live development testnet for Monolythium / LythiumDAG-BFT. Found
 
 # Pinned to the genesis the live cluster is currently running. Any
 # wipe + regenesis flips this hash and bumps the registry entry.
-genesis_hash = "0xe67cf82131fc63e335ce61afeae53299283eaa3a692830a618911aa840245031"
+genesis_hash = "0xe6855bd4832cc77e158af2111a6eafcd8b3f0bb2f9584de9a2e07f04596d02f9"
 
 # ---- Dynamic genesis resolution ----
 # Full genesis content for this network, committed in this repo and served
@@ -22,7 +22,7 @@ genesis_hash = "0xe67cf82131fc63e335ce61afeae53299283eaa3a692830a618911aa8402450
 # acceptable only because testnet is value-less and wiped without notice. See
 # README.md "Dynamic genesis resolution" and the mainnet-only groundwork below.
 genesis_url    = "https://raw.githubusercontent.com/monolythium/chain-registry/master/chains/genesis/testnet-69420.genesis.toml"
-genesis_sha256 = "47c078ec979b18e9adfe1a607f66d2f5d08b7f871a58a953b52ab386f48ea21c"
+genesis_sha256 = "4693d036c31c58e4e4e9c12b413fe263a91584ce06460cf2ac2c02cf6f7360c1"
 
 # ---- MAINNET-ONLY genesis hardening (groundwork — not used on testnet) ----
 # These fields are documented placeholders for the mainnet trust model and are
@@ -52,9 +52,9 @@ genesis_sha256 = "47c078ec979b18e9adfe1a607f66d2f5d08b7f871a58a953b52ab386f48ea2
 # was built from. Track production releases at
 # https://github.com/monolythium/mono-core
 # Signed node release the foundation operators are running:
-# protocore v0.0.25-testnet — tag + tarball at
+# protocore v0.0.26-testnet — tag + tarball at
 # https://github.com/monolythium/protocore/releases
-binary_sha   = "e4697f9b"
+binary_sha   = "34094f6d"
 
 # ---- Native receipt proof trust policy ----
 # Optional trust metadata for SDK-side native receipt proof verification.
@@ -208,51 +208,51 @@ notes    = "relay-2"
 # the mesh as a non-foundation peer needs to be added there too.
 
 [[p2p]]
-multiaddr = "/ip4/178.105.12.9/tcp/29898/p2p/12D3KooWPv4ctqZX9faHicr8dJifyBwrpPA4oBev7w2WZStejMKa"
+multiaddr = "/ip4/178.105.12.9/tcp/29898/p2p/12D3KooWK99co5zPeWa1SbKXfbZ7cq2LguTKbp4ajiQPMXLk4YRD"
 region    = "fsn1"
 
 [[p2p]]
-multiaddr = "/ip4/178.105.15.216/tcp/29898/p2p/12D3KooWFZqKgAbve2dsAm9kKomychF4dyhtJYHL13mzh3D62d1r"
+multiaddr = "/ip4/178.105.15.216/tcp/29898/p2p/12D3KooWJkGysbL1aXaqxNZKmsQigKqXs8X8PDTvrVSR3Jt86uuQ"
 region    = "fsn1"
 
 [[p2p]]
-multiaddr = "/ip4/178.104.233.182/tcp/29898/p2p/12D3KooWMG1tbP4hcvqdPP8QmnnPjaJCs4M1GUskzAJsL15ZFcVX"
+multiaddr = "/ip4/178.104.233.182/tcp/29898/p2p/12D3KooWB2bQKNpj4mCKx1FuSnWwJJ9YUbcFuK421VDrQjf3xQh7"
 region    = "nbg1"
 
 [[p2p]]
-multiaddr = "/ip4/65.108.94.1/tcp/29898/p2p/12D3KooWR5cz3fR4YkDDoPmQ6Qe7fmsXA7zo5AqdHY5Enmk5bKyT"
+multiaddr = "/ip4/65.108.94.1/tcp/29898/p2p/12D3KooWGWNvKGk87hHEXNQ7vNuXv9Wf2WgentSKgiq7g28AMEEV"
 region    = "hel1"
 
 [[p2p]]
-multiaddr = "/ip4/95.216.154.155/tcp/29898/p2p/12D3KooWFJHH3zgAaPtSBXPkCEKeGNCWQTn1QYcm4YCr5VFT3GbC"
+multiaddr = "/ip4/95.216.154.155/tcp/29898/p2p/12D3KooWAAg6sJcbofEAnxR3UeRUWgUC1PFKfzF1yT6i4F1aom4g"
 region    = "hel1"
 
 [[p2p]]
-multiaddr = "/ip4/87.99.145.48/tcp/29898/p2p/12D3KooWSDQdjgoiEbvsLErphM52u8tETdBtgyr4mbHQC5pT6HQz"
+multiaddr = "/ip4/87.99.145.48/tcp/29898/p2p/12D3KooWM9iZfud81pi3gt3F6GBoxX8rmiTwAfwyjxoycqcHJUkp"
 region    = "ash"
 
 [[p2p]]
-multiaddr = "/ip4/5.223.85.76/tcp/29898/p2p/12D3KooWKHgMQnBtSfZqUknJdhGK8niKKbLXy81ifHV2khRgAYFX"
+multiaddr = "/ip4/5.223.85.76/tcp/29898/p2p/12D3KooWGpKV3oAqoH9L1byhWbmL1KYQeT1WXq4qr3PbvemhQAmd"
 region    = "sin"
 
 [[p2p]]
-multiaddr = "/ip4/142.132.180.99/tcp/29898/p2p/12D3KooWBx29V8iNQL22jk2CSVbvhodtXy4uTXVG7AgobxNcUuyP"
+multiaddr = "/ip4/142.132.180.99/tcp/29898/p2p/12D3KooWJQiPQxuBFqAs69QpR9hv16tEgh3uADp5K1d1rqFMMwtZ"
 region    = "fsn1"
 
 [[p2p]]
-multiaddr = "/ip4/162.55.54.198/tcp/29898/p2p/12D3KooWJK2w6xzRFJMHWMxVuXpBHZE7PtDNGahEp9rq86AuhNRk"
+multiaddr = "/ip4/162.55.54.198/tcp/29898/p2p/12D3KooWKj46VLzf4Xcf7io5PXLsmNoc6UosLDbf8aCh5azmaVgT"
 region    = "nbg1"
 
 [[p2p]]
-multiaddr = "/ip4/95.217.156.190/tcp/29898/p2p/12D3KooWLD8kzKHPVexZv2pMTvpjcEPTVZxr5qMxCeVB2QR6NNa6"
+multiaddr = "/ip4/95.217.156.190/tcp/29898/p2p/12D3KooWJvgu9JsUaptK4UWWvb2hoa9D7mPYfTYNcqUJ1wWkbjLZ"
 region    = "hel1"
 
 [[p2p]]
-multiaddr = "/ip4/5.223.65.201/tcp/29898/p2p/12D3KooWAHC1cCiVsyVqrg4ofS2EQmu6Pv6G9Rc1t5btmoW6YicJ"
+multiaddr = "/ip4/5.223.65.201/tcp/29898/p2p/12D3KooWB3R7DU3EQvP9tkazDhqpgsccYuJB1XqKQwSqEQm8sGiv"
 region    = "sin"
 
 [[p2p]]
-multiaddr = "/ip4/128.140.125.5/tcp/29898/p2p/12D3KooWNAc4EWkWWprKvqoF5aiq1ByqsLQjSN7r9ZTwYgGW365r"
+multiaddr = "/ip4/128.140.125.5/tcp/29898/p2p/12D3KooWSTtNCCVtmwXHBSfX3Szm5uYiszS8PKZ2pSNsxLD6WVQ5"
 region    = "fsn1"
 
 # ---- Explorers ----
