@@ -5,7 +5,7 @@ description  = "Live development testnet for Monolythium / LythiumDAG-BFT. Found
 
 # Pinned to the genesis the live cluster is currently running. Any
 # wipe + regenesis flips this hash and bumps the registry entry.
-genesis_hash = "0x18bc4e6de661d31392bdc7b7a08b3459d0f38424973b06725e4189bb8e32ccdd"
+genesis_hash = "0x2314f9535eaa3249608183ef063cfb48e9611e8792fea7518181cf08579b4395"
 
 # ---- Dynamic genesis resolution ----
 # Full genesis content for this network, committed in this repo and served
@@ -22,7 +22,7 @@ genesis_hash = "0x18bc4e6de661d31392bdc7b7a08b3459d0f38424973b06725e4189bb8e32cc
 # acceptable only because testnet is value-less and wiped without notice. See
 # README.md "Dynamic genesis resolution" and the mainnet-only groundwork below.
 genesis_url    = "https://raw.githubusercontent.com/monolythium/chain-registry/master/chains/genesis/testnet-69420.genesis.toml"
-genesis_sha256 = "7ff190380fc83c919d7107d5de61f3e2fa5594869aa41bcae8e3e799aa086a99"
+genesis_sha256 = "b7e27d1c3792916f390a4f26228e7eea9a8322b77979ccb18d617a1d91f7f63d"
 
 # ---- MAINNET-ONLY genesis hardening (groundwork — not used on testnet) ----
 # These fields are documented placeholders for the mainnet trust model and are
@@ -52,9 +52,9 @@ genesis_sha256 = "7ff190380fc83c919d7107d5de61f3e2fa5594869aa41bcae8e3e799aa086a
 # was built from. Track production releases at
 # https://github.com/monolythium/mono-core
 # Signed node release the foundation operators are running:
-# protocore v0.1.1-testnet — tag + tarball at
+# protocore v0.1.2-testnet — tag + tarball at
 # https://github.com/monolythium/protocore/releases
-binary_sha   = "f465da23"
+binary_sha   = "21039ad2"
 
 # ---- Native receipt proof trust policy ----
 # Optional trust metadata for SDK-side native receipt proof verification.
