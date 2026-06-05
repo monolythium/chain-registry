@@ -48,13 +48,11 @@ genesis_sha256 = "069b9af2661c89e59a2a7af784cd5e59171726387fd8879395b7d365fe69c7
 #   moving `master` ref, so a registry-account compromise or stale CDN edge
 #   cannot silently redirect genesis_hash / genesis_url.
 
-# Short SHA of the mono-core commit each advertised foundation operator
-# was built from. Track production releases at
-# https://github.com/monolythium/mono-core
-# Signed node release the foundation operators are running:
-# protocore v0.1.2-testnet — tag + tarball at
+# SHA-256 of the signed protocore release binary the advertised foundation
+# operators are running:
+# protocore v0.1.5-testnet — tag + tarball at
 # https://github.com/monolythium/protocore/releases
-binary_sha   = "21039ad2"
+binary_sha   = "5b7e8eb0d7a682de2603cc7759f4110dc99d2d7aa2429c82df4f81cfbe5c8e16"
 
 # ---- Native receipt proof trust policy ----
 # Optional trust metadata for SDK-side native receipt proof verification.
