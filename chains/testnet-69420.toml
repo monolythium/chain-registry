@@ -5,7 +5,7 @@ description  = "Live development testnet for Monolythium / LythiumDAG-BFT. Found
 
 # Pinned to the genesis the live cluster is currently running. Any
 # wipe + regenesis flips this hash and bumps the registry entry.
-genesis_hash = "0x6a2bb3c8a6701bedcddc0447583bb24f34b77310e3aa77c62ca303a453e9f7ba"
+genesis_hash = "0xef367d9ddc6ba8b15ba85494af2640402b0a5b2b1836cf12c083b63ae72609ad"
 
 # ---- Dynamic genesis resolution ----
 # Full genesis content for this network, committed in this repo and served
@@ -22,7 +22,7 @@ genesis_hash = "0x6a2bb3c8a6701bedcddc0447583bb24f34b77310e3aa77c62ca303a453e9f7
 # acceptable only because testnet is value-less and wiped without notice. See
 # README.md "Dynamic genesis resolution" and the mainnet-only groundwork below.
 genesis_url    = "https://raw.githubusercontent.com/monolythium/chain-registry/master/chains/genesis/testnet-69420.genesis.toml"
-genesis_sha256 = "069b9af2661c89e59a2a7af784cd5e59171726387fd8879395b7d365fe69c751"
+genesis_sha256 = "ae5318f9afbc403d4edec0fad8b2623ae9ba63396729c38b986ed0278ee1962a"
 
 # ---- MAINNET-ONLY genesis hardening (groundwork — not used on testnet) ----
 # These fields are documented placeholders for the mainnet trust model and are
@@ -48,11 +48,10 @@ genesis_sha256 = "069b9af2661c89e59a2a7af784cd5e59171726387fd8879395b7d365fe69c7
 #   moving `master` ref, so a registry-account compromise or stale CDN edge
 #   cannot silently redirect genesis_hash / genesis_url.
 
-# SHA-256 of the signed protocore release binary the advertised foundation
-# operators are running:
-# protocore v0.1.6-testnet — tag + tarball at
-# https://github.com/monolythium/protocore/releases
-binary_sha   = "3a998990f779c871a45cf33685d3791710b38126f59ee3f938ea8133f0a71c63"
+# mono-core commit used to build the advertised foundation operator binary.
+# protocore v0.1.7-testnet release assets are published at:
+# https://github.com/monolythium/protocore/releases/tag/v0.1.7-testnet
+binary_sha   = "1d8a5358ffc5203b8a294c8411a316c9bf86215e"
 
 # ---- Native receipt proof trust policy ----
 # Optional trust metadata for SDK-side native receipt proof verification.
@@ -99,7 +98,7 @@ binary_sha   = "3a998990f779c871a45cf33685d3791710b38126f59ee3f938ea8133f0a71c63
 # The healthy public foundation operator endpoints are advertised below. Each
 # protocore process listens on 0.0.0.0:8545; the cost-based RPC rate-limiter is
 # the DoS mitigation. Reachability of each endpoint below was confirmed by an
-# external eth_chainId probe returning 0x10f2c.
+# external eth_blockNumber probe at the v0.1.7 preview head.
 
 [[rpc]]
 url      = "http://178.105.12.9:8545"
@@ -164,47 +163,58 @@ region   = "hel1"
 tier     = "official"
 notes    = "operator-10"
 
+[[rpc]]
+url      = "http://162.55.54.198:8545"
+provider = "monolythium-foundation"
+region   = "fsn1"
+tier     = "official"
+notes    = "operator-9 preview provider"
+
 # ---- P2P seeds ----
-# libp2p multiaddrs for the foundation operators advertised here. Port 29898 is
-# the gossipsub mesh port; firewall §4 of testnet-infra-setup.md
-# pins the source-IP allowlist for incoming dials. Anyone joining
-# the mesh as a non-foundation peer needs to be added there too.
+# libp2p multiaddrs for the healthy foundation endpoints advertised here. Port
+# 29898 is the gossipsub mesh port; firewall §4 of testnet-infra-setup.md pins
+# the source-IP allowlist for incoming dials. Anyone joining the mesh as a
+# non-foundation peer needs to be added there too.
 
 [[p2p]]
-multiaddr = "/ip4/178.105.12.9/tcp/29898/p2p/12D3KooWE6H5vMzyMhM4FkjU41YfnJ9rzwT1xrt6SFZq5ouRbuSG"
+multiaddr = "/ip4/178.105.12.9/tcp/29898/p2p/12D3KooWH1snBWpF4JFUnaAqh9P77EdMNnhrWM6a1oGQq5ZXmnpK"
 region    = "fsn1"
 
 [[p2p]]
-multiaddr = "/ip4/178.105.15.216/tcp/29898/p2p/12D3KooWCW9uSjQ5djyQGEvdoTNwMNsEjGEiVzhRELWUpHkgoBkC"
+multiaddr = "/ip4/178.105.15.216/tcp/29898/p2p/12D3KooWK6Qxv5Sw4cp1EjLbEwigqGBHqbENaSKUXp5BPmA6iNpw"
 region    = "fsn1"
 
 [[p2p]]
-multiaddr = "/ip4/178.104.233.182/tcp/29898/p2p/12D3KooWPXcFPhCeHo1jGswXYMQRPzoN8NGmabDgPjzCthJXFvU1"
+multiaddr = "/ip4/178.104.233.182/tcp/29898/p2p/12D3KooWLhrJFqTFeHPDDaQvVTySmNzZzw8AhGfiojjP5GoFA9xG"
 region    = "nbg1"
 
 [[p2p]]
-multiaddr = "/ip4/65.108.94.1/tcp/29898/p2p/12D3KooWKCg1EmB3z1iBTX9VbbjajjGexTnPsaJi57ViRxn1huSh"
+multiaddr = "/ip4/65.108.94.1/tcp/29898/p2p/12D3KooWJYXVioshC3c7DyXtmgEfhqeadYd9Z3Z1Knoxsep6YbDg"
 region    = "hel1"
 
 [[p2p]]
-multiaddr = "/ip4/95.216.154.155/tcp/29898/p2p/12D3KooWMUrZyYSHFZiKcRF3GYhnTGWqKst5EgU2J2vccr2XG1s9"
+multiaddr = "/ip4/95.216.154.155/tcp/29898/p2p/12D3KooWBnqhKJmGLMHRU4qhNRNXgwz9u2iBwknCzN5AY3SQJw4N"
 region    = "hel1"
 
 [[p2p]]
-multiaddr = "/ip4/87.99.145.48/tcp/29898/p2p/12D3KooWMveeUupPk5x3k4iVMmxdbSUtkiikoXFuyZkq2eEAZCEk"
+multiaddr = "/ip4/87.99.145.48/tcp/29898/p2p/12D3KooWJzq4hz1k6fiUmiBShUS6wUUkBaf5z4aPTMwy6pTny4fY"
 region    = "ash"
 
 [[p2p]]
-multiaddr = "/ip4/5.223.85.76/tcp/29898/p2p/12D3KooWFMLpVXbowWfyXNqASg7pBUq2Z9GkpyxgpeVcBTa657mm"
+multiaddr = "/ip4/5.223.85.76/tcp/29898/p2p/12D3KooWLnheVZ7YEMTR57su71P8zKYwwerqyoiLoGDaYH4ETSci"
 region    = "sin"
 
 [[p2p]]
-multiaddr = "/ip4/142.132.180.99/tcp/29898/p2p/12D3KooWRuM3RfZfbVejuAfQM4tuFQUvPTnidaYaucWHdKEQAPBZ"
+multiaddr = "/ip4/142.132.180.99/tcp/29898/p2p/12D3KooWHKBnjpnrHdn6KAmQ944Ugqzy8Hc78LThUSzgjA8VCaLH"
 region    = "fsn1"
 
 [[p2p]]
-multiaddr = "/ip4/95.217.156.190/tcp/29898/p2p/12D3KooWGnLXVQr5fnAgr65QJor8PgarhYuwb93gxr2guG8W35Hq"
+multiaddr = "/ip4/95.217.156.190/tcp/29898/p2p/12D3KooWGZVkqmGMdJ6NxkpRPA8SWGGAegHNEuve7c6aKfNKHBNb"
 region    = "hel1"
+
+[[p2p]]
+multiaddr = "/ip4/162.55.54.198/tcp/29898/p2p/12D3KooWM262RtkTNh34tDehqsFkrW17Zxy4FTqAQNF9uXeGoqNo"
+region    = "fsn1"
 
 # ---- Explorers ----
 # Live block explorer for the foundation testnet. Serves account, anchor,
