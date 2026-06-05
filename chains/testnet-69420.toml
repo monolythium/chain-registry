@@ -50,9 +50,9 @@ genesis_sha256 = "069b9af2661c89e59a2a7af784cd5e59171726387fd8879395b7d365fe69c7
 
 # SHA-256 of the signed protocore release binary the advertised foundation
 # operators are running:
-# protocore v0.1.5-testnet — tag + tarball at
+# protocore v0.1.6-testnet — tag + tarball at
 # https://github.com/monolythium/protocore/releases
-binary_sha   = "5b7e8eb0d7a682de2603cc7759f4110dc99d2d7aa2429c82df4f81cfbe5c8e16"
+binary_sha   = "3a998990f779c871a45cf33685d3791710b38126f59ee3f938ea8133f0a71c63"
 
 # ---- Native receipt proof trust policy ----
 # Optional trust metadata for SDK-side native receipt proof verification.
@@ -96,11 +96,10 @@ binary_sha   = "5b7e8eb0d7a682de2603cc7759f4110dc99d2d7aa2429c82df4f81cfbe5c8e16
 # the first reachable endpoint. After connection the SDK switches to
 # on-chain `node-registry` (precompile 0x1005) for live peer selection.
 #
-# Open public RPC is enabled on every foundation node (all 10 operators +
-# 4 relays). The 10 consensus operators are advertised below. Each protocore
-# process listens on 0.0.0.0:8545; the cost-based
-# RPC rate-limiter is the DoS mitigation. Reachability of each endpoint below
-# was confirmed by an external eth_chainId probe returning 0x10f2c.
+# The healthy public foundation operator endpoints are advertised below. Each
+# protocore process listens on 0.0.0.0:8545; the cost-based RPC rate-limiter is
+# the DoS mitigation. Reachability of each endpoint below was confirmed by an
+# external eth_chainId probe returning 0x10f2c.
 
 [[rpc]]
 url      = "http://178.105.12.9:8545"
@@ -159,13 +158,6 @@ tier     = "official"
 notes    = "operator-8"
 
 [[rpc]]
-url      = "http://162.55.54.198:8545"
-provider = "monolythium-foundation"
-region   = "nbg1"
-tier     = "official"
-notes    = "operator-9"
-
-[[rpc]]
 url      = "http://95.217.156.190:8545"
 provider = "monolythium-foundation"
 region   = "hel1"
@@ -209,10 +201,6 @@ region    = "sin"
 [[p2p]]
 multiaddr = "/ip4/142.132.180.99/tcp/29898/p2p/12D3KooWRuM3RfZfbVejuAfQM4tuFQUvPTnidaYaucWHdKEQAPBZ"
 region    = "fsn1"
-
-[[p2p]]
-multiaddr = "/ip4/162.55.54.198/tcp/29898/p2p/12D3KooWFmDnyCoGDqVFt3HFTNvxjkBGUVoMwaBG5Z9s9yPThmLQ"
-region    = "nbg1"
 
 [[p2p]]
 multiaddr = "/ip4/95.217.156.190/tcp/29898/p2p/12D3KooWGnLXVQr5fnAgr65QJor8PgarhYuwb93gxr2guG8W35Hq"
