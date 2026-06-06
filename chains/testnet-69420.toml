@@ -5,7 +5,7 @@ description  = "Live development testnet for Monolythium / LythiumDAG-BFT. Found
 
 # Pinned to the genesis the live cluster is currently running. Any
 # wipe + regenesis flips this hash and bumps the registry entry.
-genesis_hash = "0xc176da53453934f2269dcafac91630a94f9d204a6414cce2d37f1bbfa143e7d6"
+genesis_hash = "0x3b5fe6c9394c67661ddabd4aca3f883b4570c435c912412ef1d7e83b386e461c"
 
 # ---- Dynamic genesis resolution ----
 # Full genesis content for this network, committed in this repo and served
@@ -22,7 +22,7 @@ genesis_hash = "0xc176da53453934f2269dcafac91630a94f9d204a6414cce2d37f1bbfa143e7
 # acceptable only because testnet is value-less and wiped without notice. See
 # README.md "Dynamic genesis resolution" and the mainnet-only groundwork below.
 genesis_url    = "https://raw.githubusercontent.com/monolythium/chain-registry/master/chains/genesis/testnet-69420.genesis.toml"
-genesis_sha256 = "4d4c4ced53898eb8c11738fd09bf4f6ab068cbd542b030255a59194a79eebbfa"
+genesis_sha256 = "daf7669b41d94dd2b71be8c7084bef1224f837dba2c0eb2778d1e9cc428d9b5e"
 
 # ---- MAINNET-ONLY genesis hardening (groundwork — not used on testnet) ----
 # These fields are documented placeholders for the mainnet trust model and are
@@ -49,11 +49,11 @@ genesis_sha256 = "4d4c4ced53898eb8c11738fd09bf4f6ab068cbd542b030255a59194a79eebb
 #   cannot silently redirect genesis_hash / genesis_url.
 
 # mono-core commit used to build the advertised foundation operator binary.
-# protocore v0.1.13-testnet release assets are published at:
-# https://github.com/monolythium/protocore/releases/tag/v0.1.13-testnet
-# protocore-v0.1.13-testnet-x86_64-linux.tar.gz sha256:
-# 6646dc3f940906ac2a17a3f2b883bfe58728f8971c95f885940943a9be595a4e
-binary_sha   = "78062a3f694d"
+# protocore v0.1.15-testnet release assets are published at:
+# https://github.com/monolythium/protocore/releases/tag/v0.1.15-testnet
+# protocore-v0.1.15-testnet-x86_64-linux.tar.gz sha256:
+# f74bd4c8c49c46bfc7dd08abf7cfd575ba9a6743636ae892f164b28d50ad4c6c
+binary_sha   = "f07aadd3fb4c"
 
 # ---- Native receipt proof trust policy ----
 # Optional trust metadata for SDK-side native receipt proof verification.
@@ -100,7 +100,7 @@ binary_sha   = "78062a3f694d"
 # The healthy public foundation operator endpoints are advertised below. Each
 # protocore process listens on 0.0.0.0:8545; the cost-based RPC rate-limiter is
 # the DoS mitigation. Reachability of each endpoint below was confirmed by an
-# external eth_blockNumber probe at the v0.1.13 preview head.
+# external eth_blockNumber probe at the v0.1.15 preview head.
 
 [[rpc]]
 url      = "http://178.105.12.9:8545"
