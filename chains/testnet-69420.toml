@@ -52,7 +52,7 @@ genesis_sha256 = "4c40974b3f8cd2330d88a2b980f4a0d07f457b3c94be0b0e1fb6f83df08457
 # protocore v0.1.25-testnet release assets are published at:
 # https://github.com/monolythium/protocore/releases/tag/v0.1.25-testnet
 # protocore-v0.1.25-testnet-x86_64-linux.tar.gz sha256:
-# f011210b15f0552ebe5fad6081dc133cecd15b885bbc67b0fede118ec8dae49e
+# e098bfadd7238279d762c16492054d6c3d64b45dbabca9e288fa20051221d901
 binary_sha   = "a5d5b299a0bf"
 
 # ---- Native receipt proof trust policy ----
