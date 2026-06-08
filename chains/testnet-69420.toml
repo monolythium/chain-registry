@@ -5,7 +5,7 @@ description  = "Live development testnet for Monolythium / LythiumDAG-BFT. Found
 
 # Pinned to the genesis the live cluster is currently running. Any
 # wipe + regenesis flips this hash and bumps the registry entry.
-genesis_hash = "0xb9bcc577fa7256664364518f2943fe298b50973b0e43831a081b4dca3d2d5a6a"
+genesis_hash = "0x4327b7e8d1c06eed00194152f8235acaec5ba84a01487c885d9933840dc36fa5"
 
 # ---- Dynamic genesis resolution ----
 # Full genesis content for this network, committed in this repo and served
@@ -22,7 +22,7 @@ genesis_hash = "0xb9bcc577fa7256664364518f2943fe298b50973b0e43831a081b4dca3d2d5a
 # acceptable only because testnet is value-less and wiped without notice. See
 # README.md "Dynamic genesis resolution" and the mainnet-only groundwork below.
 genesis_url    = "https://raw.githubusercontent.com/monolythium/chain-registry/master/chains/genesis/testnet-69420.genesis.toml"
-genesis_sha256 = "4c40974b3f8cd2330d88a2b980f4a0d07f457b3c94be0b0e1fb6f83df08457a0"
+genesis_sha256 = "a7e01d984d15ae91fefb6d169f6ec2a24bdb871fe92e9c715a32094966042fe8"
 
 # ---- MAINNET-ONLY genesis hardening (groundwork — not used on testnet) ----
 # These fields are documented placeholders for the mainnet trust model and are
@@ -49,11 +49,13 @@ genesis_sha256 = "4c40974b3f8cd2330d88a2b980f4a0d07f457b3c94be0b0e1fb6f83df08457
 #   cannot silently redirect genesis_hash / genesis_url.
 
 # mono-core commit used to build the advertised foundation operator binary.
-# protocore v0.1.25-testnet release assets are published at:
-# https://github.com/monolythium/protocore/releases/tag/v0.1.25-testnet
-# protocore-v0.1.25-testnet-x86_64-linux.tar.gz sha256:
-# e098bfadd7238279d762c16492054d6c3d64b45dbabca9e288fa20051221d901
-binary_sha   = "a5d5b299a0bf"
+# protocore v0.1.44-testnet release assets are published at:
+# https://github.com/monolythium/protocore/releases/tag/v0.1.44-testnet
+# protocore-v0.1.44-testnet-x86_64-linux.tar.gz sha256:
+# 145d7be98de9fe1f331c8c859e31d9ada36e4aaff067542f000fd4a4bfa7565f
+# extracted protocore binary sha256:
+# f725f6a1675a2bce170167f9288a47148141123451a07c8041360f131c2c2efe
+binary_sha   = "898cf29081ec"
 
 # ---- Native receipt proof trust policy ----
 # Optional trust metadata for SDK-side native receipt proof verification.
@@ -100,7 +102,7 @@ binary_sha   = "a5d5b299a0bf"
 # The healthy public foundation node endpoints are advertised below. Each
 # protocore process listens on 0.0.0.0:8545; the cost-based RPC rate-limiter is
 # the DoS mitigation. Reachability of each endpoint below was confirmed by an
-# external eth_blockNumber probe at the v0.1.25 preview head.
+# external provenance, sync, and P2P TCP probes at the v0.1.44 testnet head.
 
 [[rpc]]
 url      = "http://178.105.12.9:8545"
@@ -166,45 +168,31 @@ tier     = "official"
 notes    = "operator-10"
 
 [[rpc]]
-url      = "http://5.223.65.201:8545"
-provider = "monolythium-foundation"
-region   = "sin"
-tier     = "official"
-notes    = "operator-11"
-
-[[rpc]]
 url      = "http://162.55.54.198:8545"
 provider = "monolythium-foundation"
 region   = "fsn1"
 tier     = "official"
-notes    = "operator-9 preview operator"
-
-[[rpc]]
-url      = "http://128.140.125.5:8545"
-provider = "monolythium-foundation"
-region   = "fsn1"
-tier     = "official"
-notes    = "relay-1"
+notes    = "operator-9"
 
 [[rpc]]
 url      = "http://178.105.45.210:8545"
 provider = "monolythium-foundation"
 region   = "fsn1"
 tier     = "official"
-notes    = "relay-2"
+notes    = "relay-1"
 
 [[rpc]]
 url      = "http://65.21.252.34:8545"
 provider = "monolythium-foundation"
 region   = "hel1"
 tier     = "official"
-notes    = "relay-3"
+notes    = "relay-2"
 
 # ---- P2P seeds ----
 # libp2p multiaddrs for the healthy foundation endpoints advertised here. Port
-# 29898 is the gossipsub mesh port; firewall §4 of testnet-infra-setup.md pins
-# the source-IP allowlist for incoming dials. Anyone joining the mesh as a
-# non-foundation peer needs to be added there too.
+# 29898 is the gossipsub mesh port. Public P2P is permissionless at the network
+# edge; operator/cluster admission remains governed by on-chain registration and
+# cluster policy.
 
 [[p2p]]
 multiaddr = "/ip4/178.105.12.9/tcp/29898/p2p/12D3KooWGgh9vYbNSqYbci8w7bg2AAaFWx7umN1ADjjcUoUTF2Za"
@@ -243,15 +231,7 @@ multiaddr = "/ip4/95.217.156.190/tcp/29898/p2p/12D3KooWPBr8guuWoZT59AobZEBHDZqKg
 region    = "hel1"
 
 [[p2p]]
-multiaddr = "/ip4/5.223.65.201/tcp/29898/p2p/12D3KooWGk3fQcDxD3uPKEe56G89X6m4ksrPKCfq6LMA952HVwbs"
-region    = "sin"
-
-[[p2p]]
 multiaddr = "/ip4/162.55.54.198/tcp/29898/p2p/12D3KooWRBA5Wzs619GuMY2NrDD6fGoLYCK2tkXff2JAZyXn7RvR"
-region    = "fsn1"
-
-[[p2p]]
-multiaddr = "/ip4/128.140.125.5/tcp/29898/p2p/12D3KooWAxWQueEVut82vNNbi1ncBrcnPbbHNyp5RZs7KSJBmu19"
 region    = "fsn1"
 
 [[p2p]]
