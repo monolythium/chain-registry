@@ -5,7 +5,9 @@ description  = "Live development testnet for Monolythium / LythiumDAG-BFT. Found
 
 # Pinned to the genesis the live cluster is currently running. Any
 # wipe + regenesis flips this hash and bumps the registry entry.
-genesis_hash = "0x4327b7e8d1c06eed00194152f8235acaec5ba84a01487c885d9933840dc36fa5"
+# 2026-06-10: DVT 2-cluster re-genesis — 2 consensus seats, each a
+# 7-operator cluster (threshold 5-of-7); see chains/genesis below.
+genesis_hash = "0x78e9773372156285cd4a26db73b61f3ab4865e9e29cd3489e27beb030d9f1eca"
 
 # ---- Dynamic genesis resolution ----
 # Full genesis content for this network, committed in this repo and served
@@ -22,7 +24,7 @@ genesis_hash = "0x4327b7e8d1c06eed00194152f8235acaec5ba84a01487c885d9933840dc36f
 # acceptable only because testnet is value-less and wiped without notice. See
 # README.md "Dynamic genesis resolution" and the mainnet-only groundwork below.
 genesis_url    = "https://raw.githubusercontent.com/monolythium/chain-registry/master/chains/genesis/testnet-69420.genesis.toml"
-genesis_sha256 = "a7e01d984d15ae91fefb6d169f6ec2a24bdb871fe92e9c715a32094966042fe8"
+genesis_sha256 = "bda1690535fce8169a6dd5c07d38e4f1b8f9ab74ae62839180630107210227c5"
 
 # ---- MAINNET-ONLY genesis hardening (groundwork — not used on testnet) ----
 # These fields are documented placeholders for the mainnet trust model and are
@@ -49,13 +51,13 @@ genesis_sha256 = "a7e01d984d15ae91fefb6d169f6ec2a24bdb871fe92e9c715a32094966042f
 #   cannot silently redirect genesis_hash / genesis_url.
 
 # mono-core commit used to build the advertised foundation operator binary.
-# protocore v0.1.44-testnet release assets are published at:
-# https://github.com/monolythium/protocore/releases/tag/v0.1.44-testnet
-# protocore-v0.1.44-testnet-x86_64-linux.tar.gz sha256:
-# 145d7be98de9fe1f331c8c859e31d9ada36e4aaff067542f000fd4a4bfa7565f
-# extracted protocore binary sha256:
-# f725f6a1675a2bce170167f9288a47148141123451a07c8041360f131c2c2efe
-binary_sha   = "898cf29081ec"
+# 2026-06-10 DVT re-genesis: the foundation fleet runs the directly-deployed
+# protocore binary built from mono-core branch `dyn-growth-coldstart-2026-06-09`
+# (HEAD d4306a4163e0). A signed protocore release for this binary is pending;
+# until it is cut, the running binary is identified by its sha256 below.
+# deployed protocore binary sha256:
+# 95237aa405eb36a2d64cc50e57e3726f307a235f5c1ca821c0647f50f8ca0008
+binary_sha   = "d4306a4163e0"
 
 # ---- Native receipt proof trust policy ----
 # Optional trust metadata for SDK-side native receipt proof verification.
