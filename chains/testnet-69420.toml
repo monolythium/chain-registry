@@ -6,8 +6,9 @@ description  = "Live development testnet for Monolythium / LythiumDAG-BFT. Found
 # Pinned to the genesis the live cluster is currently running. Any
 # wipe + regenesis flips this hash and bumps the registry entry.
 # 2026-06-10: DVT 2-cluster re-genesis — 2 consensus seats, each a
-# 7-operator cluster (threshold 5-of-7); see chains/genesis below.
-genesis_hash = "0x78e9773372156285cd4a26db73b61f3ab4865e9e29cd3489e27beb030d9f1eca"
+# 10-operator cluster (threshold 7-of-10, 7 active + 3 standby); see
+# chains/genesis below. Supersedes the earlier 5-of-7 pin.
+genesis_hash = "0x991543a385b5c4fcf1e7b1598a0d78d97e9f51397b27db232238c76f39b0f726"
 
 # ---- Dynamic genesis resolution ----
 # Full genesis content for this network, committed in this repo and served
@@ -24,7 +25,7 @@ genesis_hash = "0x78e9773372156285cd4a26db73b61f3ab4865e9e29cd3489e27beb030d9f1e
 # acceptable only because testnet is value-less and wiped without notice. See
 # README.md "Dynamic genesis resolution" and the mainnet-only groundwork below.
 genesis_url    = "https://raw.githubusercontent.com/monolythium/chain-registry/master/chains/genesis/testnet-69420.genesis.toml"
-genesis_sha256 = "bda1690535fce8169a6dd5c07d38e4f1b8f9ab74ae62839180630107210227c5"
+genesis_sha256 = "f05a9424b6d7d62b53553ab52d105abaac17967d279e5de33f6bc970772507f9"
 
 # ---- MAINNET-ONLY genesis hardening (groundwork — not used on testnet) ----
 # These fields are documented placeholders for the mainnet trust model and are
@@ -51,13 +52,14 @@ genesis_sha256 = "bda1690535fce8169a6dd5c07d38e4f1b8f9ab74ae62839180630107210227
 #   cannot silently redirect genesis_hash / genesis_url.
 
 # mono-core commit used to build the advertised foundation operator binary.
-# 2026-06-10 DVT re-genesis: the foundation fleet runs the directly-deployed
-# protocore binary built from mono-core branch `dyn-growth-coldstart-2026-06-09`
-# (HEAD d4306a4163e0). A signed protocore release for this binary is pending;
+# 2026-06-10 DVT 2x10/7-of-10 re-genesis: the foundation fleet runs the
+# directly-deployed protocore binary built from mono-core branch
+# `dyn-growth-coldstart-2026-06-09` (HEAD a2dafcd31cd9 — ARK non-custodial
+# staking + operator-onboarding CLI). A signed protocore release for this binary is pending;
 # until it is cut, the running binary is identified by its sha256 below.
 # deployed protocore binary sha256:
-# 95237aa405eb36a2d64cc50e57e3726f307a235f5c1ca821c0647f50f8ca0008
-binary_sha   = "d4306a4163e0"
+# c37f89e098149ca992a9159af8a556a24b70f1a3dbf621743c5fa71b5b598566
+binary_sha   = "a2dafcd31cd9"
 
 # ---- Native receipt proof trust policy ----
 # Optional trust metadata for SDK-side native receipt proof verification.
