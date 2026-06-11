@@ -54,12 +54,12 @@ genesis_sha256 = "484f91a2468b161ab3c6ef3b6454f4142fd2cdd9b5781c7a476174b6a2cfae
 # mono-core commit used to build the advertised foundation operator binary.
 # 2026-06-10 DVT 2x10/7-of-10 re-genesis: the foundation fleet runs the
 # directly-deployed protocore binary built from mono-core branch
-# `dyn-growth-coldstart-2026-06-09` (HEAD 52f1694c5a6d — DVT member registry + ARK non-custodial
+# `dyn-growth-coldstart-2026-06-09` (HEAD 8a555b9776d1 — cluster charter (formCluster V2) + DVT member registry + ARK non-custodial
 # staking + operator-onboarding CLI). A signed protocore release for this binary is pending;
 # until it is cut, the running binary is identified by its sha256 below.
 # deployed protocore binary sha256:
-# b24aea6a5e38d7af15aa40f7242825466e6919af742d4fc814830b3a3879d8d7
-binary_sha   = "52f1694c5a6d"
+# e55be3673eea96db1e815ccc8b5437fa4e8786695dbbcdfed8b5ae75db594226
+binary_sha   = "8a555b9776d1"
 
 # ---- Native receipt proof trust policy ----
 # Optional trust metadata for SDK-side native receipt proof verification.
