@@ -8,7 +8,7 @@ description  = "Live development testnet for Monolythium / LythiumDAG-BFT. Found
 # 2026-06-10: DVT 2-cluster re-genesis — 2 consensus seats, each a
 # 10-operator cluster (threshold 7-of-10, 7 active + 3 standby); see
 # chains/genesis below. Supersedes the earlier 5-of-7 pin.
-genesis_hash = "0x991543a385b5c4fcf1e7b1598a0d78d97e9f51397b27db232238c76f39b0f726"
+genesis_hash = "0x0d2903aeac5aa127b3fb75cd1405c2c193896981e8897671792d3817a6fdf689"
 
 # ---- Dynamic genesis resolution ----
 # Full genesis content for this network, committed in this repo and served
@@ -25,7 +25,7 @@ genesis_hash = "0x991543a385b5c4fcf1e7b1598a0d78d97e9f51397b27db232238c76f39b0f7
 # acceptable only because testnet is value-less and wiped without notice. See
 # README.md "Dynamic genesis resolution" and the mainnet-only groundwork below.
 genesis_url    = "https://raw.githubusercontent.com/monolythium/chain-registry/master/chains/genesis/testnet-69420.genesis.toml"
-genesis_sha256 = "f05a9424b6d7d62b53553ab52d105abaac17967d279e5de33f6bc970772507f9"
+genesis_sha256 = "484f91a2468b161ab3c6ef3b6454f4142fd2cdd9b5781c7a476174b6a2cfae13"
 
 # ---- MAINNET-ONLY genesis hardening (groundwork — not used on testnet) ----
 # These fields are documented placeholders for the mainnet trust model and are
@@ -54,12 +54,12 @@ genesis_sha256 = "f05a9424b6d7d62b53553ab52d105abaac17967d279e5de33f6bc970772507
 # mono-core commit used to build the advertised foundation operator binary.
 # 2026-06-10 DVT 2x10/7-of-10 re-genesis: the foundation fleet runs the
 # directly-deployed protocore binary built from mono-core branch
-# `dyn-growth-coldstart-2026-06-09` (HEAD a2dafcd31cd9 — ARK non-custodial
+# `dyn-growth-coldstart-2026-06-09` (HEAD 52f1694c5a6d — DVT member registry + ARK non-custodial
 # staking + operator-onboarding CLI). A signed protocore release for this binary is pending;
 # until it is cut, the running binary is identified by its sha256 below.
 # deployed protocore binary sha256:
-# c37f89e098149ca992a9159af8a556a24b70f1a3dbf621743c5fa71b5b598566
-binary_sha   = "a2dafcd31cd9"
+# b24aea6a5e38d7af15aa40f7242825466e6919af742d4fc814830b3a3879d8d7
+binary_sha   = "52f1694c5a6d"
 
 # ---- Native receipt proof trust policy ----
 # Optional trust metadata for SDK-side native receipt proof verification.
