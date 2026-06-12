@@ -68,6 +68,17 @@ genesis_sha256 = "d50094b7cb939009ff5d48a7e28572516c413876aeeb41dc876ea51662a6bc
 #   extracted binary sha256: cb83b633e956fd92add944047a1a02d2ea6be9c96ef242c2e8711b15a75b0462
 binary_sha   = "c15a40a6"
 
+# First-class binary provenance keys (machine-readable; consumed by the Monarch
+# OS release-drift guard `scripts/verify-release-matches-registry.sh`). These
+# MUST stay in lock-step with the comment block above on every re-genesis /
+# rolling binary swap. `release_tag` is the signed protocore release the fleet
+# runs; `binary_release_sha256` is the sha256 of the EXTRACTED `protocore`
+# binary from that release's linux tarball (NOT the mono-core commit, which is
+# `binary_sha`).
+release_tag           = "v0.1.51-testnet"
+binary_release_sha256 = "cb83b633e956fd92add944047a1a02d2ea6be9c96ef242c2e8711b15a75b0462"
+release_tarball_sha256 = "e7912f3712e1e27c4888fd798361b80bb9b005609b23014276c0af63a102962e"
+
 # ---- Native receipt proof trust policy ----
 # Optional trust metadata for SDK-side native receipt proof verification.
 # This testnet entry intentionally does not publish active signer keys yet.

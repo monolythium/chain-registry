@@ -19,6 +19,9 @@ const ROOT_KEYS = new Set([
   "genesis_url",
   "genesis_sha256",
   "binary_sha",
+  "release_tag",
+  "binary_release_sha256",
+  "release_tarball_sha256",
   "display_name",
   "description",
   "created",
@@ -108,6 +111,8 @@ chain_id = 1
 network = "selftest"
 genesis_hash = "0x${"11".repeat(32)}"
 binary_sha = "abcdef1"
+release_tag = "v0.1.0-testnet"
+binary_release_sha256 = "abababababababababababababababababababababababababababababababab"
 
 [[rpc]]
 url = "https://rpc.example"
@@ -125,6 +130,8 @@ chain_id = 1
 network = "selftest"
 genesis_hash = "0x${"11".repeat(32)}"
 binary_sha = "abcdef1"
+release_tag = "v0.1.0-testnet"
+binary_release_sha256 = "abababababababababababababababababababababababababababababababab"
 
 [[rpc]]
 url = "https://rpc.example"
@@ -409,6 +416,23 @@ function validateChainInfo(info, file) {
     requireHexBytes(info.genesis_hash, HASH_BYTES, `${file}: genesis_hash`, errors);
     if (typeof info.binary_sha !== "string" || !/^[0-9a-f]{7,40}$/u.test(info.binary_sha)) {
       errors.push(`${file}: binary_sha must be a 7-40 character lowercase git SHA`);
+    }
+    // First-class binary provenance for the Monarch OS release-drift guard.
+    // release_tag: the signed protocore release the fleet runs (vX.Y.Z-channel).
+    // binary_release_sha256: sha256 of the EXTRACTED protocore binary from that
+    // release (NOT the mono-core commit). Both required so a release artifact
+    // can be byte-checked against the registry and never silently drift.
+    if (typeof info.release_tag !== "string" || !/^v[0-9]+\.[0-9]+\.[0-9]+-[a-z]+$/u.test(info.release_tag)) {
+      errors.push(`${file}: release_tag must be a protocore release tag (vX.Y.Z-channel)`);
+    }
+    if (typeof info.binary_release_sha256 !== "string" || !/^[0-9a-f]{64}$/u.test(info.binary_release_sha256)) {
+      errors.push(`${file}: binary_release_sha256 must be a 64-char lowercase sha256`);
+    }
+    if (
+      info.release_tarball_sha256 !== undefined &&
+      (typeof info.release_tarball_sha256 !== "string" || !/^[0-9a-f]{64}$/u.test(info.release_tarball_sha256))
+    ) {
+      errors.push(`${file}: release_tarball_sha256 must be a 64-char lowercase sha256 when present`);
     }
     if (info.rpc.length === 0) errors.push(`${file}: at least one [[rpc]] entry is required`);
     if (info.p2p.length === 0) errors.push(`${file}: at least one [[p2p]] entry is required`);
