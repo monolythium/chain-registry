@@ -25,7 +25,7 @@ genesis_hash = "0x11774775b5c3bfc36ecb9c37e7252b49898caaacdb55668de3913fe60c6602
 # acceptable only because testnet is value-less and wiped without notice. See
 # README.md "Dynamic genesis resolution" and the mainnet-only groundwork below.
 genesis_url    = "https://raw.githubusercontent.com/monolythium/chain-registry/master/chains/genesis/testnet-69420.genesis.toml"
-genesis_sha256 = "484f91a2468b161ab3c6ef3b6454f4142fd2cdd9b5781c7a476174b6a2cfae13"
+genesis_sha256 = "d50094b7cb939009ff5d48a7e28572516c413876aeeb41dc876ea51662a6bc31"
 
 # ---- MAINNET-ONLY genesis hardening (groundwork — not used on testnet) ----
 # These fields are documented placeholders for the mainnet trust model and are
