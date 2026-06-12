@@ -8,7 +8,7 @@ description  = "Live development testnet for Monolythium / LythiumDAG-BFT. Found
 # 2026-06-10: DVT 2-cluster re-genesis — 2 consensus seats, each a
 # 10-operator cluster (threshold 7-of-10, 7 active + 3 standby); see
 # chains/genesis below. Supersedes the earlier 5-of-7 pin.
-genesis_hash = "0x0d2903aeac5aa127b3fb75cd1405c2c193896981e8897671792d3817a6fdf689"
+genesis_hash = "0x11774775b5c3bfc36ecb9c37e7252b49898caaacdb55668de3913fe60c660258"
 
 # ---- Dynamic genesis resolution ----
 # Full genesis content for this network, committed in this repo and served
@@ -53,20 +53,20 @@ genesis_sha256 = "484f91a2468b161ab3c6ef3b6454f4142fd2cdd9b5781c7a476174b6a2cfae
 
 # mono-core commit used to build the advertised foundation operator binary.
 # 2026-06-10 DVT 2x10/7-of-10 re-genesis. The foundation fleet runs the
-# signed, attested protocore release `v0.1.48-testnet` (the exact published
+# signed, attested protocore release `v0.1.49-testnet` (the exact published
 # bytes — operator-downloadable, provenance digest matches the fleet), built
-# from mono-core commit 96eaac52b355: small-committee payload-commitment fix
+# from mono-core commit 96eaac52b355: service-reward model (stake=rank, service-weighted rewards, charter governance, archive attest+challenge, faucet-alloc fix)
 # (M4-M-01, first tx-capable DVT binary) + cluster charter (formCluster V2) +
 # DVT member registry + ARK non-custodial staking + operator-onboarding CLI.
 # Built --features mdbx,indexer-postgres,mesh,sp1-verifier; postgres indexer
 # enabled fleet-wide (indexer_history surface = available).
 #
 # Verify the signed release before trusting it (cosign certificate identity =
-# the release.yml workflow @refs/tags/v0.1.48-testnet):
-#   github.com/monolythium/protocore  release  v0.1.48-testnet
-#   release tarball  sha256: 9af00b7cb06fdbfcadc2e85c5f41a9a28dedd71a05aacefa93dedbd5c57e2176
-#   extracted binary sha256: e6d3b40aec8fa91e19ff6fb2a615dd2ae8aff6ee245963caaa738af98c1b54aa
-binary_sha   = "96eaac52"
+# the release.yml workflow @refs/tags/v0.1.49-testnet):
+#   github.com/monolythium/protocore  release  v0.1.49-testnet
+#   release tarball  sha256: 358233cc445a1f9995b6ea645646b710d4cf791afb8f3e8340e86c9db999e6e2
+#   extracted binary sha256: d003ad58278d1368a39d733003929c4a7cf215cc7dbd5905a9506a186996173b
+binary_sha   = "b4257f14"
 
 # ---- Native receipt proof trust policy ----
 # Optional trust metadata for SDK-side native receipt proof verification.
