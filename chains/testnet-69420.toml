@@ -53,22 +53,24 @@ genesis_sha256 = "d50094b7cb939009ff5d48a7e28572516c413876aeeb41dc876ea51662a6bc
 
 # mono-core commit used to build the advertised foundation operator binary.
 # 2026-06-10 DVT 2x10/7-of-10 re-genesis (genesis unchanged since). Binary
-# rolled to `v0.1.52-testnet` on 2026-06-14 — the canonical signed, attested
+# rolled to `v0.1.53-testnet` on 2026-06-14 — the canonical signed, attested
 # protocore release new operators download, built from mono-core commit
-# a40ea06ee36f: cold-start fast-sync (checkpoint-bootstrap + byte-identical
-# warm-restart closure) on top of the service-reward model (stake=rank,
-# service-weighted rewards, charter governance, archive attest+challenge),
-# cluster charter (formCluster V2), DVT member registry, ARK non-custodial
-# staking. Built --features mdbx,indexer-postgres,mesh,sp1-verifier; postgres
-# indexer enabled fleet-wide. (The live fleet runs an equivalent v0.1.52 build
-# warm-swapped in place; consensus is binary-sha-agnostic and pins on genesis.)
+# 79c147e41d34: fast-sync now AUTO-RESOLVES its cold-start seeds from this
+# registry's `[[rpc]]` list (and, for OTA'd nodes, the Monarch OS extension
+# env), so a clean-box node bootstraps from a quorum-signed checkpoint with
+# ZERO per-node config — on top of cold-start fast-sync (checkpoint-bootstrap +
+# byte-identical warm-restart closure), the service-reward model, cluster
+# charter (formCluster V2), DVT member registry, ARK non-custodial staking.
+# Built --features mdbx,indexer-postgres,mesh,sp1-verifier; postgres indexer
+# enabled fleet-wide. (The live fleet runs an equivalent build warm-swapped in
+# place; consensus is binary-sha-agnostic and pins on genesis.)
 #
 # Verify the signed release before trusting it (cosign certificate identity =
-# the release.yml workflow @refs/tags/v0.1.52-testnet):
-#   github.com/monolythium/protocore  release  v0.1.52-testnet
-#   release tarball  sha256: 9dbf0976a71471e89ed116fdad46013efea2e2022c9ed835a234b4ffea759c92
-#   extracted binary sha256: 5f0e4d5fd38e239893730330e9cd782866c8ad5a8ee6b22227cef7919202d8a4
-binary_sha   = "a40ea06e"
+# the release.yml workflow @refs/tags/v0.1.53-testnet):
+#   github.com/monolythium/protocore  release  v0.1.53-testnet
+#   release tarball  sha256: dfc08c18e6f33247f591562ac3e3d330499b29c987a8136b5e36f123b9f7c9f2
+#   extracted binary sha256: 17b54e975ede6c00ba85a2e2da65da69ce4bbf88192f1b0bf43fff95512d0831
+binary_sha   = "79c147e4"
 
 # First-class binary provenance keys (machine-readable; consumed by the Monarch
 # OS release-drift guard `scripts/verify-release-matches-registry.sh`). These
@@ -77,9 +79,9 @@ binary_sha   = "a40ea06e"
 # runs; `binary_release_sha256` is the sha256 of the EXTRACTED `protocore`
 # binary from that release's linux tarball (NOT the mono-core commit, which is
 # `binary_sha`).
-release_tag           = "v0.1.52-testnet"
-binary_release_sha256 = "5f0e4d5fd38e239893730330e9cd782866c8ad5a8ee6b22227cef7919202d8a4"
-release_tarball_sha256 = "9dbf0976a71471e89ed116fdad46013efea2e2022c9ed835a234b4ffea759c92"
+release_tag           = "v0.1.53-testnet"
+binary_release_sha256 = "17b54e975ede6c00ba85a2e2da65da69ce4bbf88192f1b0bf43fff95512d0831"
+release_tarball_sha256 = "dfc08c18e6f33247f591562ac3e3d330499b29c987a8136b5e36f123b9f7c9f2"
 
 # ---- Native receipt proof trust policy ----
 # Optional trust metadata for SDK-side native receipt proof verification.
