@@ -53,7 +53,7 @@ genesis_sha256 = "d50094b7cb939009ff5d48a7e28572516c413876aeeb41dc876ea51662a6bc
 
 # mono-core commit used to build the advertised foundation operator binary.
 # 2026-06-10 DVT 2x10/7-of-10 re-genesis (genesis unchanged since). Binary
-# rolled to `v0.1.55-testnet` on 2026-06-14 — the canonical signed, attested
+# rolled to `v0.1.56-testnet` on 2026-06-14 — the canonical signed, attested
 # protocore release new operators download, built from mono-core commit
 # 79c147e41d34: fast-sync now AUTO-RESOLVES its cold-start seeds from this
 # registry's `[[rpc]]` list (and, for OTA'd nodes, the Monarch OS extension
@@ -66,11 +66,11 @@ genesis_sha256 = "d50094b7cb939009ff5d48a7e28572516c413876aeeb41dc876ea51662a6bc
 # place; consensus is binary-sha-agnostic and pins on genesis.)
 #
 # Verify the signed release before trusting it (cosign certificate identity =
-# the release.yml workflow @refs/tags/v0.1.55-testnet):
-#   github.com/monolythium/protocore  release  v0.1.55-testnet
-#   release tarball  sha256: 588d4826c7c3d4bebaea2d04e2c79c5b3bddbd3efbaf2d792abd76d9759afeea
-#   extracted binary sha256: 09862e56ebb9f80b958f55cb45a81100fb9a7ae77aa7a3170de6539f6f8d5db2
-binary_sha   = "78339610"
+# the release.yml workflow @refs/tags/v0.1.56-testnet):
+#   github.com/monolythium/protocore  release  v0.1.56-testnet
+#   release tarball  sha256: a7f15eb06ca109aff12cae607c034c53bcc339a797171e2d654a7cdb23674cbb
+#   extracted binary sha256: 46c2c82faa3de99923b776adff3fc83e9424d20f93131c4ee86321a91efab2bd
+binary_sha   = "e801e8ed"
 
 # First-class binary provenance keys (machine-readable; consumed by the Monarch
 # OS release-drift guard `scripts/verify-release-matches-registry.sh`). These
@@ -79,9 +79,9 @@ binary_sha   = "78339610"
 # runs; `binary_release_sha256` is the sha256 of the EXTRACTED `protocore`
 # binary from that release's linux tarball (NOT the mono-core commit, which is
 # `binary_sha`).
-release_tag           = "v0.1.55-testnet"
-binary_release_sha256 = "09862e56ebb9f80b958f55cb45a81100fb9a7ae77aa7a3170de6539f6f8d5db2"
-release_tarball_sha256 = "588d4826c7c3d4bebaea2d04e2c79c5b3bddbd3efbaf2d792abd76d9759afeea"
+release_tag           = "v0.1.56-testnet"
+binary_release_sha256 = "46c2c82faa3de99923b776adff3fc83e9424d20f93131c4ee86321a91efab2bd"
+release_tarball_sha256 = "a7f15eb06ca109aff12cae607c034c53bcc339a797171e2d654a7cdb23674cbb"
 
 # ---- Native receipt proof trust policy ----
 # Optional trust metadata for SDK-side native receipt proof verification.
