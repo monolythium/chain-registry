@@ -73,7 +73,7 @@ genesis_sha256 = "d50094b7cb939009ff5d48a7e28572516c413876aeeb41dc876ea51662a6bc
 # the release.yml workflow @refs/tags/v0.1.60-testnet):
 #   github.com/monolythium/protocore  release  v0.1.60-testnet
 #   release tarball  sha256: 80981bb2bcbf915069d95be52261d328cf1d4f140d1261a02932eecd0b0ab18e
-#   extracted binary sha256: f1b41383084f9cad092010bfbdfd40d2c700d1b3ac382ae1a90713218dd2264d
+#   extracted binary sha256: 89714234aaa722875c36be8295c103be0bb92e9cc95ef4b96b668f457da5bbf2
 binary_sha   = "45743855"
 
 # First-class binary provenance keys (machine-readable; consumed by the Monarch
@@ -84,7 +84,7 @@ binary_sha   = "45743855"
 # binary from that release's linux tarball (NOT the mono-core commit, which is
 # `binary_sha`).
 release_tag           = "v0.1.60-testnet"
-binary_release_sha256 = "f1b41383084f9cad092010bfbdfd40d2c700d1b3ac382ae1a90713218dd2264d"
+binary_release_sha256 = "89714234aaa722875c36be8295c103be0bb92e9cc95ef4b96b668f457da5bbf2"
 release_tarball_sha256 = "80981bb2bcbf915069d95be52261d328cf1d4f140d1261a02932eecd0b0ab18e"
 
 # ---- Native receipt proof trust policy ----
