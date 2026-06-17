@@ -133,6 +133,30 @@ release_tarball_sha256 = "80981bb2bcbf915069d95be52261d328cf1d4f140d1261a02932ee
 # protocore process listens on 0.0.0.0:8545; the cost-based RPC rate-limiter is
 # the DoS mitigation. Reachability of each endpoint below was confirmed by an
 # external provenance, sync, and P2P TCP probes at the v0.1.44 testnet head.
+#
+# RELAYS FIRST (ordering is load-bearing). The relays below run
+# `serve_snapshots = true` and serve the COMPLETE fast-sync closure (the [1,R]
+# `committed-ref-by-height` index). Operators serve only a partial snapshot
+# (`by_height = 0`), which makes a cold-start node fatal-abort on the A2 boot
+# invariant and crash-loop. An un-pinned node resolves its `fast_sync` seeds in
+# THIS file's order, so the relays MUST lead the `[[rpc]]` list. Pinned fleet
+# nodes set their own `[fast_sync].seed_rpc_urls` and ignore this ordering, so
+# this only affects fresh / reprovisioned cold-start nodes — exactly the ones
+# that need a complete closure. Do not move operators above the relays.
+
+[[rpc]]
+url      = "http://178.105.45.210:8545"
+provider = "monolythium-foundation"
+region   = "fsn1"
+tier     = "official"
+notes    = "relay-1; serves complete fast-sync closure (cold-start preferred)"
+
+[[rpc]]
+url      = "http://65.21.252.34:8545"
+provider = "monolythium-foundation"
+region   = "hel1"
+tier     = "official"
+notes    = "relay-2; serves complete fast-sync closure (cold-start preferred)"
 
 [[rpc]]
 url      = "http://178.105.12.9:8545"
@@ -203,20 +227,6 @@ provider = "monolythium-foundation"
 region   = "fsn1"
 tier     = "official"
 notes    = "operator-9"
-
-[[rpc]]
-url      = "http://178.105.45.210:8545"
-provider = "monolythium-foundation"
-region   = "fsn1"
-tier     = "official"
-notes    = "relay-1"
-
-[[rpc]]
-url      = "http://65.21.252.34:8545"
-provider = "monolythium-foundation"
-region   = "hel1"
-tier     = "official"
-notes    = "relay-2"
 
 # ---- P2P seeds ----
 # libp2p multiaddrs for the healthy foundation endpoints advertised here. Port
