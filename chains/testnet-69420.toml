@@ -53,28 +53,30 @@ genesis_sha256 = "d50094b7cb939009ff5d48a7e28572516c413876aeeb41dc876ea51662a6bc
 
 # mono-core commit used to build the advertised foundation operator binary.
 # 2026-06-10 DVT 2x10/7-of-10 re-genesis (genesis unchanged since). Binary
-# rolled to `v0.1.60-testnet` on 2026-06-17 — the canonical signed, attested
+# rolled to `v0.1.61-testnet` on 2026-06-17 — the canonical signed, attested
 # protocore release new operators download, built from mono-core commit
-# 45743855909012: lands the #18 epoch-seed divergence fix (a catching-up node
-# DEFERS instead of ZERO-skipping the epoch-boundary VRF seed → no more
-# CheckpointStateRootMismatch self-quarantine on the live commit path), the
-# lyth_chainStatus public-read alias (#21), and `gen-operator-keys
-# --from-mnemonic` (deterministic, seat-preserving recovery keygen). Supersedes
-# v0.1.56; byte-compatible ROLLING swap (no re-genesis) — proven on the live
-# 22-node fleet (21/21 rolled with the chain advancing continuously + 3
-# diverged nodes recovered). On top of cold-start fast-sync (checkpoint-
-# bootstrap + byte-identical warm-restart closure), the service-reward model,
-# cluster charter (formCluster V2), DVT member registry, ARK non-custodial
-# staking. Built --features mdbx,indexer-postgres,mesh,sp1-verifier; postgres
-# indexer enabled fleet-wide. (The live fleet runs an equivalent build warm-
-# swapped in place; consensus is binary-sha-agnostic and pins on genesis.)
+# f21367e0a68c. v0.1.61 adds, on top of v0.1.60:
+#   - the milestone-gated MRV app-contract EVM-parity surface — DORMANT below
+#     its foundation-signed activation height N (byte-identical to v0.1.60 at
+#     every height < N; below-N replay proven byte-identical in tests);
+#   - a fast-sync cold-start fix: a served warm-restart closure with an empty
+#     committed-ref-by-height index now boots repair-only / non-proposing and
+#     climbs as a follower, instead of the A2 fatal-abort + crash-loop;
+#   - the release-tag embed: web3_clientVersion now reports
+#     protocore/v2/<tag>+<commit>, so Monarch's release-matcher + confirm-by-
+#     commit can map a running node to this published release.
+# Carries forward v0.1.60's #18 epoch-seed fix, the lyth_chainStatus alias
+# (#21), and gen-operator-keys --from-mnemonic recovery keygen. Byte-compatible
+# ROLLING swap (no re-genesis); the MRV surface stays inert until N. Built
+# --features mdbx,indexer-postgres,mesh,sp1-verifier; postgres indexer enabled
+# fleet-wide.
 #
 # Verify the signed release before trusting it (cosign certificate identity =
-# the release.yml workflow @refs/tags/v0.1.60-testnet):
-#   github.com/monolythium/protocore  release  v0.1.60-testnet
-#   release tarball  sha256: 80981bb2bcbf915069d95be52261d328cf1d4f140d1261a02932eecd0b0ab18e
-#   extracted binary sha256: 89714234aaa722875c36be8295c103be0bb92e9cc95ef4b96b668f457da5bbf2
-binary_sha   = "45743855"
+# the release.yml workflow @refs/tags/v0.1.61-testnet):
+#   github.com/monolythium/protocore  release  v0.1.61-testnet
+#   release tarball  sha256: 5191e0956a2fc9ccef3b66bac3f2b5c9c1a3b066d54c67abbc20ef27bc3cef2f
+#   extracted binary sha256: 01aef8be3511e70f5b8267c2dac75411bbc891c0bcbadfe4766d1f85fbb84a4b
+binary_sha   = "f21367e0"
 
 # First-class binary provenance keys (machine-readable; consumed by the Monarch
 # OS release-drift guard `scripts/verify-release-matches-registry.sh`). These
@@ -83,9 +85,9 @@ binary_sha   = "45743855"
 # runs; `binary_release_sha256` is the sha256 of the EXTRACTED `protocore`
 # binary from that release's linux tarball (NOT the mono-core commit, which is
 # `binary_sha`).
-release_tag           = "v0.1.60-testnet"
-binary_release_sha256 = "89714234aaa722875c36be8295c103be0bb92e9cc95ef4b96b668f457da5bbf2"
-release_tarball_sha256 = "80981bb2bcbf915069d95be52261d328cf1d4f140d1261a02932eecd0b0ab18e"
+release_tag           = "v0.1.61-testnet"
+binary_release_sha256 = "01aef8be3511e70f5b8267c2dac75411bbc891c0bcbadfe4766d1f85fbb84a4b"
+release_tarball_sha256 = "5191e0956a2fc9ccef3b66bac3f2b5c9c1a3b066d54c67abbc20ef27bc3cef2f"
 
 # ---- Native receipt proof trust policy ----
 # Optional trust metadata for SDK-side native receipt proof verification.
