@@ -53,41 +53,45 @@ genesis_sha256 = "d50094b7cb939009ff5d48a7e28572516c413876aeeb41dc876ea51662a6bc
 
 # mono-core commit used to build the advertised foundation operator binary.
 # 2026-06-10 DVT 2x10/7-of-10 re-genesis (genesis unchanged since). Binary
-# rolled to `v0.1.62-testnet` on 2026-06-17 — the canonical signed, attested
+# rolled to `v0.1.63-testnet` on 2026-06-17 — the canonical signed, attested
 # protocore release new operators download, built from mono-core commit
-# dad2fff0bc6a. v0.1.62 = v0.1.61 (milestone-gated MRV app-contract EVM-parity
-# surface, DORMANT below the foundation-signed activation height N + the
-# release-tag embed) PLUS the V4-LIVE-0009 proposer-gate fix:
-#   - V4-LIVE-0009: a by-height committed-ref index spanning [1, head] with only
-#     a sub-tolerance gap (<=64) + a substantial fallback (>=256) keeps the
-#     proposer ENABLED. The prior rigid gaps==0 gate disabled the proposer on a
-#     benign ~1-row hole; a simultaneous fleet-wide warm-restart (the v0.1.61
-#     roll) then put EVERY committee node in repair-only at once → no proposer →
-#     no forward checkpoint → fleet-wide deadlock (chain stalled at 179270,
-#     recovered by this fix). Fork-safe: a proposal whose committed-ref-set the
-#     committee does not share is rejected, never committed.
-# Carries forward v0.1.60's #18 epoch-seed fix, the lyth_chainStatus alias (#21),
-# gen-operator-keys --from-mnemonic recovery keygen, and v0.1.61's cold-start
-# A2-degrade. Byte-compatible ROLLING swap (no re-genesis); MRV inert until N.
+# 143dc78ced6a. v0.1.63 = v0.1.62 PLUS the fast-sync hardening:
+#   - cold-start snapshot-lag fix: try_one_seed now fetches the seed's served
+#     snapshot manifest FIRST, then the quorum cert AT-OR-BELOW that height
+#     (instead of pinning the always-newer latest cert that outruns the lagging
+#     snapshot) — fixes the retry-forever cold-start loop for fresh/recovering
+#     and archive nodes. All quorum/root/recency guards preserved.
+#   - by-height committed-ref backfill: missing index rows are reconstructed at
+#     boot (and on the live floor-skip) from the durable block-window summaries,
+#     healing gaps==0 (the benign hole that armed the v0.1.61 deadlock).
+# v0.1.62 carried V4-LIVE-0009 (proposer stays ENABLED for a full-range [1,head]
+# index with a sub-tolerance gap<=64 + fallback>=256; fork-safe — a non-shared
+# committed-ref-set is rejected, never committed). v0.1.63 is BYTE-IDENTICAL in
+# execution to v0.1.62 (the fixes are bootstrap/sidecar only).
+#
+# ROLLOUT STATE (transitional, 2026-06-17): operators run v0.1.63 (this pin);
+# the foundation committee + relays remain on v0.1.62 (e3406e1a) through the MRV
+# milestone height N and roll v0.1.63 AFTER N. Both are execution-compatible, so
+# v0.1.63 nodes fast-sync cleanly from the v0.1.62 seeds. MRV inert until N.
 # Built --features mdbx,indexer-postgres,mesh,sp1-verifier; indexer enabled.
 #
 # Verify the signed release before trusting it (cosign certificate identity =
-# the release.yml workflow @refs/tags/v0.1.62-testnet):
-#   github.com/monolythium/protocore  release  v0.1.62-testnet
-#   release tarball  sha256: 1d8870e6fd9f0317eea2e76cea9ccdd3509ea88945e05067af0fb1ffa4d489f1
-#   extracted binary sha256: e3406e1a7c9d6782fb451d42fe52e04ba9e66b7a28f19c99ad136daf8700ad80
-binary_sha   = "dad2fff0"
+# the release.yml workflow @refs/tags/v0.1.63-testnet):
+#   github.com/monolythium/protocore  release  v0.1.63-testnet
+#   release tarball  sha256: 1d6f824cfb0b7c6194a7034b6939af2c3655f3e477905dfc778941d21d86551d
+#   extracted binary sha256: b24d15ec8a4340a94c3495bc78acca5312a7345dedba4030532086498b574d94
+binary_sha   = "143dc78c"
 
 # First-class binary provenance keys (machine-readable; consumed by the Monarch
 # OS release-drift guard `scripts/verify-release-matches-registry.sh`). These
 # MUST stay in lock-step with the comment block above on every re-genesis /
-# rolling binary swap. `release_tag` is the signed protocore release the fleet
-# runs; `binary_release_sha256` is the sha256 of the EXTRACTED `protocore`
+# rolling binary swap. `release_tag` is the signed protocore release operators
+# run; `binary_release_sha256` is the sha256 of the EXTRACTED `protocore`
 # binary from that release's linux tarball (NOT the mono-core commit, which is
 # `binary_sha`).
-release_tag           = "v0.1.62-testnet"
-binary_release_sha256 = "e3406e1a7c9d6782fb451d42fe52e04ba9e66b7a28f19c99ad136daf8700ad80"
-release_tarball_sha256 = "1d8870e6fd9f0317eea2e76cea9ccdd3509ea88945e05067af0fb1ffa4d489f1"
+release_tag           = "v0.1.63-testnet"
+binary_release_sha256 = "b24d15ec8a4340a94c3495bc78acca5312a7345dedba4030532086498b574d94"
+release_tarball_sha256 = "1d6f824cfb0b7c6194a7034b6939af2c3655f3e477905dfc778941d21d86551d"
 
 # ---- Native receipt proof trust policy ----
 # Optional trust metadata for SDK-side native receipt proof verification.
