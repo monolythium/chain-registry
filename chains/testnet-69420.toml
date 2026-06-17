@@ -53,24 +53,28 @@ genesis_sha256 = "d50094b7cb939009ff5d48a7e28572516c413876aeeb41dc876ea51662a6bc
 
 # mono-core commit used to build the advertised foundation operator binary.
 # 2026-06-10 DVT 2x10/7-of-10 re-genesis (genesis unchanged since). Binary
-# rolled to `v0.1.56-testnet` on 2026-06-14 — the canonical signed, attested
+# rolled to `v0.1.60-testnet` on 2026-06-17 — the canonical signed, attested
 # protocore release new operators download, built from mono-core commit
-# 79c147e41d34: fast-sync now AUTO-RESOLVES its cold-start seeds from this
-# registry's `[[rpc]]` list (and, for OTA'd nodes, the Monarch OS extension
-# env), so a clean-box node bootstraps from a quorum-signed checkpoint with
-# ZERO per-node config — on top of cold-start fast-sync (checkpoint-bootstrap +
-# byte-identical warm-restart closure), the service-reward model, cluster
-# charter (formCluster V2), DVT member registry, ARK non-custodial staking.
-# Built --features mdbx,indexer-postgres,mesh,sp1-verifier; postgres indexer
-# enabled fleet-wide. (The live fleet runs an equivalent build warm-swapped in
-# place; consensus is binary-sha-agnostic and pins on genesis.)
+# 45743855909012: lands the #18 epoch-seed divergence fix (a catching-up node
+# DEFERS instead of ZERO-skipping the epoch-boundary VRF seed → no more
+# CheckpointStateRootMismatch self-quarantine on the live commit path), the
+# lyth_chainStatus public-read alias (#21), and `gen-operator-keys
+# --from-mnemonic` (deterministic, seat-preserving recovery keygen). Supersedes
+# v0.1.56; byte-compatible ROLLING swap (no re-genesis) — proven on the live
+# 22-node fleet (21/21 rolled with the chain advancing continuously + 3
+# diverged nodes recovered). On top of cold-start fast-sync (checkpoint-
+# bootstrap + byte-identical warm-restart closure), the service-reward model,
+# cluster charter (formCluster V2), DVT member registry, ARK non-custodial
+# staking. Built --features mdbx,indexer-postgres,mesh,sp1-verifier; postgres
+# indexer enabled fleet-wide. (The live fleet runs an equivalent build warm-
+# swapped in place; consensus is binary-sha-agnostic and pins on genesis.)
 #
 # Verify the signed release before trusting it (cosign certificate identity =
-# the release.yml workflow @refs/tags/v0.1.56-testnet):
-#   github.com/monolythium/protocore  release  v0.1.56-testnet
-#   release tarball  sha256: a7f15eb06ca109aff12cae607c034c53bcc339a797171e2d654a7cdb23674cbb
-#   extracted binary sha256: 46c2c82faa3de99923b776adff3fc83e9424d20f93131c4ee86321a91efab2bd
-binary_sha   = "e801e8ed"
+# the release.yml workflow @refs/tags/v0.1.60-testnet):
+#   github.com/monolythium/protocore  release  v0.1.60-testnet
+#   release tarball  sha256: 80981bb2bcbf915069d95be52261d328cf1d4f140d1261a02932eecd0b0ab18e
+#   extracted binary sha256: f1b41383084f9cad092010bfbdfd40d2c700d1b3ac382ae1a90713218dd2264d
+binary_sha   = "45743855"
 
 # First-class binary provenance keys (machine-readable; consumed by the Monarch
 # OS release-drift guard `scripts/verify-release-matches-registry.sh`). These
@@ -79,9 +83,9 @@ binary_sha   = "e801e8ed"
 # runs; `binary_release_sha256` is the sha256 of the EXTRACTED `protocore`
 # binary from that release's linux tarball (NOT the mono-core commit, which is
 # `binary_sha`).
-release_tag           = "v0.1.56-testnet"
-binary_release_sha256 = "46c2c82faa3de99923b776adff3fc83e9424d20f93131c4ee86321a91efab2bd"
-release_tarball_sha256 = "a7f15eb06ca109aff12cae607c034c53bcc339a797171e2d654a7cdb23674cbb"
+release_tag           = "v0.1.60-testnet"
+binary_release_sha256 = "f1b41383084f9cad092010bfbdfd40d2c700d1b3ac382ae1a90713218dd2264d"
+release_tarball_sha256 = "80981bb2bcbf915069d95be52261d328cf1d4f140d1261a02932eecd0b0ab18e"
 
 # ---- Native receipt proof trust policy ----
 # Optional trust metadata for SDK-side native receipt proof verification.
