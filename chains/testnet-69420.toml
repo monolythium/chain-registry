@@ -8,7 +8,7 @@ description  = "Live development testnet for Monolythium / LythiumDAG-BFT. Found
 # 2026-06-10: DVT 2-cluster re-genesis — 2 consensus seats, each a
 # 10-operator cluster (threshold 7-of-10, 7 active + 3 standby); see
 # chains/genesis below. Supersedes the earlier 5-of-7 pin.
-genesis_hash = "0x11774775b5c3bfc36ecb9c37e7252b49898caaacdb55668de3913fe60c660258"
+genesis_hash = "0x6c76fe490fab7195fc5821b052ca7a90b8fe96e0b18204d28430e97f57751943"
 
 # ---- Dynamic genesis resolution ----
 # Full genesis content for this network, committed in this repo and served
@@ -25,7 +25,7 @@ genesis_hash = "0x11774775b5c3bfc36ecb9c37e7252b49898caaacdb55668de3913fe60c6602
 # acceptable only because testnet is value-less and wiped without notice. See
 # README.md "Dynamic genesis resolution" and the mainnet-only groundwork below.
 genesis_url    = "https://raw.githubusercontent.com/monolythium/chain-registry/master/chains/genesis/testnet-69420.genesis.toml"
-genesis_sha256 = "d50094b7cb939009ff5d48a7e28572516c413876aeeb41dc876ea51662a6bc31"
+genesis_sha256 = "4a63e7093a1378492da3ad9b9d9237294d43b98089667f9f0161dd5b9b6c71e9"
 
 # ---- MAINNET-ONLY genesis hardening (groundwork — not used on testnet) ----
 # These fields are documented placeholders for the mainnet trust model and are
@@ -78,9 +78,9 @@ genesis_sha256 = "d50094b7cb939009ff5d48a7e28572516c413876aeeb41dc876ea51662a6bc
 # Verify the signed release before trusting it (cosign certificate identity =
 # the release.yml workflow @refs/tags/v0.1.63-testnet):
 #   github.com/monolythium/protocore  release  v0.1.63-testnet
-#   release tarball  sha256: 1d6f824cfb0b7c6194a7034b6939af2c3655f3e477905dfc778941d21d86551d
+#   release tarball  sha256: 5121fa94a732731fdbd22a1ea8e65c2a7bca584ea9a76f4320089252e01ee1aa
 #   extracted binary sha256: b24d15ec8a4340a94c3495bc78acca5312a7345dedba4030532086498b574d94
-binary_sha   = "143dc78c"
+binary_sha   = "f2964a9c"
 
 # First-class binary provenance keys (machine-readable; consumed by the Monarch
 # OS release-drift guard `scripts/verify-release-matches-registry.sh`). These
@@ -89,9 +89,9 @@ binary_sha   = "143dc78c"
 # run; `binary_release_sha256` is the sha256 of the EXTRACTED `protocore`
 # binary from that release's linux tarball (NOT the mono-core commit, which is
 # `binary_sha`).
-release_tag           = "v0.1.63-testnet"
+release_tag           = "v0.1.70-testnet"
 binary_release_sha256 = "b24d15ec8a4340a94c3495bc78acca5312a7345dedba4030532086498b574d94"
-release_tarball_sha256 = "1d6f824cfb0b7c6194a7034b6939af2c3655f3e477905dfc778941d21d86551d"
+release_tarball_sha256 = "5121fa94a732731fdbd22a1ea8e65c2a7bca584ea9a76f4320089252e01ee1aa"
 
 # ---- Native receipt proof trust policy ----
 # Optional trust metadata for SDK-side native receipt proof verification.
