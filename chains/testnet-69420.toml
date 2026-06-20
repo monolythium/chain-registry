@@ -53,26 +53,28 @@ genesis_sha256 = "4a63e7093a1378492da3ad9b9d9237294d43b98089667f9f0161dd5b9b6c71
 #   cannot silently redirect genesis_hash / genesis_url.
 
 # mono-core commit used to build the advertised foundation operator binary.
-# 2026-06-20 ROLLING UPGRADE to `v0.1.71-testnet`, built from mono-core commit
-# 553953b7 (NO re-genesis; genesis 0x6c76fe49 above unchanged). v0.1.71 makes
-# the MRV nested-call cycle clamp + counter-fold (#55 — a CRITICAL permissionless
-# chain-halt DoS that was parity-gated OFF) and the call-tree memory cap (#59)
-# ALWAYS-ON, and carries the #26 RPC error-code renumber + the #40
-# service_score_rewards capability. Byte-identical on replay (chain-69420 has
-# zero MRV txs). Rolled to all 22 active nodes (2x10 DVT + 2 relays) one at a
-# time, each verified synced. Built --features mdbx,indexer-postgres,mesh,sp1-verifier.
+# 2026-06-20 ROLLING UPGRADE to `v0.1.72-testnet`, built from mono-core commit
+# 76803f49 (NO re-genesis; genesis 0x6c76fe49 above unchanged). v0.1.72 fixes
+# the delegation reward-escrow conservation bug (#75): the settling ops now
+# settle each row at its last-settled effective weight BEFORE re-snapshotting
+# from the live balance (harvest-before-reweight), gated on a foundation-signed
+# milestone `delegation_settle_fix_height = 95000`. Below height 95000 the legacy
+# order is byte-identical to v0.1.71, so this roll is byte-identical on replay
+# until the milestone activates. Rolled to all 22 active nodes (2x10 DVT + 2
+# relays) one at a time, each verified synced. Built
+# --features mdbx,indexer-postgres,mesh,sp1-verifier.
 #
-# PROVENANCE NOTE: 553953b7 is the exact build commit and is mono-core master
-# HEAD (PR #73 squash-merge — reachable, not an orphan). Keep `binary_sha` =
-# 553953b7 in lock-step with the mono-core-sdk pin (packages/ts/src/registry.ts)
-# and the browser-wallet build-info trust pin.
+# PROVENANCE NOTE: 76803f49 is the exact build commit and is mono-core master
+# HEAD (PR #76 squash-merge). Keep `binary_sha` = 76803f49 in lock-step with the
+# mono-core-sdk pin (packages/ts/src/registry.ts) and the browser-wallet
+# build-info trust pin.
 #
 # Verify the signed release before trusting it (cosign certificate identity =
-# the release.yml workflow @refs/tags/v0.1.71-testnet):
-#   github.com/monolythium/protocore  release  v0.1.71-testnet
-#   release tarball  sha256: a8be6d98ac74ed4e0f4bd6382255b35df686d4bb9e085b07018bbb62da440361
-#   extracted binary sha256: 1f921fb1880db1893c6a250257abcb4a772a1d9aa3a84a3d9084fad7a17ac26d
-binary_sha   = "553953b7"
+# the release.yml workflow @refs/tags/v0.1.72-testnet):
+#   github.com/monolythium/protocore  release  v0.1.72-testnet
+#   release tarball  sha256: 3f76d0abfe5e6b7d92a3b146af0b617d2597b9d9ec4fdc6a9356c1563b64ab47
+#   extracted binary sha256: 6e6909abebe96512555d44bb82881de754879424396d590cd0e536898c4715e6
+binary_sha   = "76803f49"
 
 # First-class binary provenance keys (machine-readable; consumed by the Monarch
 # OS release-drift guard `scripts/verify-release-matches-registry.sh`). These
@@ -81,9 +83,9 @@ binary_sha   = "553953b7"
 # run; `binary_release_sha256` is the sha256 of the EXTRACTED `protocore`
 # binary from that release's linux tarball (NOT the mono-core commit, which is
 # `binary_sha`).
-release_tag           = "v0.1.71-testnet"
-binary_release_sha256 = "1f921fb1880db1893c6a250257abcb4a772a1d9aa3a84a3d9084fad7a17ac26d"
-release_tarball_sha256 = "a8be6d98ac74ed4e0f4bd6382255b35df686d4bb9e085b07018bbb62da440361"
+release_tag           = "v0.1.72-testnet"
+binary_release_sha256 = "6e6909abebe96512555d44bb82881de754879424396d590cd0e536898c4715e6"
+release_tarball_sha256 = "3f76d0abfe5e6b7d92a3b146af0b617d2597b9d9ec4fdc6a9356c1563b64ab47"
 
 # ---- Native receipt proof trust policy ----
 # Optional trust metadata for SDK-side native receipt proof verification.
