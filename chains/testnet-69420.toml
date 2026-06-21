@@ -57,30 +57,31 @@ genesis_sha256 = "300fce9db7ccf0a3e1f19e4bd3af6babc4987dcb4502f5c83c4cc36d1a9b7a
 #   cannot silently redirect genesis_hash / genesis_url.
 
 # mono-core commit used to build the advertised foundation operator binary.
-# The advertised binary is still `v0.1.72-testnet` (mono-core commit 76803f49) —
-# UNCHANGED by the 2026-06-21 re-genesis. v0.1.72 already carries both the #65
-# round-keyed epoch-seed read and the #75 delegation-escrow conservation fix
-# (settle each row at its last-settled effective weight BEFORE re-snapshotting
-# from the live balance — harvest-before-reweight); both are milestone-gated in
-# the binary. The re-genesis simply bakes their activation heights into the
-# genesis milestone (epoch_seed_round_keyed_height = 1, delegation_settle_fix_
-# height = 1), so on this fresh chain both are live from block 1 — no rolling
-# upgrade and no 95000 milestone. The milestone is generated from mono-core master
-# HEAD (PR #77 squash-merge, on top of the #76 delegation fix). All 22 active
-# nodes (2x10 DVT + 2 relays) run this binary on the new genesis, all synced.
+# 2026-06-21 ROLLING UPGRADE to `v0.1.73-testnet` (mono-core commit 72a137c6),
+# NO re-genesis — genesis 0x363fb60a above UNCHANGED. v0.1.73 adds the Fix 2
+# seed-durability fix: a new node-local ColumnFamily::RoundCertSeeds mirrors each
+# sealed round cert's 32-byte leader-seed digest SYNCHRONOUSLY on seal, and a
+# boot hydrator restores it, so a total warm-restart near an epoch boundary
+# recovers a sealed boundary seed even when the async RoundCerts drain has not
+# yet flushed it (the chain-69420 round-50000 EPOCH-SEED-STALL class). The change
+# is node-local, off the state root, and byte-identical on replay, so the roll is
+# a pure one-at-a-time binary swap with no milestone change. (It is PREVENTION for
+# a round that sealed before the restart; a never-sealed boundary round still
+# needs the committee repair sweep, which is tracked separately.) Rolled to all
+# 22 active nodes (2x10 DVT + 2 relays), each verified synced.
 # Built --features mdbx,indexer-postgres,mesh,sp1-verifier.
 #
-# PROVENANCE NOTE: 76803f49 is the exact build commit and is mono-core master
-# HEAD (PR #76 squash-merge). Keep `binary_sha` = 76803f49 in lock-step with the
+# PROVENANCE NOTE: 72a137c6 is the exact build commit and is mono-core master
+# HEAD (PR #79 squash-merge). Keep `binary_sha` = 72a137c6 in lock-step with the
 # mono-core-sdk pin (packages/ts/src/registry.ts) and the browser-wallet
 # build-info trust pin.
 #
 # Verify the signed release before trusting it (cosign certificate identity =
-# the release.yml workflow @refs/tags/v0.1.72-testnet):
-#   github.com/monolythium/protocore  release  v0.1.72-testnet
-#   release tarball  sha256: 3f76d0abfe5e6b7d92a3b146af0b617d2597b9d9ec4fdc6a9356c1563b64ab47
-#   extracted binary sha256: 6e6909abebe96512555d44bb82881de754879424396d590cd0e536898c4715e6
-binary_sha   = "76803f49"
+# the release.yml workflow @refs/tags/v0.1.73-testnet):
+#   github.com/monolythium/protocore  release  v0.1.73-testnet
+#   release tarball  sha256: f64a6343186346fa146feabbb588fdd9c0710db48fcfb9840ff30f089dac0993
+#   extracted binary sha256: b5d3b79d8cbfb14bbdbd36fb1e456be274c921bbb3cad2a3ed11ff8c2adcd8af
+binary_sha   = "72a137c6"
 
 # First-class binary provenance keys (machine-readable; consumed by the Monarch
 # OS release-drift guard `scripts/verify-release-matches-registry.sh`). These
@@ -89,9 +90,9 @@ binary_sha   = "76803f49"
 # run; `binary_release_sha256` is the sha256 of the EXTRACTED `protocore`
 # binary from that release's linux tarball (NOT the mono-core commit, which is
 # `binary_sha`).
-release_tag           = "v0.1.72-testnet"
-binary_release_sha256 = "6e6909abebe96512555d44bb82881de754879424396d590cd0e536898c4715e6"
-release_tarball_sha256 = "3f76d0abfe5e6b7d92a3b146af0b617d2597b9d9ec4fdc6a9356c1563b64ab47"
+release_tag           = "v0.1.73-testnet"
+binary_release_sha256 = "b5d3b79d8cbfb14bbdbd36fb1e456be274c921bbb3cad2a3ed11ff8c2adcd8af"
+release_tarball_sha256 = "f64a6343186346fa146feabbb588fdd9c0710db48fcfb9840ff30f089dac0993"
 
 # ---- Native receipt proof trust policy ----
 # Optional trust metadata for SDK-side native receipt proof verification.
