@@ -5,11 +5,15 @@ description  = "Live development testnet for Monolythium / LythiumDAG-BFT. Found
 
 # Pinned to the genesis the live cluster is currently running. Any
 # wipe + regenesis flips this hash and bumps the registry entry.
-# 2026-06-19 re-genesis (protocore v0.1.70-testnet) set the genesis_hash below.
-# Structure — 2 consensus seats, each a 10-operator cluster (threshold 7-of-10,
-# 7 active + 3 standby) — unchanged since the 2026-06-10 2-cluster cutover; see
-# chains/genesis below. Supersedes the earlier 5-of-7 pin.
-genesis_hash = "0x6c76fe490fab7195fc5821b052ca7a90b8fe96e0b18204d28430e97f57751943"
+# 2026-06-21 re-genesis (protocore v0.1.72-testnet) set the genesis_hash below,
+# recovering the chain from the round-50000 EPOCH-SEED-STALL by baking the #65
+# round-keyed epoch seed read (epoch_seed_round_keyed_height = 1) AND the #75
+# delegation-escrow conservation fix (delegation_settle_fix_height = 1) into the
+# genesis milestone — both active from block 1 on this fresh chain. Same 2x10
+# operator keys as the abandoned 0x6c76fe49 chain. Structure — 2 consensus seats,
+# each a 10-operator cluster (threshold 7-of-10, 7 active + 3 standby) — unchanged
+# since the 2026-06-10 2-cluster cutover; see chains/genesis below.
+genesis_hash = "0x363fb60abd3f481e16fe74d6a3e5afd35d6d3ba9cc26e186f27d4195cd5a7359"
 
 # ---- Dynamic genesis resolution ----
 # Full genesis content for this network, committed in this repo and served
@@ -26,7 +30,7 @@ genesis_hash = "0x6c76fe490fab7195fc5821b052ca7a90b8fe96e0b18204d28430e97f577519
 # acceptable only because testnet is value-less and wiped without notice. See
 # README.md "Dynamic genesis resolution" and the mainnet-only groundwork below.
 genesis_url    = "https://raw.githubusercontent.com/monolythium/chain-registry/master/chains/genesis/testnet-69420.genesis.toml"
-genesis_sha256 = "4a63e7093a1378492da3ad9b9d9237294d43b98089667f9f0161dd5b9b6c71e9"
+genesis_sha256 = "300fce9db7ccf0a3e1f19e4bd3af6babc4987dcb4502f5c83c4cc36d1a9b7ab6"
 
 # ---- MAINNET-ONLY genesis hardening (groundwork — not used on testnet) ----
 # These fields are documented placeholders for the mainnet trust model and are
@@ -53,16 +57,18 @@ genesis_sha256 = "4a63e7093a1378492da3ad9b9d9237294d43b98089667f9f0161dd5b9b6c71
 #   cannot silently redirect genesis_hash / genesis_url.
 
 # mono-core commit used to build the advertised foundation operator binary.
-# 2026-06-20 ROLLING UPGRADE to `v0.1.72-testnet`, built from mono-core commit
-# 76803f49 (NO re-genesis; genesis 0x6c76fe49 above unchanged). v0.1.72 fixes
-# the delegation reward-escrow conservation bug (#75): the settling ops now
-# settle each row at its last-settled effective weight BEFORE re-snapshotting
-# from the live balance (harvest-before-reweight), gated on a foundation-signed
-# milestone `delegation_settle_fix_height = 95000`. Below height 95000 the legacy
-# order is byte-identical to v0.1.71, so this roll is byte-identical on replay
-# until the milestone activates. Rolled to all 22 active nodes (2x10 DVT + 2
-# relays) one at a time, each verified synced. Built
-# --features mdbx,indexer-postgres,mesh,sp1-verifier.
+# The advertised binary is still `v0.1.72-testnet` (mono-core commit 76803f49) —
+# UNCHANGED by the 2026-06-21 re-genesis. v0.1.72 already carries both the #65
+# round-keyed epoch-seed read and the #75 delegation-escrow conservation fix
+# (settle each row at its last-settled effective weight BEFORE re-snapshotting
+# from the live balance — harvest-before-reweight); both are milestone-gated in
+# the binary. The re-genesis simply bakes their activation heights into the
+# genesis milestone (epoch_seed_round_keyed_height = 1, delegation_settle_fix_
+# height = 1), so on this fresh chain both are live from block 1 — no rolling
+# upgrade and no 95000 milestone. The milestone is generated from mono-core master
+# HEAD (PR #77 squash-merge, on top of the #76 delegation fix). All 22 active
+# nodes (2x10 DVT + 2 relays) run this binary on the new genesis, all synced.
+# Built --features mdbx,indexer-postgres,mesh,sp1-verifier.
 #
 # PROVENANCE NOTE: 76803f49 is the exact build commit and is mono-core master
 # HEAD (PR #76 squash-merge). Keep `binary_sha` = 76803f49 in lock-step with the
@@ -235,51 +241,51 @@ notes    = "operator-9"
 # cluster policy.
 
 [[p2p]]
-multiaddr = "/ip4/178.105.12.9/tcp/29898/p2p/12D3KooWGgh9vYbNSqYbci8w7bg2AAaFWx7umN1ADjjcUoUTF2Za"
+multiaddr = "/ip4/178.105.12.9/tcp/29898/p2p/12D3KooWAqapid7MZW1FiJxLC1GzkvfQBdAGM5ZVA1nzUjKhzRbq"
 region    = "fsn1"
 
 [[p2p]]
-multiaddr = "/ip4/178.105.15.216/tcp/29898/p2p/12D3KooWPUMj4vt1ee1Ug2QMJQwbDHSJ936JVaqw3iLXtAqPrq7R"
+multiaddr = "/ip4/178.105.15.216/tcp/29898/p2p/12D3KooWK7WYgpyqG9hiCMJ5WrmZFu6X6m1TXpgztfAhmwrTmNGu"
 region    = "fsn1"
 
 [[p2p]]
-multiaddr = "/ip4/178.104.233.182/tcp/29898/p2p/12D3KooWLPNJFUZhXyc1S7YvjMiKXyrNKCN3eFegDFF5UZAio7NJ"
+multiaddr = "/ip4/178.104.233.182/tcp/29898/p2p/12D3KooWHyEzvL7etS6WgFx4rgVjE6tnEfXKhM8yndEj2nNgLJWK"
 region    = "nbg1"
 
 [[p2p]]
-multiaddr = "/ip4/65.108.94.1/tcp/29898/p2p/12D3KooWRAuuQa5iEAzLUpLnyZ9VM53dvZMt3FPj7smDcwXn3oxz"
+multiaddr = "/ip4/65.108.94.1/tcp/29898/p2p/12D3KooWJr5dDPyrQS6xReuEF8MFAN47SQJ34kGq1U3sZdWkKuFD"
 region    = "hel1"
 
 [[p2p]]
-multiaddr = "/ip4/95.216.154.155/tcp/29898/p2p/12D3KooWFc9sVuCAuLxFTVy8KN5KXhyDvPjKkU98ySK81dFyStN8"
+multiaddr = "/ip4/95.216.154.155/tcp/29898/p2p/12D3KooWJ9zB1pWaNCEJj66gHMdDzu3xF1dpnzFNZoV7hAdKhPC3"
 region    = "hel1"
 
 [[p2p]]
-multiaddr = "/ip4/87.99.145.48/tcp/29898/p2p/12D3KooWL2KLRUHybGLd736nusDRTF2V1a9waeTsxKPwF78HDCmb"
+multiaddr = "/ip4/87.99.145.48/tcp/29898/p2p/12D3KooWFsB5z6aiUBE6uHXkgxB1mS4nxrM8fyWxnvDPWstzTmUa"
 region    = "ash"
 
 [[p2p]]
-multiaddr = "/ip4/5.223.85.76/tcp/29898/p2p/12D3KooWHvobdzzEAiKcFkgdkRfr8vWGyWYfBoWS3jnPycvfwGrK"
+multiaddr = "/ip4/5.223.85.76/tcp/29898/p2p/12D3KooWNox1cBRqRyCDK5Aq9XoDdctJdoMkrDVfF3PjuiQSWU9h"
 region    = "sin"
 
 [[p2p]]
-multiaddr = "/ip4/142.132.180.99/tcp/29898/p2p/12D3KooWBcAeWScYmDWPTjNM47CkKR4vEf44CNhDCcWuGpyY7Hko"
+multiaddr = "/ip4/142.132.180.99/tcp/29898/p2p/12D3KooWKyVKyDFF3gCcHosqdtRkGzsjVVpMHmpGYTeBWJhJreih"
 region    = "fsn1"
 
 [[p2p]]
-multiaddr = "/ip4/95.217.156.190/tcp/29898/p2p/12D3KooWPBr8guuWoZT59AobZEBHDZqKgwHWAP3aKUzKWeGTa7Z6"
+multiaddr = "/ip4/95.217.156.190/tcp/29898/p2p/12D3KooWR5ZPNznstwQSqEqX3yaKABtFtYoc3yxk8LKx6FgfnrzH"
 region    = "hel1"
 
 [[p2p]]
-multiaddr = "/ip4/162.55.54.198/tcp/29898/p2p/12D3KooWRBA5Wzs619GuMY2NrDD6fGoLYCK2tkXff2JAZyXn7RvR"
+multiaddr = "/ip4/162.55.54.198/tcp/29898/p2p/12D3KooWK6JHC2eerLa8GdPqoPfTcApCh7YjuTiPZHpkNp5eMqEu"
 region    = "fsn1"
 
 [[p2p]]
-multiaddr = "/ip4/178.105.45.210/tcp/29898/p2p/12D3KooWQRpCMLezJmvqqpbpEu8ixGHgonqianG1aVZjw6GiStbd"
+multiaddr = "/ip4/178.105.45.210/tcp/29898/p2p/12D3KooWJdD6pr9RmEndQpQSCreeA3N2dmM3D8TLkd4NzKbycMka"
 region    = "fsn1"
 
 [[p2p]]
-multiaddr = "/ip4/65.21.252.34/tcp/29898/p2p/12D3KooWRGzTwPX21Nee2c39RWuT2ayNWb6NMX19jCx8recrNeXL"
+multiaddr = "/ip4/65.21.252.34/tcp/29898/p2p/12D3KooWE88fmJMTEjCU2dP8Qxcv9jNKkao83G6BWKr7fXZPP3cQ"
 region    = "hel1"
 
 # ---- Explorers ----
