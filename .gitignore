@@ -23,6 +23,10 @@ TODO.md
 *.keystore
 *.p12
 secrets/
+
+# Cosign keyless signing certificates for the canonical milestone configs are
+# PUBLIC Fulcio certs (the verifier needs them) — track them despite *.pem above.
+!chains/milestones/*.pem
 credentials/
 
 # Node tooling (validator dependency — restored via `npm ci`)
