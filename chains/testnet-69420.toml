@@ -71,24 +71,26 @@ milestones_sha256 = "b4e93526fc07cd8dea3663d469db598e9326c8fad604873146201c7c142
 #   cannot silently redirect genesis_hash / genesis_url.
 
 # mono-core commit used to build the advertised foundation operator binary.
-# 2026-06-24 v2 RE-GENESIS to `v0.2.0-testnet`, mono-core master @ 3f55673f
-# (version 0.2.0 — nextgen-v2 merge + version bump). The cosigned protocore
-# v0.2.0-testnet release is built --features mdbx,indexer-postgres,mesh,sp1-verifier;
-# its extracted protocore sha256 =
-# 21c1fa77b31ba39e9e416c5c701ecd8ceb448b4af54f9cae8b5a40ef3e2e1765
+# 2026-06-24 ROLLING BINARY SWAP to `v0.2.1-testnet`, mono-core master @ 25513326
+# (version 0.2.1). NO re-genesis — genesis 0xd56f9763 above UNCHANGED. v0.2.1 rolls
+# up ml-dsa 0.1.1 (RUSTSEC-2025-0144 timing fix; keys/sigs byte-identical), issues
+# #16b/#23/#40/#47/#54, milestones + upgrade-plans as unsigned config, and the
+# SealBeacon wire-arm removal. The cosigned protocore v0.2.1-testnet release is built
+# --features mdbx,indexer-postgres,mesh,sp1-verifier; its extracted protocore sha256 =
+# 4d7718287e8c66cadbdb332d7656cc0293cf70fb5ccd62092e0f62013045d2d2
 # (= binary_release_sha256 below; GLIBC_2.34). This IS the binary running as
 # /usr/local/bin/protocore on all 22 fleet nodes (2x10 DVT + 2 relays) on genesis
 # 0xd56f9763, and the binary Monarch OS bakes.
 #
 # Verify the signed release before trusting it (cosign certificate identity = the
-# release.yml workflow @refs/tags/v0.2.0-testnet, issuer = GitHub Actions OIDC):
-#   github.com/monolythium/protocore  release  v0.2.0-testnet
-#   release tarball  sha256: fd934bf0a62e431a6a1485265ff5700889b12cc5cf3e4efe4597c451cfceb951
-#   extracted binary sha256: 21c1fa77b31ba39e9e416c5c701ecd8ceb448b4af54f9cae8b5a40ef3e2e1765
+# release.yml workflow @refs/tags/v0.2.1-testnet, issuer = GitHub Actions OIDC):
+#   github.com/monolythium/protocore  release  v0.2.1-testnet
+#   release tarball  sha256: b4f737b7cfdd6cca766299914ca9816a1de2352286899ab8f2b25bacacba6f3f
+#   extracted binary sha256: 4d7718287e8c66cadbdb332d7656cc0293cf70fb5ccd62092e0f62013045d2d2
 #
-# Keep `binary_sha` = 3f55673f in lock-step with the mono-core-sdk pin
+# Keep `binary_sha` = 25513326 in lock-step with the mono-core-sdk pin
 # (packages/ts/src/registry.ts) and the browser-wallet build-info trust pin.
-binary_sha   = "3f55673f"
+binary_sha   = "25513326"
 
 # First-class binary provenance keys (machine-readable; consumed by the Monarch
 # OS release-drift guard `scripts/verify-release-matches-registry.sh`). These
@@ -97,9 +99,9 @@ binary_sha   = "3f55673f"
 # run; `binary_release_sha256` is the sha256 of the EXTRACTED `protocore`
 # binary from that release's linux tarball (NOT the mono-core commit, which is
 # `binary_sha`).
-release_tag           = "v0.2.0-testnet"
-binary_release_sha256 = "21c1fa77b31ba39e9e416c5c701ecd8ceb448b4af54f9cae8b5a40ef3e2e1765"
-release_tarball_sha256 = "fd934bf0a62e431a6a1485265ff5700889b12cc5cf3e4efe4597c451cfceb951"
+release_tag           = "v0.2.1-testnet"
+binary_release_sha256 = "4d7718287e8c66cadbdb332d7656cc0293cf70fb5ccd62092e0f62013045d2d2"
+release_tarball_sha256 = "b4f737b7cfdd6cca766299914ca9816a1de2352286899ab8f2b25bacacba6f3f"
 
 # ---- Native receipt proof trust policy ----
 # Optional trust metadata for SDK-side native receipt proof verification.
