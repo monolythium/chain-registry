@@ -34,6 +34,18 @@ genesis_hash = "0xd56f9763ca849c5482cae27c7e2551f891684063b89afd53aadeb558684539
 genesis_url    = "https://raw.githubusercontent.com/monolythium/chain-registry/master/chains/genesis/testnet-69420.genesis.toml"
 genesis_sha256 = "cee021669d539dbfa4c50dd2707cab2e6e82bd65df2e19a64dfba278dfaac2eb"
 
+# ---- Canonical milestone config (rolling-upgrade mechanism) ----
+# The canonical, cosigned milestone config for this network, committed in this
+# repo. Milestones activate protocol parameters / precompile gates at chosen
+# heights without a re-genesis. This is the CANONICAL REFERENCE, not a runtime
+# fetch: operators fetch milestones_url at deploy time, `cosign verify-blob` the
+# committed .sig/.pem beside it (see chains/milestones/), then deploy and roll
+# the fleet before the new activation height. The chain loads the file as plain
+# config (no in-file signature) and the genesis-pinned milestone_digest binds
+# the content the running node applies. Mirrors genesis_url's authenticity model.
+milestones_url    = "https://raw.githubusercontent.com/monolythium/chain-registry/master/chains/milestones/testnet-69420.milestones.toml"
+milestones_sha256 = "b4e93526fc07cd8dea3663d469db598e9326c8fad604873146201c7c14262758"
+
 # ---- MAINNET-ONLY genesis hardening (groundwork — not used on testnet) ----
 # These fields are documented placeholders for the mainnet trust model and are
 # intentionally left commented. They MUST NOT carry active values on this

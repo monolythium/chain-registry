@@ -18,6 +18,8 @@ trust metadata.
 | `genesis_hash` | hex string (`0x...`) | yes | 32-byte keccak256 hash over the **raw on-disk bytes** of the canonical genesis file. The authoritative chain-identity pin and the on-chain genesis hash. |
 | `genesis_url` | string (`https://`) | no | HTTPS URL of the full genesis content for dynamic resolution (see "Dynamic genesis resolution" below). When it points at this repo's `chains/genesis/<network>.genesis.toml`, the validator verifies the on-disk bytes against `genesis_hash` (and `genesis_sha256`) offline. |
 | `genesis_sha256` | hex string (64 chars, no `0x`) | no | SHA-256 of the genesis bytes served at `genesis_url`. A cheap content pre-check; `sha256sum`-style lowercase hex. Requires `genesis_url`. NOT the chain-identity pin (`genesis_hash` is). |
+| `milestones_url` | string (`https://`) | no | HTTPS URL of the canonical milestone config (`chains/milestones/<network>.milestones.toml`). Carries rolling-upgrade entries that activate protocol parameters / precompile gates at chosen heights without a re-genesis. A deploy-time reference (fetch + `cosign verify-blob`, not a runtime fetch); the chain loads the file as plain config and the genesis-pinned `milestone_digest` binds it. Mirrors `genesis_url`. See "Milestones" below. |
+| `milestones_sha256` | hex string (64 chars, no `0x`) | no | SHA-256 of the milestone config served at `milestones_url`. A cheap content pre-check; `sha256sum`-style lowercase hex. Requires `milestones_url`. Authenticity is the cosign `.sig`/`.pem` beside the file, not this hash. |
 | `binary_sha` | git short SHA | yes | mono-core commit the active validator binary was built from. Lets a reader verify the chain is running known software. |
 | `display_name` | string | no | Human-readable network name for UI ("Monolythium Testnet"). Falls back to `network` if absent. |
 | `description` | string | no | One-line purpose statement. |
@@ -57,6 +59,35 @@ the chain files and are a **hard rejection** if set as active values today
 | `genesis_cert_identity` | string | mainnet | Expected cosign certificate identity (OIDC SAN regex). **Image-baked**, never trusted from the registry — the image pins *who* may sign genesis. |
 | `genesis_cert_issuer` | string | mainnet | Expected cosign OIDC issuer URL (e.g. the GitHub Actions OIDC issuer). Image-baked, used with `genesis_cert_identity`. |
 | `registry_rev` | string (40-char commit SHA) | mainnet | Commit-SHA pin for this registry, baked per signed image instead of the moving `master` ref, so a registry-account compromise or stale CDN edge cannot silently redirect `genesis_hash` / `genesis_url`. |
+
+## Milestones
+
+`milestones_url` + `milestones_sha256` point at the network's canonical,
+**unsigned**, cosigned milestone config
+(`chains/milestones/<network>.milestones.toml`). Milestones activate protocol
+parameters and precompile gates at chosen block **heights** without cutting a
+new genesis — the rolling-upgrade mechanism.
+
+The config keeps a `[meta]` header (`chain_id` + a `config_id` string) and one
+or more `[[entries]]`. It deliberately **drops** the old on-chain signature
+apparatus (`[meta].signers` / `threshold` / `signer_set_id` and the
+`[[signatures]]` blocks): the chain loads the file as plain config and does
+**not** verify an in-file signature.
+
+Authenticity comes from two anchors instead, exactly like `genesis_url`:
+
+- **Supply-chain — the cosign blob.** CI
+  (`.github/workflows/milestones-attestation.yml`) `cosign sign-blob`s the file
+  (keyless OIDC) and commits the `.sig` / `.pem` / `.sha256` beside it.
+  Operators `cosign verify-blob` against the workflow cert-identity / OIDC
+  issuer **before** deploy.
+- **On-chain — the genesis-pinned digest.** Genesis pins the config's canonical
+  `milestone_digest`; a node recomputes it and requires a match before applying
+  any entry, binding the milestones it enforces to the genesis it booted.
+
+To roll an upgrade: edit `[[entries]]` with a future activation `height`, push
+(CI re-cosigns), then operators verify, deploy, and roll the fleet **before**
+the new height. See the repo README "Milestones".
 
 ## `[[rpc]]`
 

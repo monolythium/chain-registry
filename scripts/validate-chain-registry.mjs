@@ -18,6 +18,13 @@ const ROOT_KEYS = new Set([
   "genesis_hash",
   "genesis_url",
   "genesis_sha256",
+  // Canonical milestone config reference (mirrors genesis_url/genesis_sha256):
+  // the cosigned chains/milestones/<network>.milestones.toml that carries the
+  // rolling-upgrade entries. Deploy-time fetch + cosign verify, not a runtime
+  // fetch; the chain loads it as config + the genesis-pinned milestone_digest
+  // binds it.
+  "milestones_url",
+  "milestones_sha256",
   "binary_sha",
   "release_tag",
   "binary_release_sha256",
