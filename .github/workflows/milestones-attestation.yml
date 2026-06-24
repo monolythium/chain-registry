@@ -1,0 +1,73 @@
+name: milestones-attestation
+
+# Supply-chain authenticity for the canonical milestone configs.
+#
+# The milestone config under chains/milestones/ is plain, UNSIGNED config — the
+# chain loads it as configuration and does NOT verify an in-file signature.
+# Authenticity instead comes from GitHub + a keyless-OIDC cosign signature
+# attached beside the file, exactly the model the registry already relies on for
+# the committed genesis content (genesis_url) and the cosigned protocore release
+# the operator binary is built from.
+#
+# On every push that touches chains/milestones/**, this job recomputes each
+# milestone file's sha256 and `cosign sign-blob`s it (keyless OIDC, mirroring
+# the protocore release.yml cosign step), then commits the resulting `.sha256`,
+# `.sig`, and `.pem` next to the source file. Operators `cosign verify-blob` the
+# file against the workflow's certificate identity / OIDC issuer before they
+# deploy a milestone change and roll the fleet (see README.md "Milestones").
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'chains/milestones/**'
+  # Allow a manual re-attestation (e.g. after rotating the signing identity)
+  # without editing a milestone file.
+  workflow_dispatch: {}
+
+permissions:
+  # contents: write — commit the .sha256/.sig/.pem attestations back to master.
+  # id-token: write — mint the OIDC token cosign keyless signing needs.
+  contents: write
+  id-token: write
+
+jobs:
+  attest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install cosign
+        uses: sigstore/cosign-installer@v3
+
+      - name: Compute sha256 + cosign sign-blob (keyless OIDC)
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          for f in chains/milestones/*.milestones.toml; do
+            echo "::group::Attesting ${f}"
+            # sha256 manifest, committed beside the file.
+            sha256sum "${f}" > "${f}.sha256"
+            # Keyless cosign signature + certificate (mirrors protocore
+            # release.yml: cosign sign-blob --yes --output-signature .sig
+            # --output-certificate .pem).
+            cosign sign-blob --yes \
+              --output-signature   "${f}.sig" \
+              --output-certificate "${f}.pem" \
+              "${f}"
+            echo "::endgroup::"
+          done
+
+      - name: Commit attestations
+        run: |
+          set -euo pipefail
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add chains/milestones/*.sha256 chains/milestones/*.sig chains/milestones/*.pem
+          if git diff --cached --quiet; then
+            echo "No attestation changes to commit."
+            exit 0
+          fi
+          git commit -m "ci: cosign-attest milestone config(s) [skip ci]"
+          git push

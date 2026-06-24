@@ -112,7 +112,47 @@ to run** (no baked genesis hash). A Foundation re-genesis flips `genesis_hash`
 + `genesis_url` in this repo and is picked up on the next boot — the image
 survives re-genesis with no rebuild.
 
-### Trust model — be honest about what the hash-match proves
+### Milestones
+
+Protocol parameters and precompile gates that activate at chosen block
+**heights** without cutting a new genesis (inflation ceiling, fee splits,
+delegation caps, precompile on/off gates, and the like) are carried in a
+**canonical, cosigned milestone config** committed here:
+[`chains/milestones/testnet-69420.milestones.toml`](./chains/milestones/testnet-69420.milestones.toml).
+A live network references it from its chain file as `milestones_url` /
+`milestones_sha256`, alongside `genesis_url`.
+
+**This is the rolling-upgrade mechanism.** To change a parameter without a
+re-genesis:
+
+1. Append or edit an `[[entries]]` block with a future activation `height` and
+   push to `master`.
+2. CI (`.github/workflows/milestones-attestation.yml`) recomputes the file's
+   sha256 and **cosigns** it (keyless OIDC `cosign sign-blob`), committing the
+   `.sha256`, `.sig`, and `.pem` beside the file.
+3. Operators `cosign verify-blob` the file against the workflow's certificate
+   identity / OIDC issuer, deploy the new config, and **roll the fleet before
+   the new activation height**.
+
+**The config is plain, unsigned config — the chain does not verify an in-file
+milestone signature.** The old on-chain signature apparatus (`[meta].signers` /
+`threshold` / `signer_set_id` and the `[[signatures]]` blocks) is intentionally
+dropped. Authenticity comes from two anchors instead:
+
+- **Supply-chain anchor — the cosign blob.** The `.sig`/`.pem` beside the file,
+  verified with `cosign verify-blob` before deploy. This is exactly the
+  GitHub-authenticity model the registry already uses for the committed genesis
+  content (`genesis_url`) and for the cosigned protocore release the operator
+  binary is built from.
+- **On-chain anchor — the genesis-pinned digest.** The genesis bundle pins the
+  config's canonical `milestone_digest`. A node recomputes it and requires a
+  match before applying any entry, so the milestones a running node enforces are
+  bound to the genesis it booted.
+
+The chain therefore trusts **the config + the genesis-pinned digest**, not an
+in-file signature.
+
+## Trust model — be honest about what the hash-match proves
 
 **Testnet (live now).** `genesis_hash` is the authoritative pin, and the gate
 is: HTTPS fetch of the registry entry + HTTPS fetch of the full genesis, with
