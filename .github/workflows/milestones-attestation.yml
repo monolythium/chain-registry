@@ -59,17 +59,24 @@ jobs:
             echo "::endgroup::"
           done
 
-      - name: Commit attestations
+      - name: Publish attestations to a rolling release
+        # master requires PRs (a branch ruleset), so the bot cannot push back —
+        # publish the cosign artifacts to a rolling GitHub Release instead, the
+        # same way the protocore release attaches its cosigned tarball. The
+        # canonical config (milestones_sha256) stays pinned in the chain entry;
+        # this release carries the cosign .sig/.pem so operators can
+        # `cosign verify-blob` before they deploy + roll the fleet.
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          git config user.name  "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add chains/milestones/*.sha256 chains/milestones/*.sig chains/milestones/*.pem
-          if git diff --cached --quiet; then
-            echo "No attestation changes to commit."
-            exit 0
-          fi
-          git commit -m "ci: cosign-attest milestone config(s) [skip ci]"
-          # checkout@v4 leaves a detached HEAD at the pushed SHA, so push the
-          # new commit explicitly onto the branch.
-          git push origin "HEAD:${GITHUB_REF_NAME}"
+          TAG=milestones-testnet-69420
+          gh release view "$TAG" >/dev/null 2>&1 || gh release create "$TAG" \
+            --title "Canonical milestone configs — testnet-69420 (cosigned)" \
+            --notes "Keyless-OIDC cosigned canonical milestone config(s). Verify a file F before deploying:
+            cosign verify-blob --certificate F.pem --signature F.sig \\
+              --certificate-identity-regexp 'github.com/monolythium/chain-registry' \\
+              --certificate-oidc-issuer https://token.actions.githubusercontent.com F"
+          for f in chains/milestones/*.milestones.toml; do
+            gh release upload "$TAG" "$f" "$f.sig" "$f.pem" "$f.sha256" --clobber
+          done
