@@ -70,4 +70,6 @@ jobs:
             exit 0
           fi
           git commit -m "ci: cosign-attest milestone config(s) [skip ci]"
-          git push
+          # checkout@v4 leaves a detached HEAD at the pushed SHA, so push the
+          # new commit explicitly onto the branch.
+          git push origin "HEAD:${GITHUB_REF_NAME}"
