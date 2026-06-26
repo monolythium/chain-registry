@@ -15,7 +15,7 @@ description  = "Live development testnet for Monolythium / LythiumDAG-BFT. Found
 # the live fleet (round-100 boundary crossed, no stall). Same 2x10 operator keys.
 # Structure — 2 consensus seats, each a 10-operator cluster (threshold 7-of-10,
 # 7 active + 3 standby) — unchanged; see chains/genesis below.
-genesis_hash = "0xd56f9763ca849c5482cae27c7e2551f891684063b89afd53aadeb55868453959"
+genesis_hash = "0xb52b59d667a0ad97c531607b840b7082547ba3151aa11a819eb6916b080b1ca9"
 
 # ---- Dynamic genesis resolution ----
 # Full genesis content for this network, committed in this repo and served
@@ -32,7 +32,7 @@ genesis_hash = "0xd56f9763ca849c5482cae27c7e2551f891684063b89afd53aadeb558684539
 # acceptable only because testnet is value-less and wiped without notice. See
 # README.md "Dynamic genesis resolution" and the mainnet-only groundwork below.
 genesis_url    = "https://raw.githubusercontent.com/monolythium/chain-registry/master/chains/genesis/testnet-69420.genesis.toml"
-genesis_sha256 = "cee021669d539dbfa4c50dd2707cab2e6e82bd65df2e19a64dfba278dfaac2eb"
+genesis_sha256 = "18e51d14dc29aa954f1cff96702c68661a8ddb2921a5bfa5763482cf80378571"
 
 # ---- Canonical milestone config (rolling-upgrade mechanism) ----
 # The canonical, cosigned milestone config for this network, committed in this
@@ -93,7 +93,7 @@ milestones_sha256 = "53c6399087712d31b096b77c7a2c173e78c1162020212e8a970e871ba81
 #
 # Keep `binary_sha` = 25513326 in lock-step with the mono-core-sdk pin
 # (packages/ts/src/registry.ts) and the browser-wallet build-info trust pin.
-binary_sha   = "25513326"
+binary_sha   = "6f33aa30"
 
 # First-class binary provenance keys (machine-readable; consumed by the Monarch
 # OS release-drift guard `scripts/verify-release-matches-registry.sh`). These
@@ -102,7 +102,7 @@ binary_sha   = "25513326"
 # run; `binary_release_sha256` is the sha256 of the EXTRACTED `protocore`
 # binary from that release's linux tarball (NOT the mono-core commit, which is
 # `binary_sha`).
-release_tag           = "v0.2.1-testnet"
+release_tag           = "v0.2.2-testnet"
 binary_release_sha256 = "4d7718287e8c66cadbdb332d7656cc0293cf70fb5ccd62092e0f62013045d2d2"
 release_tarball_sha256 = "b4f737b7cfdd6cca766299914ca9816a1de2352286899ab8f2b25bacacba6f3f"
 
@@ -254,43 +254,43 @@ notes    = "operator-9"
 # cluster policy.
 
 [[p2p]]
-multiaddr = "/ip4/178.105.12.9/tcp/29898/p2p/12D3KooWCeY2MFQ2mRm4rF5AvLNBTi5PcPcdzXoSmGXi1v4gKwdY"
+multiaddr = "/ip4/178.105.12.9/tcp/29898/p2p/12D3KooWBYxkFw39V6qsGMCH7pLHWrwg2kv3zBPpWw54gVPazzB3"
 region    = "fsn1"
 
 [[p2p]]
-multiaddr = "/ip4/178.105.15.216/tcp/29898/p2p/12D3KooWFSdFb3uqmPXc5H6wjcDya9V1oPRw2hjoZj5aYD79RBFL"
+multiaddr = "/ip4/178.105.15.216/tcp/29898/p2p/12D3KooWJA4TV7xBvzJ7wW52DFnjZwnU1958ydcAN1dANUpopcp4"
 region    = "fsn1"
 
 [[p2p]]
-multiaddr = "/ip4/178.104.233.182/tcp/29898/p2p/12D3KooWBEKuR8r7heqEEPP889JPso3svTd8DPRfRwn8qF48SedH"
+multiaddr = "/ip4/178.104.233.182/tcp/29898/p2p/12D3KooWLZmhYw2QiWUScxJY5RDhsDF2v4ytzsRGocvsPcgpBSea"
 region    = "nbg1"
 
 [[p2p]]
-multiaddr = "/ip4/65.108.94.1/tcp/29898/p2p/12D3KooWJEqnWPaWNvF5fNcCRJ25VjfRqTPdJhUzQLwWew2pf7HB"
+multiaddr = "/ip4/65.108.94.1/tcp/29898/p2p/12D3KooWASyMjWLdabUw5jW6WkHvgmimi9zkNxQbxaok7ZNGwWEx"
 region    = "hel1"
 
 [[p2p]]
-multiaddr = "/ip4/95.216.154.155/tcp/29898/p2p/12D3KooWAVFc4cWFbesRDoJeNVs2J8BmyBDCdsYsodxTyD4C9zJN"
+multiaddr = "/ip4/95.216.154.155/tcp/29898/p2p/12D3KooWPpqArNiDrsrar4BEfYfe5MWvVeJHxaG8GbWQ9r9GheC8"
 region    = "hel1"
 
 [[p2p]]
-multiaddr = "/ip4/87.99.145.48/tcp/29898/p2p/12D3KooWLJSF7W93hXwq8PKFhsCNUtu44eLoAJxSP3q625UmGKYj"
+multiaddr = "/ip4/87.99.145.48/tcp/29898/p2p/12D3KooWHXPiDW3JJ12VdUfgiPVHWBiAzEMDexwKQKbgkZwyuxDc"
 region    = "ash"
 
 [[p2p]]
-multiaddr = "/ip4/5.223.85.76/tcp/29898/p2p/12D3KooWQVHJFrvGPLenk9CsA9E3pLKoy82Xx1Cav1nhwhcDm7YT"
+multiaddr = "/ip4/5.223.85.76/tcp/29898/p2p/12D3KooWL6WiD5bRp4bSGP62rZTKQDrZajRxDBAfTuN91Yrab6Yq"
 region    = "sin"
 
 [[p2p]]
-multiaddr = "/ip4/142.132.180.99/tcp/29898/p2p/12D3KooWCQmNnw7LZPDhu6VCaDAJmJhgwL99VgApEPnBHHNpRbEC"
+multiaddr = "/ip4/142.132.180.99/tcp/29898/p2p/12D3KooWCNSwwQVoxhJmRmK5WyRcMuK9o5s3p6JwESwk7wPuGXny"
 region    = "fsn1"
 
 [[p2p]]
-multiaddr = "/ip4/95.217.156.190/tcp/29898/p2p/12D3KooWDmHmovzA4pHfpCdGykcg12eogYXtKi4EsZB8QTTEjRZH"
+multiaddr = "/ip4/95.217.156.190/tcp/29898/p2p/12D3KooWJ4RzFiWF6xcuRbL6m5c3v5jzTF1yKLiA2FThueXjCXSg"
 region    = "hel1"
 
 [[p2p]]
-multiaddr = "/ip4/162.55.54.198/tcp/29898/p2p/12D3KooWGGEfokSoqhLbNC6MuieYBT6ffEBynzKUb6n4LE7YTz8e"
+multiaddr = "/ip4/162.55.54.198/tcp/29898/p2p/12D3KooWRdNH3cGvjrmpij6whoKnNuVQUhMKj9dZT8UngZYjDS8q"
 region    = "fsn1"
 
 [[p2p]]
