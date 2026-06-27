@@ -47,7 +47,7 @@ genesis_sha256 = "18e51d14dc29aa954f1cff96702c68661a8ddb2921a5bfa5763482cf803785
 # genesis pins no milestone_digest, so authenticity rests on this sha pin + the
 # cosign blob. Mirrors genesis_url's authenticity model.
 milestones_url    = "https://raw.githubusercontent.com/monolythium/chain-registry/master/chains/milestones/testnet-69420.milestones.toml"
-milestones_sha256 = "da5d9e77892bf77a261126f6df3e030766d1354ccb6d27e2db4a40ef513b5343"
+milestones_sha256 = "71fcd4ffdfc7e563432344d08528814783775a449daee42ffc5a84eadc7202a7"
 
 # ---- MAINNET-ONLY genesis hardening (groundwork — not used on testnet) ----
 # These fields are documented placeholders for the mainnet trust model and are
