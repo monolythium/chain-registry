@@ -74,24 +74,24 @@ milestones_sha256 = "53c6399087712d31b096b77c7a2c173e78c1162020212e8a970e871ba81
 #   cannot silently redirect genesis_hash / genesis_url.
 
 # mono-core commit used to build the advertised foundation operator binary.
-# 2026-06-24 ROLLING BINARY SWAP to `v0.2.1-testnet`, mono-core master @ 25513326
-# (version 0.2.1). NO re-genesis — genesis 0xd56f9763 above UNCHANGED. v0.2.1 rolls
-# up ml-dsa 0.1.1 (RUSTSEC-2025-0144 timing fix; keys/sigs byte-identical), issues
-# #16b/#23/#40/#47/#54, milestones + upgrade-plans as unsigned config, and the
-# SealBeacon wire-arm removal. The cosigned protocore v0.2.1-testnet release is built
-# --features mdbx,indexer-postgres,mesh,sp1-verifier; its extracted protocore sha256 =
-# 4d7718287e8c66cadbdb332d7656cc0293cf70fb5ccd62092e0f62013045d2d2
-# (= binary_release_sha256 below; GLIBC_2.34). This IS the binary running as
+# 2026-06-25 RE-GENESIS to `v0.2.2-testnet`, mono-core master @ 6f33aa30
+# (version 0.2.2) — see genesis 0xb52b… above. v0.2.2 = master 6f33aa30 plus the
+# 2026-06-24 mainnet-readiness audit fixes and the #144 drill-hermeticity fix.
+# The cosigned v0.2.2 protocore binary — VERIFIED 2026-06-27 running as
 # /usr/local/bin/protocore on all 22 fleet nodes (2x10 DVT + 2 relays) on genesis
-# 0xd56f9763, and the binary Monarch OS bakes.
+# 0xb52b, and the binary Monarch OS bakes — has sha256 =
+# 118f86473089e76997abf6768ea964d77070977b41f0817a98dbb876decd14c9
+# (= binary_release_sha256 below).
 #
-# Verify the signed release before trusting it (cosign certificate identity = the
-# release.yml workflow @refs/tags/v0.2.1-testnet, issuer = GitHub Actions OIDC):
-#   github.com/monolythium/protocore  release  v0.2.1-testnet
-#   release tarball  sha256: b4f737b7cfdd6cca766299914ca9816a1de2352286899ab8f2b25bacacba6f3f
-#   extracted binary sha256: 4d7718287e8c66cadbdb332d7656cc0293cf70fb5ccd62092e0f62013045d2d2
+# ⚠ PENDING (outward, automated via GitHub): the formal `v0.2.2-testnet` GitHub
+# *release* (tarball + cosign attestation) is NOT yet published — the latest
+# published protocore release is `v0.2.1-testnet`. Trigger release.yml @
+# refs/tags/v0.2.2-testnet so the drift guard can cosign-verify against a real
+# release tag; the extracted-binary sha256 must equal binary_release_sha256 below
+# (118f8647…). Until then, binary_release_sha256 reflects the deployed+cosigned
+# binary verified on-fleet, not a published release artifact.
 #
-# Keep `binary_sha` = 25513326 in lock-step with the mono-core-sdk pin
+# Keep `binary_sha` = 6f33aa30 in lock-step with the mono-core-sdk pin
 # (packages/ts/src/registry.ts) and the browser-wallet build-info trust pin.
 binary_sha   = "6f33aa30"
 
@@ -103,7 +103,12 @@ binary_sha   = "6f33aa30"
 # binary from that release's linux tarball (NOT the mono-core commit, which is
 # `binary_sha`).
 release_tag           = "v0.2.2-testnet"
-binary_release_sha256 = "4d7718287e8c66cadbdb332d7656cc0293cf70fb5ccd62092e0f62013045d2d2"
+binary_release_sha256 = "118f86473089e76997abf6768ea964d77070977b41f0817a98dbb876decd14c9"
+# ⚠ v0.2.1 tarball sha256 — STALE pending the v0.2.2-testnet release publication
+# (the v0.2.2 GitHub release is not yet published, so its tarball does not exist
+# to hash; the drift guard does not consume this field — it verifies
+# binary_release_sha256 against the extracted binary). Replace with the v0.2.2
+# tarball sha256 when release.yml @ refs/tags/v0.2.2-testnet publishes.
 release_tarball_sha256 = "b4f737b7cfdd6cca766299914ca9816a1de2352286899ab8f2b25bacacba6f3f"
 
 # ---- Native receipt proof trust policy ----
