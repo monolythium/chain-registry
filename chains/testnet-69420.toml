@@ -104,12 +104,10 @@ binary_sha   = "6f33aa30"
 # `binary_sha`).
 release_tag           = "v0.2.2-testnet"
 binary_release_sha256 = "118f86473089e76997abf6768ea964d77070977b41f0817a98dbb876decd14c9"
-# ⚠ v0.2.1 tarball sha256 — STALE pending the v0.2.2-testnet release publication
-# (the v0.2.2 GitHub release is not yet published, so its tarball does not exist
-# to hash; the drift guard does not consume this field — it verifies
-# binary_release_sha256 against the extracted binary). Replace with the v0.2.2
-# tarball sha256 when release.yml @ refs/tags/v0.2.2-testnet publishes.
-release_tarball_sha256 = "b4f737b7cfdd6cca766299914ca9816a1de2352286899ab8f2b25bacacba6f3f"
+# sha256 of the published v0.2.2-testnet release .tar.gz (its EXTRACTED binary
+# sha256 = binary_release_sha256 = 118f8647… above, verified on-fleet + via
+# cosign verify-blob against the protocore tag-workflow identity).
+release_tarball_sha256 = "6d412e5d46edddb515f5a626fd5ca968dd807a8bc20a5ca210b6e122de65ca9b"
 
 # ---- Native receipt proof trust policy ----
 # Optional trust metadata for SDK-side native receipt proof verification.
