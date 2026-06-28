@@ -7,7 +7,6 @@ import { keccak_256 } from "@noble/hashes/sha3";
 
 const U64_MAX = (1n << 64n) - 1n;
 const ML_DSA_65_PUBLIC_KEY_BYTES = 1952;
-const BLS_PUBLIC_KEY_BYTES = 48;
 const HASH_BYTES = 32;
 const SIGNER_ID_BYTES = 20;
 const RPC_TIERS = new Set(["official", "degraded", "community"]);
@@ -164,7 +163,7 @@ cluster_public_key = "0x12"
   const invalidErrors = invalid.errors.concat(validateChainInfo(invalid.info, "selftest.toml"));
   assertSelfTest(
     invalidErrors.some((error) => error.includes("archive.signature_threshold exceeds signer count")) &&
-      invalidErrors.some((error) => error.includes("finality.cluster_public_key must be 48 bytes")),
+      invalidErrors.some((error) => error.includes("finality.cluster_public_key must be 1952 bytes")),
     `invalid fixture did not fail as expected: ${invalidErrors.join("; ")}`,
   );
 
@@ -636,7 +635,7 @@ function validateFinalityTrust(finality, label, errors) {
 
   if (finality.mode === "cluster") {
     const committeeSize = requirePositiveU32(finality.committee_size, `${label}.committee_size`, errors);
-    requireHexBytes(finality.cluster_public_key, BLS_PUBLIC_KEY_BYTES, `${label}.cluster_public_key`, errors);
+    requireHexBytes(finality.cluster_public_key, ML_DSA_65_PUBLIC_KEY_BYTES, `${label}.cluster_public_key`, errors);
     if (Array.isArray(finality.signers) && finality.signers.length > 0) {
       errors.push(`${label}.signers must be absent in cluster mode`);
     }
@@ -661,7 +660,7 @@ function validateFinalityTrust(finality, label, errors) {
     const signerLabel = `${label}.signers[${index}]`;
     const authorityIndex = requireU32(signer.authority_index, `${signerLabel}.authority_index`, errors);
     if (authorityIndex !== null) addUniqueValue(authorityIndexes, authorityIndex.toString(), `${signerLabel}.authority_index`, errors);
-    requireHexBytes(signer.public_key, BLS_PUBLIC_KEY_BYTES, `${signerLabel}.public_key`, errors);
+    requireHexBytes(signer.public_key, ML_DSA_65_PUBLIC_KEY_BYTES, `${signerLabel}.public_key`, errors);
     addUniqueHex(publicKeys, signer.public_key, `${signerLabel}.public_key`, errors);
     validateBounds(signer.valid_from_round, signer.valid_to_round, `${signerLabel}.round`, errors);
   });

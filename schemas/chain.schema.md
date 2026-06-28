@@ -168,7 +168,7 @@ Duplicate signer `public_key` values are invalid. Duplicate non-empty
 
 ### `[receipt_proof_trust.finality]`
 
-Finality verification uses one of two mutually exclusive BLS policy
+Finality verification uses one of two mutually exclusive ML-DSA-65 policy
 modes:
 
 | Field | Type | Required | Description |
@@ -177,7 +177,7 @@ modes:
 | `chain_id` | `u64` | no | Chain id override for finality verification. SDK helpers default this to the top-level `chain_id`. |
 | `threshold` | `u32` | yes | Minimum number of finality signatures required. Must be at least 1 and no greater than `committee_size` in cluster mode or the active signer count in multisig mode. |
 | `committee_size` | `u32` | mode-dependent | Required only when `mode = "cluster"`. Total cluster committee size. |
-| `cluster_public_key` | hex string (`0x...`) | mode-dependent | Required only when `mode = "cluster"`. 48-byte BLS cluster public key. |
+| `cluster_public_key` | hex string (`0x...`) | mode-dependent | Required only when `mode = "cluster"`. 1952-byte ML-DSA-65 cluster public key. |
 | `valid_from_round` | `u64` | no | First consensus round for which the finality policy is valid, inclusive. Missing means unbounded from round 0. |
 | `valid_to_round` | `u64` | no | Last consensus round for which the finality policy is valid, inclusive. Missing means no round upper bound. |
 
@@ -193,7 +193,7 @@ Only valid when `mode = "multisig"`.
 | Field | Type | Required | Description |
 |---|---|---|---|
 | `authority_index` | `u32` | yes | Authority index used by the finality transcript in multisig mode. Unique within the finality roster. |
-| `public_key` | hex string (`0x...`) | yes | 48-byte BLS public key. |
+| `public_key` | hex string (`0x...`) | yes | 1952-byte ML-DSA-65 public key. |
 | `valid_from_round` | `u64` | no | First consensus round for which the signer is valid, inclusive. Missing means unbounded from round 0. |
 | `valid_to_round` | `u64` | no | Last consensus round for which the signer is valid, inclusive. Missing means no round upper bound. |
 | `notes` | string | no | Free-form operator notes. Do not put secrets here. |

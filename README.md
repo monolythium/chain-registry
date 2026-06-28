@@ -88,7 +88,7 @@ Mandatory top-level fields for live networks: `chain_id`, `network`, `genesis_ha
 Chain files may also publish an optional `[receipt_proof_trust]`
 policy. When present, it describes SDK-side trust metadata for native
 receipt proof verification: archive ML-DSA signer public keys and
-signature threshold, plus a finality BLS policy using either cluster or
+signature threshold, plus a finality ML-DSA-65 policy using either cluster or
 multisig mode. Height and round validity bounds are optional.
 
 ## Dynamic genesis resolution
