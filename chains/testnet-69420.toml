@@ -5,19 +5,23 @@ description  = "Live development testnet for Monolythium / LythiumDAG-BFT. Found
 
 # Pinned to the genesis the live cluster is currently running. Any
 # wipe + regenesis flips this hash and bumps the registry entry.
-# 2026-06-28 BIP-39 RE-GENESIS (protocore v0.2.4-testnet, mono-core master @
-# 862f6bc0) set the genesis_hash below. v0.2.4 drops the bespoke PQM-1 mnemonic
-# format for standard BIP-39 -> ML-DSA-65 derivation (#161); the re-genesis
-# regenerated the 2x10 operator/p2p keys from fresh BIP-39 mnemonics. The
-# nextgen-v2 design carries over: binary sparse-Merkle state tree (BLAKE3);
-# encrypted mempool + LythiumSeal removed (plaintext mempool); keystone STARK
-# verifier gated OFF (raw ML-DSA-65 finality); confidential value ops gated OFF
-# (DEC-029); and the seedless deterministic epoch-boundary seed
-# (epoch_seed_from_state_root_height = 1, WC-G1/DEC-022) that makes the
-# round-50000-class EPOCH-SEED-STALL structurally impossible. Structure — 2
-# consensus seats, each a 10-operator cluster (threshold 7-of-10, 7 active + 3
-# standby) — unchanged; see chains/genesis below.
-genesis_hash = "0xaabb0f1ea0e9cae9dcc4fbd3e2af577c3568b209061207f919d159c2ab4ba995"
+# 2026-06-30 v0.3.0 LIFECYCLE-ACTIVE RE-GENESIS (protocore v0.3.0-testnet,
+# mono-core master @ 4d781ed9) set the genesis_hash below, superseding the
+# 2026-06-28 BIP-39 genesis 0xaabb0f1e…. v0.3.0 activates the dynamic DVT
+# cluster lifecycle from genesis (committed per-boundary sealed rosters +
+# announce-ahead reconfiguration + round-keyed orderer/committer;
+# dynamic_cluster_lifecycle_height = 0 in the milestone config) and fully purges
+# FROST/DKG/BLS from the chain. The re-genesis regenerated the 2x10 operator/p2p
+# keys from the standard BIP-39 -> ML-DSA-65 mnemonics. The nextgen-v2 design
+# carries over: binary sparse-Merkle state tree (BLAKE3); encrypted mempool +
+# LythiumSeal removed (plaintext mempool); keystone STARK verifier gated OFF
+# (raw ML-DSA-65 finality); confidential value ops gated OFF (DEC-029); and the
+# seedless deterministic epoch-boundary seed (epoch_seed_from_state_root_height
+# = 1, WC-G1/DEC-022) that makes the round-50000-class EPOCH-SEED-STALL
+# structurally impossible. Structure — 2 consensus seats, each a 10-operator
+# cluster (threshold 7-of-10, 7 active + 3 standby) — unchanged; see
+# chains/genesis below.
+genesis_hash = "0xdc0ff48230ce904893ee3184c331b405251a2dd7491e856b1d4be3944413f315"
 
 # ---- Dynamic genesis resolution ----
 # Full genesis content for this network, committed in this repo and served
@@ -34,7 +38,7 @@ genesis_hash = "0xaabb0f1ea0e9cae9dcc4fbd3e2af577c3568b209061207f919d159c2ab4ba9
 # acceptable only because testnet is value-less and wiped without notice. See
 # README.md "Dynamic genesis resolution" and the mainnet-only groundwork below.
 genesis_url    = "https://raw.githubusercontent.com/monolythium/chain-registry/master/chains/genesis/testnet-69420.genesis.toml"
-genesis_sha256 = "b683156eac606bc2fa37050b702a11433ded3bc12f4ff1906c83cf3495a8c0fe"
+genesis_sha256 = "145b95b6e9dd4eae220001b4521fdcc149c559688c6f5bd993134939a04f47a2"
 
 # ---- Canonical milestone config (rolling-upgrade mechanism) ----
 # The canonical, cosigned milestone config for this network, committed in this
@@ -49,7 +53,7 @@ genesis_sha256 = "b683156eac606bc2fa37050b702a11433ded3bc12f4ff1906c83cf3495a8c0
 # genesis pins no milestone_digest, so authenticity rests on this sha pin + the
 # cosign blob. Mirrors genesis_url's authenticity model.
 milestones_url    = "https://raw.githubusercontent.com/monolythium/chain-registry/master/chains/milestones/testnet-69420.milestones.toml"
-milestones_sha256 = "38666eed9d788360f88d6c1eaa631073fe9538d93662bc94a5072b5fd323656e"
+milestones_sha256 = "005b06ebfe5413602c3477fdf82b910304f6504d1f9548a327d8c990ec7b7810"
 
 # ---- MAINNET-ONLY genesis hardening (groundwork — not used on testnet) ----
 # These fields are documented placeholders for the mainnet trust model and are
@@ -76,26 +80,27 @@ milestones_sha256 = "38666eed9d788360f88d6c1eaa631073fe9538d93662bc94a5072b5fd32
 #   cannot silently redirect genesis_hash / genesis_url.
 
 # mono-core commit used to build the advertised foundation operator binary.
-# 2026-06-28 BIP-39 RE-GENESIS to `v0.2.4-testnet`, mono-core master @ 862f6bc0
-# (version 0.2.4) — see genesis 0xaabb… above. v0.2.4 drops the bespoke PQM-1
-# mnemonic format for standard BIP-39 -> ML-DSA-65 derivation (#161). The
-# cosigned v0.2.4 protocore binary — confirmed running on the live fleet
-# (genesis 0xaabb, version 0.2.4 reported over RPC), and the binary Monarch OS
-# bakes — has sha256 =
-# c09638f024e52a88889d9cb8150920a78ff0256e49f95cae90f5771db966ace0
+# 2026-06-30 v0.3.0 LIFECYCLE-ACTIVE RE-GENESIS to `v0.3.0-testnet`, mono-core
+# master @ 4d781ed9 (version 0.3.0) — see genesis 0xdc0ff48… above. v0.3.0
+# activates the dynamic DVT cluster lifecycle from genesis and fully purges
+# FROST/DKG/BLS from the chain. The cosigned v0.3.0 protocore binary — confirmed
+# running on the live fleet (genesis 0xdc0ff48, chain_id 69420 over RPC), and the
+# binary Monarch OS bakes — has sha256 =
+# 653347dbdbcad29da8bc95ac3c0c97140171c8c55072add0da74fe3d7b3e17e5
 # (= binary_release_sha256 below).
 #
-# The `v0.2.4-testnet` GitHub release (tarball + cosign attestation) IS
+# The `v0.3.0-testnet` GitHub release (tarball + cosign attestation) IS
 # published; its EXTRACTED protocore binary sha256 == binary_release_sha256
-# below (c09638f0…), and the release .tar.gz sha256 == release_tarball_sha256
+# below (653347db…), and the release .tar.gz sha256 == release_tarball_sha256
 # below. This binary carries the open-seat marketplace primitive (#147) with the
-# audit fixes (#150/#152/#153) and the cassette supervisor (#127); the open-seat
-# selectors and the #58 block.timestamp clamp activate via the canonical
-# milestone config (see milestones_url) at the heights pinned there.
+# audit fixes (#150/#152/#153) and the cassette supervisor (#127); the dynamic
+# cluster lifecycle (#166) is active from genesis, and the open-seat selectors
+# and the #58 block.timestamp clamp activate via the canonical milestone config
+# (see milestones_url) at the heights pinned there.
 #
-# Keep `binary_sha` = 862f6bc0 in lock-step with the mono-core-sdk pin
+# Keep `binary_sha` = 4d781ed9 in lock-step with the mono-core-sdk pin
 # (packages/ts/src/registry.ts) and the browser-wallet build-info trust pin.
-binary_sha   = "862f6bc0"
+binary_sha   = "4d781ed9"
 
 # First-class binary provenance keys (machine-readable; consumed by the Monarch
 # OS release-drift guard `scripts/verify-release-matches-registry.sh`). These
@@ -104,12 +109,12 @@ binary_sha   = "862f6bc0"
 # run; `binary_release_sha256` is the sha256 of the EXTRACTED `protocore`
 # binary from that release's linux tarball (NOT the mono-core commit, which is
 # `binary_sha`).
-release_tag           = "v0.2.4-testnet"
-binary_release_sha256 = "c09638f024e52a88889d9cb8150920a78ff0256e49f95cae90f5771db966ace0"
-# sha256 of the published v0.2.4-testnet release .tar.gz (its EXTRACTED binary
-# sha256 = binary_release_sha256 = c09638f0… above; the .tar.gz carries the
+release_tag           = "v0.3.0-testnet"
+binary_release_sha256 = "653347dbdbcad29da8bc95ac3c0c97140171c8c55072add0da74fe3d7b3e17e5"
+# sha256 of the published v0.3.0-testnet release .tar.gz (its EXTRACTED binary
+# sha256 = binary_release_sha256 = 653347db… above; the .tar.gz carries the
 # cosign .sig/.pem produced by the protocore release.yml tag-workflow identity).
-release_tarball_sha256 = "7a8ae562aed5d4602ef06c890353b1c2b31ec88f8bf8eee400325278b8775b24"
+release_tarball_sha256 = "5f8355dd1738f572550d13ab9bca8bf1b551e78a4df1703cb32d993e67818fd0"
 
 # ---- Native receipt proof trust policy ----
 # Optional trust metadata for SDK-side native receipt proof verification.
@@ -258,53 +263,55 @@ notes    = "operator-9"
 # edge; operator/cluster admission remains governed by on-chain registration and
 # cluster policy.
 #
-# PEER-ID NOTE (2026-06-28 BIP-39 re-genesis): the IPs are unchanged and
-# confirmed healthy on the new genesis (0xaabb…). The /p2p/<peer-id> components
-# were re-collected node-side from each live node's `protocore` libp2p identity
-# after the re-genesis and are current: the 10 cluster-0 operator peer IDs were
-# regenerated by the wipe+redeploy cutover and have been refreshed here; the two
-# relay peer IDs were preserved by the cutover (their operator/p2p key survived)
-# and were already correct. genesis_hash remains the authoritative integrity pin;
-# the [[rpc]] fast-sync seeds are IP-only; node discovery is hybrid (DHT + seeds).
+# PEER-ID NOTE (2026-06-30 v0.3.0 lifecycle-active re-genesis): the IPs are
+# unchanged and confirmed healthy on the new genesis (0xdc0ff48…). The
+# /p2p/<peer-id> components were re-collected node-side from each live node's
+# `protocore` libp2p identity after the re-genesis and are current: the 10
+# cluster-0 operator peer IDs were regenerated by the wipe+redeploy cutover
+# (the libp2p identity is a freshly generated ed25519 keypair per redeploy) and
+# have been refreshed here; the two relay peer IDs were preserved by the cutover
+# (their operator/p2p key survived) and are unchanged. genesis_hash remains the
+# authoritative integrity pin; the [[rpc]] fast-sync seeds are IP-only; node
+# discovery is hybrid (DHT + seeds).
 
 [[p2p]]
-multiaddr = "/ip4/178.105.12.9/tcp/29898/p2p/12D3KooWMYWtMz98RNpLnNmuA6DWA6K8J7izGr9uRodho8VPbMKd"
+multiaddr = "/ip4/178.105.12.9/tcp/29898/p2p/12D3KooWKjLNBV9pyUoAc4PvPomBPVQvFYGrhfw1zgayHKxLJWTK"
 region    = "fsn1"
 
 [[p2p]]
-multiaddr = "/ip4/178.105.15.216/tcp/29898/p2p/12D3KooWLhSWasf3awYXVcED16wzNxDQo3Y7fv94oP6ZFH5XH79s"
+multiaddr = "/ip4/178.105.15.216/tcp/29898/p2p/12D3KooWM3f4JVKD73JpLHAMat4eCjHCQ8spa2t5kbw5pr9Th14Y"
 region    = "fsn1"
 
 [[p2p]]
-multiaddr = "/ip4/178.104.233.182/tcp/29898/p2p/12D3KooWKb4LF7mkXrb5qyfk4cq2UxcPdnwNH2nGNJTpnne2LGFE"
+multiaddr = "/ip4/178.104.233.182/tcp/29898/p2p/12D3KooWEG9SgHdxXdt6UELFfuhGSoYLWz7U925MQJ3ahYbporMd"
 region    = "nbg1"
 
 [[p2p]]
-multiaddr = "/ip4/65.108.94.1/tcp/29898/p2p/12D3KooWQSvL228fcYJ5rMTDH9Nzoz9r2iTV34q8otPyiEbN47V8"
+multiaddr = "/ip4/65.108.94.1/tcp/29898/p2p/12D3KooWB8TwRaLvPi1bv3ELjpsU4xB9d1nBNBVnB8uNSYkt8nzM"
 region    = "hel1"
 
 [[p2p]]
-multiaddr = "/ip4/95.216.154.155/tcp/29898/p2p/12D3KooWD4Bymq3R3drVv8BHmKpSnLrBxL5Ni15CD1bxQ1EM41W1"
+multiaddr = "/ip4/95.216.154.155/tcp/29898/p2p/12D3KooWGgxaS4P1HeVsYurjZUXhtodknQE3UWb5FnNQvnnfNreC"
 region    = "hel1"
 
 [[p2p]]
-multiaddr = "/ip4/87.99.145.48/tcp/29898/p2p/12D3KooWPG7ndy3D38DXTirxK6KDSwW5TZXhwamWRp5tCBeuTyA2"
+multiaddr = "/ip4/87.99.145.48/tcp/29898/p2p/12D3KooWR7WhALaKvCJHnjeDzEY2ft5RZxiZ43i3exuksFprm1ji"
 region    = "ash"
 
 [[p2p]]
-multiaddr = "/ip4/5.223.85.76/tcp/29898/p2p/12D3KooWAYUTsjJkvD1B8sXstMbHgRMAL2eVpRxN8zUww3QVuxDS"
+multiaddr = "/ip4/5.223.85.76/tcp/29898/p2p/12D3KooWBwdQRUyzscvhzArSptASgEG2NAYuYg6v6Z2gDWDQvYqu"
 region    = "sin"
 
 [[p2p]]
-multiaddr = "/ip4/142.132.180.99/tcp/29898/p2p/12D3KooWDUCFyThFMFmfeqtp2S5z7ZM7su377CweCsV4SzBgVpiB"
+multiaddr = "/ip4/142.132.180.99/tcp/29898/p2p/12D3KooWR7Ycv69VweBup98kLCvn9UqYS6oGdLHozUH4raU96yxw"
 region    = "fsn1"
 
 [[p2p]]
-multiaddr = "/ip4/95.217.156.190/tcp/29898/p2p/12D3KooWNszoww3v51LsbXqwK3qcvMgq5YqY3fVHGUSt6AcgLm2a"
+multiaddr = "/ip4/95.217.156.190/tcp/29898/p2p/12D3KooWHf9MUBuLFKRZXt3LqprV5d486fFkbn6CiRERSMEr9nYK"
 region    = "hel1"
 
 [[p2p]]
-multiaddr = "/ip4/162.55.54.198/tcp/29898/p2p/12D3KooWL9gBQppag5J5tNdyczwFw4HuunLiJkuPUPuQmGAAgn1A"
+multiaddr = "/ip4/162.55.54.198/tcp/29898/p2p/12D3KooWCPanBgTEeBMSAxiTdnNUzRMXicZCiQRgFoBYXbUXyBxP"
 region    = "fsn1"
 
 [[p2p]]
