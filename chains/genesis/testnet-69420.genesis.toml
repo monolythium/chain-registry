@@ -1,6 +1,7 @@
 chain_id = 69420
-timestamp = 1782974835
+timestamp = 1783100000
 roster_capacity = 100
+milestone_digest = "0xb9f4a07f2733de49055c171dbbe938f336dfb070d24a83f7af4c64d1b9d2bd7f"
 
 [[validators]]
 id = 0
@@ -23,7 +24,7 @@ balance = "100000000000000000000"
 
 # faucet
 [[alloc]]
-address = "mono1mg2ja9n9uusyjp0g9kraq23747a5clyxzsasq8"
+address = "mono1ndtyf44w8870tvhp4yzd43xs7xxqacygg0xg6p"
 balance = "10000000000000000000000000"
 
 # rc-demo-burner
