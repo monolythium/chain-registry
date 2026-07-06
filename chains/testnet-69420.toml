@@ -107,9 +107,20 @@ milestones_sha256 = "7efe5018adb5b2566c732f57f4e440338cf69a05f17fb37e3ad164e9ddd
 # timeouts (#114/#108), the gated parent-monotonic timestamp clamp (#154),
 # and replay-verify armed by default on public profiles (#118).
 #
-# Keep `binary_sha` = 81ff5a2d in lock-step with the mono-core-sdk pin
+# 2026-07-06 v0.3.5 ROLLING BINARY SWAP (protocore v0.3.5-testnet, mono-core
+# master @ 35b40a79 = 81ff5a2d + #229 + version bump). Genesis 0x25fd542b,
+# milestones 7efe5018, and milestone_digest 0xb9f4a07f are UNCHANGED — this is a
+# cosigned rolling swap, NOT a re-genesis. #229 fixes a tx-DELIVERY bug: the RPC
+# submit path (LiveTxBroadcaster::submit_raw) admitted a locally-submitted tx to
+# the local mempool but never broadcast it to Topic::Tx, so txs sent to any node
+# other than a cluster proposer were never included. v0.3.5 publishes the tx to
+# the gossip topic after admit (+ resurrects the mempool in_flight release). The
+# extracted release binary sha256 = f0dc28c6… (= binary_release_sha256 below);
+# the whole fleet runs THIS binary.
+#
+# Keep `binary_sha` = 35b40a79 in lock-step with the mono-core-sdk pin
 # (packages/ts/src/registry.ts) and the browser-wallet build-info trust pin.
-binary_sha   = "81ff5a2d"
+binary_sha   = "35b40a79"
 
 # First-class binary provenance keys (machine-readable; consumed by the Monarch
 # OS release-drift guard `scripts/verify-release-matches-registry.sh`). These
@@ -118,12 +129,12 @@ binary_sha   = "81ff5a2d"
 # run; `binary_release_sha256` is the sha256 of the EXTRACTED `protocore`
 # binary from that release's linux tarball (NOT the mono-core commit, which is
 # `binary_sha`).
-release_tag           = "v0.3.4-testnet"
-binary_release_sha256 = "8472107f155ce9119ded703c7b6b8b935d66fdb1edba62a7b827d096ece847b8"
+release_tag           = "v0.3.5-testnet"
+binary_release_sha256 = "f0dc28c670d99a40dad51a550fdae3f6d5b89cd216d809019756393da98b0392"
 # sha256 of the published v0.3.2-testnet release .tar.gz (its EXTRACTED binary
 # sha256 = binary_release_sha256 = c633e3a7… above; the .tar.gz carries the
 # cosign .sig/.pem produced by the protocore release.yml tag-workflow identity).
-release_tarball_sha256 = "7829cc03b1270ce0b845d724ea1166acf9e74c9693067734e810fc2c44df08d9"
+release_tarball_sha256 = "629844eda866cf52cd570bf89d0028e7e55668c1dc0ec5af61ef53d214ff9dd1"
 
 # ---- Native receipt proof trust policy ----
 # Optional trust metadata for SDK-side native receipt proof verification.
