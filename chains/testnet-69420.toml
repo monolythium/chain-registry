@@ -1,4 +1,8 @@
 chain_id     = 69420
+# 2026-07-07 v0.4.0 4-CLUSTER (n=4, f=1) RE-GENESIS: genesis 0xbe1b3a3c, protocore v0.4.0-testnet
+# (bin 259c67c1, mono-core da04f8f5). Structure NOW = 4 DVT clusters x 7 operators,
+# 5-of-7 threshold (was 2x10). milestone_digest 0xb9f4a07f + milestones_sha256
+# 7efe5018 UNCHANGED. A whole cluster/seat can fail without halting (proven live).
 network      = "testnet-69420"
 display_name = "Monolythium Testnet"
 description  = "Live development testnet for Monolythium / LythiumDAG-BFT. Foundation-operated. Wipe + regenesis is allowed without notice — do NOT store value on this network."
@@ -27,7 +31,7 @@ description  = "Live development testnet for Monolythium / LythiumDAG-BFT. Found
 # ML-DSA-65 mnemonics (fresh [[p2p]] peer IDs below); the two relay p2p
 # identities carried over. Structure — 2 consensus seats, each a 10-operator
 # cluster (threshold 7-of-10) — unchanged; see chains/genesis.
-genesis_hash = "0x25fd542b65f9fabc471a5bd05eb154ef52e56e57a6ea703cc5224574fcb8706e"
+genesis_hash = "0xbe1b3a3c25c0a40a9faa9ca1b434991406f71f0e93c76c083a0e7ba44a47d33a"
 
 # ---- Dynamic genesis resolution ----
 # Full genesis content for this network, committed in this repo and served
@@ -44,7 +48,7 @@ genesis_hash = "0x25fd542b65f9fabc471a5bd05eb154ef52e56e57a6ea703cc5224574fcb870
 # acceptable only because testnet is value-less and wiped without notice. See
 # README.md "Dynamic genesis resolution" and the mainnet-only groundwork below.
 genesis_url    = "https://raw.githubusercontent.com/monolythium/chain-registry/master/chains/genesis/testnet-69420.genesis.toml"
-genesis_sha256 = "eb426cfe8eaabac993241b8a43de82402b7ce1f84efe6c69fb37d45f9b93034b"
+genesis_sha256 = "fced985fa36868beae4a72e45a97e1f1c8405f947541102ffafdcc82842ccd35"
 
 # ---- Canonical milestone config (rolling-upgrade mechanism) ----
 # The canonical, cosigned milestone config for this network, committed in this
@@ -120,7 +124,7 @@ milestones_sha256 = "7efe5018adb5b2566c732f57f4e440338cf69a05f17fb37e3ad164e9ddd
 #
 # Keep `binary_sha` = 35b40a79 in lock-step with the mono-core-sdk pin
 # (packages/ts/src/registry.ts) and the browser-wallet build-info trust pin.
-binary_sha   = "35b40a79"
+binary_sha   = "da04f8f5"
 
 # First-class binary provenance keys (machine-readable; consumed by the Monarch
 # OS release-drift guard `scripts/verify-release-matches-registry.sh`). These
@@ -129,12 +133,12 @@ binary_sha   = "35b40a79"
 # run; `binary_release_sha256` is the sha256 of the EXTRACTED `protocore`
 # binary from that release's linux tarball (NOT the mono-core commit, which is
 # `binary_sha`).
-release_tag           = "v0.3.5-testnet"
-binary_release_sha256 = "f0dc28c670d99a40dad51a550fdae3f6d5b89cd216d809019756393da98b0392"
+release_tag           = "v0.4.0-testnet"
+binary_release_sha256 = "259c67c1c7fc8bc3f8ca22c82953ea7dc54a9e2ceaa02d0fe0879ab5192f8227"
 # sha256 of the published v0.3.2-testnet release .tar.gz (its EXTRACTED binary
 # sha256 = binary_release_sha256 = c633e3a7… above; the .tar.gz carries the
 # cosign .sig/.pem produced by the protocore release.yml tag-workflow identity).
-release_tarball_sha256 = "629844eda866cf52cd570bf89d0028e7e55668c1dc0ec5af61ef53d214ff9dd1"
+release_tarball_sha256 = "732874becf4520da1d074969c301a7327cd738127e18b4751799fead32e1aa73"
 
 # ---- Native receipt proof trust policy ----
 # Optional trust metadata for SDK-side native receipt proof verification.
@@ -294,53 +298,121 @@ notes    = "operator-9"
 # authoritative integrity pin; the [[rpc]] fast-sync seeds are IP-only; node
 # discovery is hybrid (DHT + seeds).
 
-[[p2p]]
-multiaddr = "/ip4/178.105.12.9/tcp/29898/p2p/12D3KooWMTj28KshiutQcxMxXrRRjq3tCARyn6PwtAAG11BU9FbS"
-region    = "fsn1"
+# 4-CLUSTER seeds (v0.4.0 re-genesis 2026-07-07): 28 operators = 4 DVT clusters x 7,
+# cluster-major (cluster A = the 5.78.x Helsinki subnet, concentrated into one seat).
+# Peer IDs freshly collected from each live node after the wipe+redeploy cutover.
 
 [[p2p]]
-multiaddr = "/ip4/178.105.15.216/tcp/29898/p2p/12D3KooWFJSCWzTGE9SA1mcYN45okmgAHQcGQ9bHvUhe4RE1KJ9Q"
-region    = "fsn1"
+multiaddr = "/ip4/5.78.236.250/tcp/29898/p2p/12D3KooWQoTGcgyArEpPVBLWtF2F6oApy9t4fHHZtVTWfi2hTCmY
+"
 
 [[p2p]]
-multiaddr = "/ip4/178.104.233.182/tcp/29898/p2p/12D3KooWFsMbNdzafwJWt4jz2p4o8EwvVwCCT7dHXC8igCnR6HMT"
-region    = "nbg1"
+multiaddr = "/ip4/5.78.233.163/tcp/29898/p2p/12D3KooWPeXbc1FoaYixLzsVGyN8kw363Y7EqeZD3WXUj386NXFu
+"
 
 [[p2p]]
-multiaddr = "/ip4/65.108.94.1/tcp/29898/p2p/12D3KooWDCbSZS1cXsgc1yjfxz2mrpSYMCmeyNFp2JiUxbFbZLUT"
-region    = "hel1"
+multiaddr = "/ip4/5.78.226.88/tcp/29898/p2p/12D3KooWAjsymTFv7zPeUcaNs17DKaXfyH1d3T8LsKG44W1uCa3U
+"
 
 [[p2p]]
-multiaddr = "/ip4/95.216.154.155/tcp/29898/p2p/12D3KooWBaSoZ4iRAYVwJWshZH2eNPEhg6yMeksL7L2aU7tHPqwZ"
-region    = "hel1"
+multiaddr = "/ip4/5.78.195.220/tcp/29898/p2p/12D3KooWAdT6xpqDY1MD9eYsuDoXgQKGzfR1wX7JvL4H3MQqzcTK
+"
 
 [[p2p]]
-multiaddr = "/ip4/87.99.145.48/tcp/29898/p2p/12D3KooWM6kXNTkL59KHTgghLgiXuw88b8EvzsVpLT8PewWH5TZE"
-region    = "ash"
+multiaddr = "/ip4/5.78.233.251/tcp/29898/p2p/12D3KooWQDd8JpPPGLZZkzQZsnMEVGbEnLEX8dtJBnwKNenKZLDo
+"
 
 [[p2p]]
-multiaddr = "/ip4/5.223.85.76/tcp/29898/p2p/12D3KooWBsSdAjQndCkE5u2Q8AcRSLV9RX8i9esArwHxNEDthLuT"
-region    = "sin"
+multiaddr = "/ip4/5.78.235.111/tcp/29898/p2p/12D3KooWFXiAPUw6ncj6F3qwAkkyvrX6c8LUr1BTkR2z2HK9CUG7
+"
 
 [[p2p]]
-multiaddr = "/ip4/142.132.180.99/tcp/29898/p2p/12D3KooWGejfRw71C3P87mtvDdas1b2sCHF5XxLTYonP5rr8ResT"
-region    = "fsn1"
+multiaddr = "/ip4/5.78.236.36/tcp/29898/p2p/12D3KooWSAyo845nZx88HYNjtDusuxE9kipSsfi54rBRVjB6Wshj
+"
 
 [[p2p]]
-multiaddr = "/ip4/95.217.156.190/tcp/29898/p2p/12D3KooWPkvywkA3ci2mg4qi7KVP59Z614GJJny6Q7X4BAYntk4Z"
-region    = "hel1"
+multiaddr = "/ip4/5.78.229.250/tcp/29898/p2p/12D3KooWRSnb6cUL4akMYAdEYPNpbddY4r5Sdip3kCCLAGD1PXQh
+"
 
 [[p2p]]
-multiaddr = "/ip4/162.55.54.198/tcp/29898/p2p/12D3KooWHbBwz6QcQ3DeT4ZsfHN9t6NFgDCP2vgsUgNJ4mKqi2MS"
-region    = "fsn1"
+multiaddr = "/ip4/178.105.12.9/tcp/29898/p2p/12D3KooWMyhRQkmWCUBE5ShER5BfrFZ3A3c8baZhY5ANyBGEuzhi
+"
 
 [[p2p]]
-multiaddr = "/ip4/178.105.45.210/tcp/29898/p2p/12D3KooWJdD6pr9RmEndQpQSCreeA3N2dmM3D8TLkd4NzKbycMka"
-region    = "fsn1"
+multiaddr = "/ip4/5.223.85.76/tcp/29898/p2p/12D3KooWKAWRFTUFHnK9Ti9mLniT4hcGb6j9LQmbbfwMi56EHjvK
+"
 
 [[p2p]]
-multiaddr = "/ip4/65.21.252.34/tcp/29898/p2p/12D3KooWE88fmJMTEjCU2dP8Qxcv9jNKkao83G6BWKr7fXZPP3cQ"
-region    = "hel1"
+multiaddr = "/ip4/116.202.8.181/tcp/29898/p2p/12D3KooWPaoNUAxukZwTohtofKHscmu6hsh8Ue18XpBE9FYkBqzJ
+"
+
+[[p2p]]
+multiaddr = "/ip4/46.225.26.24/tcp/29898/p2p/12D3KooWCYWHjndBGnvBomNquh4foK8VSK9MQ4uwo5bMnTnNbjUo
+"
+
+[[p2p]]
+multiaddr = "/ip4/168.119.181.105/tcp/29898/p2p/12D3KooWFoiDFVikwEP5spaBU6ZiPdaNyr2YLEDy4zAgLiAUygKw
+"
+
+[[p2p]]
+multiaddr = "/ip4/65.108.94.1/tcp/29898/p2p/12D3KooWDjt7nfbkdHMBt5F4ZuqcWbGCADbhhRVvJocmFJ6Gv6jF
+"
+
+[[p2p]]
+multiaddr = "/ip4/5.78.231.123/tcp/29898/p2p/12D3KooWBJkLxf7mR9vMzQXMHSJXEQeqCYixgbP3SG265NR4pjMQ
+"
+
+[[p2p]]
+multiaddr = "/ip4/178.105.15.216/tcp/29898/p2p/12D3KooWFJSCWzTGE9SA1mcYN45okmgAHQcGQ9bHvUhe4RE1KJ9Q
+"
+
+[[p2p]]
+multiaddr = "/ip4/142.132.180.99/tcp/29898/p2p/12D3KooWDQgycwFBJRThjoQTC93tLkNB5ybBtAZ1DjzVjpJjGEX3
+"
+
+[[p2p]]
+multiaddr = "/ip4/178.104.98.80/tcp/29898/p2p/12D3KooWPBhe8MVCycbqpjBxGn2SDNrXE2iMKbdU3peYNi2NPZk3
+"
+
+[[p2p]]
+multiaddr = "/ip4/178.105.218.151/tcp/29898/p2p/12D3KooWRyzmXpVGTRgMAv3sLodutktjtFaboeF2Ha57neVaaQXz
+"
+
+[[p2p]]
+multiaddr = "/ip4/95.216.154.155/tcp/29898/p2p/12D3KooWRpuX515ozMPCMB7Mo7kMXnr3eF99eepTaE292qUZkjks
+"
+
+[[p2p]]
+multiaddr = "/ip4/46.62.214.97/tcp/29898/p2p/12D3KooWPKJSx2kBce9eBFxSwqygyCea2v97XczDPEgK9j5mysni
+"
+
+[[p2p]]
+multiaddr = "/ip4/5.78.239.10/tcp/29898/p2p/12D3KooWPckKRjojCAD9aSutLNDnVkyEVxdxAJUXMzPosKy5hrBU
+"
+
+[[p2p]]
+multiaddr = "/ip4/178.104.233.182/tcp/29898/p2p/12D3KooWGiR9yqaM5UkGncLVjnCcFaTDbfZrjWam3ZmyM5rNTqZ7
+"
+
+[[p2p]]
+multiaddr = "/ip4/87.99.145.48/tcp/29898/p2p/12D3KooWKFxwa384Hd2JzGrf9zZqhiKY4ttCFLoGhyp4CA3b1jjd
+"
+
+[[p2p]]
+multiaddr = "/ip4/162.55.54.198/tcp/29898/p2p/12D3KooWP3Rviz3PrcSiVWASHr7kRwGZWnxwNSh4nJCQ3Fr82k6P
+"
+
+[[p2p]]
+multiaddr = "/ip4/49.12.14.148/tcp/29898/p2p/12D3KooWJ3v6K15fJV58KJrqJKBg1zdHY9urV3fMsZ8QfkLPJuVn
+"
+
+[[p2p]]
+multiaddr = "/ip4/49.12.40.11/tcp/29898/p2p/12D3KooWNFoe5Y6p7Y3hUSfUESUHPi65WE7mWSrR8ZgMC4jaxGTQ
+"
+
+[[p2p]]
+multiaddr = "/ip4/95.217.156.190/tcp/29898/p2p/12D3KooWFy7tvDdrsH8avgDnTaekhRBzVByTb82jtbKFRk7u8rAL
+"
 
 # ---- Explorers ----
 # Live block explorer for the foundation testnet. Serves account, anchor,
