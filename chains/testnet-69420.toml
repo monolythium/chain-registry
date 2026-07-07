@@ -1,5 +1,5 @@
 chain_id     = 69420
-# 2026-07-07 v0.4.0 4-CLUSTER (n=4, f=1) RE-GENESIS: genesis 0xbe1b3a3c, protocore v0.4.0-testnet, 4 DVT clusters x 7 (5-of-7), milestones UNCHANGED. A whole cluster can fail without halting (proven live).
+# 2026-07-07 v0.4.0 4-CLUSTER (n=4, f=1) 7-of-10 RE-GENESIS: genesis 0xe22733f4, 4 DVT clusters x 10 operators (7-of-10). A whole cluster can fail without halting.
 network      = "testnet-69420"
 display_name = "Monolythium Testnet"
 description  = "Live development testnet for Monolythium / LythiumDAG-BFT. Foundation-operated. Wipe + regenesis is allowed without notice — do NOT store value on this network."
@@ -28,7 +28,7 @@ description  = "Live development testnet for Monolythium / LythiumDAG-BFT. Found
 # ML-DSA-65 mnemonics (fresh [[p2p]] peer IDs below); the two relay p2p
 # identities carried over. Structure — 2 consensus seats, each a 10-operator
 # cluster (threshold 7-of-10) — unchanged; see chains/genesis.
-genesis_hash = "0xbe1b3a3c25c0a40a9faa9ca1b434991406f71f0e93c76c083a0e7ba44a47d33a"
+genesis_hash = "0xe22733f4d7e013b93f0f825667fcf852cbf7ad1ca31a42a1bfcf1ab6d79c89a3"
 
 # ---- Dynamic genesis resolution ----
 # Full genesis content for this network, committed in this repo and served
@@ -45,7 +45,7 @@ genesis_hash = "0xbe1b3a3c25c0a40a9faa9ca1b434991406f71f0e93c76c083a0e7ba44a47d3
 # acceptable only because testnet is value-less and wiped without notice. See
 # README.md "Dynamic genesis resolution" and the mainnet-only groundwork below.
 genesis_url    = "https://raw.githubusercontent.com/monolythium/chain-registry/master/chains/genesis/testnet-69420.genesis.toml"
-genesis_sha256 = "fced985fa36868beae4a72e45a97e1f1c8405f947541102ffafdcc82842ccd35"
+genesis_sha256 = "5e5e6e0301bf742e2b7e81794ac20ca3fb5f39fdadf54230e1e0c625f9bf2cbb"
 
 # ---- Canonical milestone config (rolling-upgrade mechanism) ----
 # The canonical, cosigned milestone config for this network, committed in this
@@ -298,89 +298,128 @@ notes    = "operator-9"
 # 4-CLUSTER seeds (v0.4.0 re-genesis 2026-07-07): 28 operators = 4 DVT clusters x 7 (cluster-major;
 # cluster A concentrates the 5.78.x Helsinki subnet). Peer IDs collected live post-cutover.
 
-[[p2p]]
-multiaddr = "/ip4/5.78.236.250/tcp/29898/p2p/12D3KooWQoTGcgyArEpPVBLWtF2F6oApy9t4fHHZtVTWfi2hTCmY"
+# 4x10 seeds (v0.4.0 7-of-10 re-genesis 2026-07-07): 40 operators = 4 DVT clusters x 10 (cluster-major;
+# cluster A = the 10 Helsinki 5.78.x hosts as one seat). 7-of-10 threshold. Peer IDs collected live post-cutover.
 
 [[p2p]]
-multiaddr = "/ip4/5.78.233.163/tcp/29898/p2p/12D3KooWPeXbc1FoaYixLzsVGyN8kw363Y7EqeZD3WXUj386NXFu"
+multiaddr = "/ip4/5.78.236.250/tcp/29898/p2p/12D3KooWKhqR2c9ip7bDXN3SHPfMaHDYMooGBUCVEBpKiVfsXzy6"
 
 [[p2p]]
-multiaddr = "/ip4/5.78.226.88/tcp/29898/p2p/12D3KooWAjsymTFv7zPeUcaNs17DKaXfyH1d3T8LsKG44W1uCa3U"
+multiaddr = "/ip4/5.78.233.163/tcp/29898/p2p/12D3KooWDghqff7Bu3xQPAuqVCsmWgSoG8jpYbbawDNavoiPB8yD"
 
 [[p2p]]
-multiaddr = "/ip4/5.78.195.220/tcp/29898/p2p/12D3KooWAdT6xpqDY1MD9eYsuDoXgQKGzfR1wX7JvL4H3MQqzcTK"
+multiaddr = "/ip4/5.78.226.88/tcp/29898/p2p/12D3KooWQsjKqGadAEmVKoUCP347A3xc84JbN1En6GwcsESEMWyP"
 
 [[p2p]]
-multiaddr = "/ip4/5.78.233.251/tcp/29898/p2p/12D3KooWQDd8JpPPGLZZkzQZsnMEVGbEnLEX8dtJBnwKNenKZLDo"
+multiaddr = "/ip4/5.78.195.220/tcp/29898/p2p/12D3KooWPtJZD2ePxNyDWrJ1attjZiA2FiM4kPZiowemYyMM6PX5"
 
 [[p2p]]
-multiaddr = "/ip4/5.78.235.111/tcp/29898/p2p/12D3KooWFXiAPUw6ncj6F3qwAkkyvrX6c8LUr1BTkR2z2HK9CUG7"
+multiaddr = "/ip4/5.78.233.251/tcp/29898/p2p/12D3KooWN6uJqUtb8AEDJNGWeaymp1HrwkJKZawF94o7Xe6C1zBM"
 
 [[p2p]]
-multiaddr = "/ip4/5.78.236.36/tcp/29898/p2p/12D3KooWSAyo845nZx88HYNjtDusuxE9kipSsfi54rBRVjB6Wshj"
+multiaddr = "/ip4/5.78.235.111/tcp/29898/p2p/12D3KooWFgRDLKrDtJ5oGYDB1vfKxmL5yDJe4jqhrLobr1Th7Tmg"
 
 [[p2p]]
-multiaddr = "/ip4/5.78.229.250/tcp/29898/p2p/12D3KooWRSnb6cUL4akMYAdEYPNpbddY4r5Sdip3kCCLAGD1PXQh"
+multiaddr = "/ip4/5.78.236.36/tcp/29898/p2p/12D3KooWAvY4UHyoMd1GCUtB9121CvTvVqJTohL3o6MTvJSCbYPM"
 
 [[p2p]]
-multiaddr = "/ip4/178.105.12.9/tcp/29898/p2p/12D3KooWMyhRQkmWCUBE5ShER5BfrFZ3A3c8baZhY5ANyBGEuzhi"
+multiaddr = "/ip4/5.78.229.250/tcp/29898/p2p/12D3KooWECSLL2shfVVqAsfr7tSnYmRe1UeuCCxHPzRr3QKHevsS"
 
 [[p2p]]
-multiaddr = "/ip4/5.223.85.76/tcp/29898/p2p/12D3KooWKAWRFTUFHnK9Ti9mLniT4hcGb6j9LQmbbfwMi56EHjvK"
+multiaddr = "/ip4/5.78.231.123/tcp/29898/p2p/12D3KooWJqGhiJPaB4bTqQ1n197va5EfE2NKeTnHyVZtPzMQ5VNv"
 
 [[p2p]]
-multiaddr = "/ip4/116.202.8.181/tcp/29898/p2p/12D3KooWPaoNUAxukZwTohtofKHscmu6hsh8Ue18XpBE9FYkBqzJ"
+multiaddr = "/ip4/5.78.239.10/tcp/29898/p2p/12D3KooWQL2hqkZF4N3yDyb2wPhLFbQihxEcqZJDoo711rEFGyDp"
 
 [[p2p]]
-multiaddr = "/ip4/46.225.26.24/tcp/29898/p2p/12D3KooWCYWHjndBGnvBomNquh4foK8VSK9MQ4uwo5bMnTnNbjUo"
+multiaddr = "/ip4/178.105.12.9/tcp/29898/p2p/12D3KooWKQtYyLQXDBXapjt2UwmMPV8s9TjDyzgXzmQgvvSKLpLJ"
 
 [[p2p]]
-multiaddr = "/ip4/168.119.181.105/tcp/29898/p2p/12D3KooWFoiDFVikwEP5spaBU6ZiPdaNyr2YLEDy4zAgLiAUygKw"
+multiaddr = "/ip4/65.108.94.1/tcp/29898/p2p/12D3KooWQfhPxFknDzw3fn54aqrDMd4TmQLjHRUVPvj8Q1k4ps26"
 
 [[p2p]]
-multiaddr = "/ip4/65.108.94.1/tcp/29898/p2p/12D3KooWDjt7nfbkdHMBt5F4ZuqcWbGCADbhhRVvJocmFJ6Gv6jF"
+multiaddr = "/ip4/5.223.85.76/tcp/29898/p2p/12D3KooWN5eQsz4KW659fXgzzWNqJx5EM3WmQaBHb8qKvVAFyg5z"
 
 [[p2p]]
-multiaddr = "/ip4/5.78.231.123/tcp/29898/p2p/12D3KooWBJkLxf7mR9vMzQXMHSJXEQeqCYixgbP3SG265NR4pjMQ"
+multiaddr = "/ip4/95.217.156.190/tcp/29898/p2p/12D3KooW9rMkr7zGdxkHJPu67YUYuo2ZpFhaCeMhVvMPf6AcJMe7"
 
 [[p2p]]
-multiaddr = "/ip4/178.105.15.216/tcp/29898/p2p/12D3KooWFJSCWzTGE9SA1mcYN45okmgAHQcGQ9bHvUhe4RE1KJ9Q"
+multiaddr = "/ip4/178.104.98.80/tcp/29898/p2p/12D3KooWCcDGLBvxr2DzjTpoJUfXr3W9xiXCJUaNAfzZtwSoxQjp"
 
 [[p2p]]
-multiaddr = "/ip4/142.132.180.99/tcp/29898/p2p/12D3KooWDQgycwFBJRThjoQTC93tLkNB5ybBtAZ1DjzVjpJjGEX3"
+multiaddr = "/ip4/178.105.218.151/tcp/29898/p2p/12D3KooWNxNRwPip2e8QeAdFp3CKvay2ceq6LXKU7FU1xHEWxPTP"
 
 [[p2p]]
-multiaddr = "/ip4/178.104.98.80/tcp/29898/p2p/12D3KooWPBhe8MVCycbqpjBxGn2SDNrXE2iMKbdU3peYNi2NPZk3"
+multiaddr = "/ip4/46.62.214.97/tcp/29898/p2p/12D3KooWQ8BwX9AenXzRQEgAJkTG4aCkerQTNa8tKXnro8c5UHGL"
 
 [[p2p]]
-multiaddr = "/ip4/178.105.218.151/tcp/29898/p2p/12D3KooWRyzmXpVGTRgMAv3sLodutktjtFaboeF2Ha57neVaaQXz"
+multiaddr = "/ip4/157.180.92.16/tcp/29898/p2p/12D3KooWMv9gvPNEduebqsU1XqE7nHLexdnMm9JgPxGfsZVm368x"
 
 [[p2p]]
-multiaddr = "/ip4/95.216.154.155/tcp/29898/p2p/12D3KooWRpuX515ozMPCMB7Mo7kMXnr3eF99eepTaE292qUZkjks"
+multiaddr = "/ip4/77.42.67.172/tcp/29898/p2p/12D3KooWJttyrhP2tQeJYSaMHYWkhv97U7Sk1Ztf9xMuRRXzfbcK"
 
 [[p2p]]
-multiaddr = "/ip4/46.62.214.97/tcp/29898/p2p/12D3KooWPKJSx2kBce9eBFxSwqygyCea2v97XczDPEgK9j5mysni"
+multiaddr = "/ip4/46.62.156.131/tcp/29898/p2p/12D3KooWCmNszhmMHqcQ4AjChcvRUkYBcCauHSrZ572ih4pCZW5c"
 
 [[p2p]]
-multiaddr = "/ip4/5.78.239.10/tcp/29898/p2p/12D3KooWPckKRjojCAD9aSutLNDnVkyEVxdxAJUXMzPosKy5hrBU"
+multiaddr = "/ip4/178.105.15.216/tcp/29898/p2p/12D3KooWEvJ7TXk71x6Qdb2tXLpZwn1jMAybS8jg3BHtsTcv5rRY"
 
 [[p2p]]
-multiaddr = "/ip4/178.104.233.182/tcp/29898/p2p/12D3KooWGiR9yqaM5UkGncLVjnCcFaTDbfZrjWam3ZmyM5rNTqZ7"
+multiaddr = "/ip4/95.216.154.155/tcp/29898/p2p/12D3KooWEbqK9AxDS8an6Hr6Botgeapd8tKJ1QKitsiT5XRGrr8N"
 
 [[p2p]]
-multiaddr = "/ip4/87.99.145.48/tcp/29898/p2p/12D3KooWKFxwa384Hd2JzGrf9zZqhiKY4ttCFLoGhyp4CA3b1jjd"
+multiaddr = "/ip4/142.132.180.99/tcp/29898/p2p/12D3KooWQqrU7woVz5aV6CmC9Tr9aE1hJZz5fVZe5ftm9tgMaDc9"
 
 [[p2p]]
-multiaddr = "/ip4/162.55.54.198/tcp/29898/p2p/12D3KooWP3Rviz3PrcSiVWASHr7kRwGZWnxwNSh4nJCQ3Fr82k6P"
+multiaddr = "/ip4/116.202.8.181/tcp/29898/p2p/12D3KooWSCMHjawVh1NL5EFPGm2bpVoSFgR6SecQfB2i6XiTD33F"
 
 [[p2p]]
-multiaddr = "/ip4/49.12.14.148/tcp/29898/p2p/12D3KooWJ3v6K15fJV58KJrqJKBg1zdHY9urV3fMsZ8QfkLPJuVn"
+multiaddr = "/ip4/46.225.26.24/tcp/29898/p2p/12D3KooWNHfJsCVHtt1XvsSwfPjiHTiUAhvkwdm89FAo39MkmPrx"
 
 [[p2p]]
-multiaddr = "/ip4/49.12.40.11/tcp/29898/p2p/12D3KooWNFoe5Y6p7Y3hUSfUESUHPi65WE7mWSrR8ZgMC4jaxGTQ"
+multiaddr = "/ip4/168.119.181.105/tcp/29898/p2p/12D3KooWPeuMdrpsinV2dcEJF9ihC6VSZVpyM8UX5nfNHq23NAui"
 
 [[p2p]]
-multiaddr = "/ip4/95.217.156.190/tcp/29898/p2p/12D3KooWFy7tvDdrsH8avgDnTaekhRBzVByTb82jtbKFRk7u8rAL"
+multiaddr = "/ip4/167.233.235.205/tcp/29898/p2p/12D3KooWFzGV4cPqJtmpaZPezk8KWMmjtBaexZSvKfQ7yXmcZDTd"
+
+[[p2p]]
+multiaddr = "/ip4/167.233.225.50/tcp/29898/p2p/12D3KooWDAP7fjW46z7HjQQSuphfpcSEWPgXrfyg63fN91KE95V9"
+
+[[p2p]]
+multiaddr = "/ip4/138.199.144.111/tcp/29898/p2p/12D3KooWEtzQjzFGtAnHEuMMEonmUDKmZxH3BbZFFU46r2M7Nrzd"
+
+[[p2p]]
+multiaddr = "/ip4/167.233.224.96/tcp/29898/p2p/12D3KooWAhyepSDFVMb3TNMJLywK63RNm1vuzq7Hu91xghP9bpQF"
+
+[[p2p]]
+multiaddr = "/ip4/178.104.233.182/tcp/29898/p2p/12D3KooWNLuxyXpzfeR2t3ck3Fn5c34QKpVnRrYTQHgHcf8MhXqE"
+
+[[p2p]]
+multiaddr = "/ip4/87.99.145.48/tcp/29898/p2p/12D3KooWJuFXaVo6ooedLLgCqP6Aiv5fZBWns38pPgVdv6Z8YFfE"
+
+[[p2p]]
+multiaddr = "/ip4/162.55.54.198/tcp/29898/p2p/12D3KooWMHB1Jnioyn8iqVdcR4e9ShS9itn7vPc8mBMVEspR4Hov"
+
+[[p2p]]
+multiaddr = "/ip4/49.12.14.148/tcp/29898/p2p/12D3KooWMFeuJudHw1akygZBYZ9o93j2TtgPJ6qG8s5MuejKS7Ze"
+
+[[p2p]]
+multiaddr = "/ip4/49.12.40.11/tcp/29898/p2p/12D3KooWChARBFkhte2A4wbhRikuBNJmVzZ4rK3gyutPq1oynmxf"
+
+[[p2p]]
+multiaddr = "/ip4/157.180.72.92/tcp/29898/p2p/12D3KooWC8wgFpgdkoyA6VKTnVb9YkJRsCRhxn93QcqPANEeezBm"
+
+[[p2p]]
+multiaddr = "/ip4/77.42.35.183/tcp/29898/p2p/12D3KooWA44YB3auTGhPAoMpymzhovnugX22DAMMiVhAWoEALB5A"
+
+[[p2p]]
+multiaddr = "/ip4/46.62.132.92/tcp/29898/p2p/12D3KooWBuJNuPxXFAE5aAwvi8hd1GorHT8CXcF6mDsk2fBeTAB2"
+
+[[p2p]]
+multiaddr = "/ip4/37.27.35.64/tcp/29898/p2p/12D3KooWC4HaGjR4N4C1H77dvQ8We18u5s37q6bAbcWkrnGTPQNt"
+
+[[p2p]]
+multiaddr = "/ip4/5.223.65.201/tcp/29898/p2p/12D3KooWFDJTuUoJzqojgdkZ8JXTyn1oibxoAJF9JfqiiKZAWsfB"
 
 # ---- Explorers ----
 # Live block explorer for the foundation testnet. Serves account, anchor,
