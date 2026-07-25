@@ -29,9 +29,9 @@ milestones_sha256 = "7739c3d702b72586dd9880bafedb3967393fab679e4d2e3268d038bcd7c
 binary_sha            = "f052832c62ad5640fa7a419018bba4b120a18587"
 binary_release_sha256 = "477704b170b620e9b52255b1dc26dddfcadb8664052867c1750ac40e3764851b"
 release_tag           = "v0.4.1-testnet"
-# PENDING (deliberately not invented): `release_tarball_sha256` requires the
-# final signed release asset. Add it only after downloading and hashing the
-# published immutable tarball.
+# Independently downloaded from the public immutable release and verified
+# against its signed archive and accepted executable identity.
+release_tarball_sha256 = "5d03e6fb7110613b28a18cda013bd16731e5ddb02b0307fea205eacbc97f311e"
 
 # Wallet-facing JSON-RPC. R5 operator and relay RPC ports require the native-PQ
 # transport and are intentionally not advertised as plaintext HTTP endpoints.
