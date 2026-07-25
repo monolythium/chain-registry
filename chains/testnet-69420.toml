@@ -37,6 +37,7 @@ release_tarball_sha256 = "5d03e6fb7110613b28a18cda013bd16731e5ddb02b0307fea205ea
 # transport and are intentionally not advertised as plaintext HTTP endpoints.
 [[rpc]]
 url      = "https://rpc.monolythium.com"
+ws_url   = "wss://rpc.monolythium.com/ws"
 provider = "monolythium-foundation"
 tier     = "official"
 notes    = "canonical native-PQ-terminating public RPC gateway"
