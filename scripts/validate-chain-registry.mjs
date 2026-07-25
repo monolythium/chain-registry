@@ -17,6 +17,10 @@ const ROOT_KEYS = new Set([
   "genesis_hash",
   "genesis_url",
   "genesis_sha256",
+  // SHA-256 of the exact mono-core network-registry.toml bytes installed on
+  // the fleet and bound into genesis. Release verifiers use this to keep the
+  // public chain entry aligned with the node bootstrap trust artifact.
+  "network_registry_sha256",
   // Canonical milestone config reference (mirrors genesis_url/genesis_sha256):
   // the cosigned chains/milestones/<network>.milestones.toml that carries the
   // rolling-upgrade entries. Deploy-time fetch + cosign verify, not a runtime
@@ -117,6 +121,7 @@ function runSelfTest() {
 chain_id = 1
 network = "selftest"
 genesis_hash = "0x${"11".repeat(32)}"
+network_registry_sha256 = "${"22".repeat(32)}"
 binary_sha = "abcdef1"
 release_tag = "v0.1.0-testnet"
 binary_release_sha256 = "abababababababababababababababababababababababababababababababab"
@@ -136,6 +141,7 @@ multiaddr = "/ip4/127.0.0.1/tcp/29898/p2p/12D3KooWSelfTest"
 chain_id = 1
 network = "selftest"
 genesis_hash = "0x${"11".repeat(32)}"
+network_registry_sha256 = "0x${"22".repeat(32)}"
 binary_sha = "abcdef1"
 release_tag = "v0.1.0-testnet"
 binary_release_sha256 = "abababababababababababababababababababababababababababababababab"
@@ -163,7 +169,10 @@ cluster_public_key = "0x12"
   const invalidErrors = invalid.errors.concat(validateChainInfo(invalid.info, "selftest.toml"));
   assertSelfTest(
     invalidErrors.some((error) => error.includes("archive.signature_threshold exceeds signer count")) &&
-      invalidErrors.some((error) => error.includes("finality.cluster_public_key must be 1952 bytes")),
+      invalidErrors.some((error) => error.includes("finality.cluster_public_key must be 1952 bytes")) &&
+      invalidErrors.some((error) =>
+        error.includes("network_registry_sha256 must be a 64-char lowercase sha256"),
+      ),
     `invalid fixture did not fail as expected: ${invalidErrors.join("; ")}`,
   );
 
@@ -443,6 +452,12 @@ function validateChainInfo(info, file) {
     }
     if (info.rpc.length === 0) errors.push(`${file}: at least one [[rpc]] entry is required`);
     if (info.p2p.length === 0) errors.push(`${file}: at least one [[p2p]] entry is required`);
+  }
+  if (
+    info.network_registry_sha256 !== undefined &&
+    (typeof info.network_registry_sha256 !== "string" || !/^[0-9a-f]{64}$/u.test(info.network_registry_sha256))
+  ) {
+    errors.push(`${file}: network_registry_sha256 must be a 64-char lowercase sha256 when present`);
   }
   validateGenesisResolution(info, file, errors);
   info.rpc.forEach((rpc, index) => validateRpc(rpc, `${file}: rpc[${index}]`, errors));

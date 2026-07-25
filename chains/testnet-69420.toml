@@ -1,15 +1,19 @@
 chain_id     = 69420
-# 2026-07-24 Posture-C V15 4-cluster / 40-operator (7-of-10) re-genesis candidate.
-# Publish this registry state only after the live cut has produced accepted evidence.
+# 2026-07-25 Posture-C V16 R5 4-cluster / 40-operator (7-of-10)
+# re-genesis, accepted by the live-cut evidence gate.
 network      = "testnet-69420"
 display_name = "Monolythium Testnet"
 description  = "Live development testnet for Monolythium / LythiumDAG-BFT. Foundation-operated. Wipe + regenesis is allowed without notice — do NOT store value on this network."
 
-# Canonical V15 genesis identity. `genesis_hash` is the value emitted by the
+# Canonical V16 R5 genesis identity. `genesis_hash` is the value emitted by the
 # mono-core genesis verifier; `genesis_sha256` pins the exact authored bytes.
-genesis_hash   = "0xbf09dc062e1a3ce71e4fbe5833d1ebe546cce5c9dcbd4de3ee0c693690661666"
+genesis_hash   = "0x8dfc309dfe8e35b4ca036631c7dc25b29e618ac8a9694e0e2bbe23d0f98ab1fe"
 genesis_url    = "https://raw.githubusercontent.com/monolythium/chain-registry/master/chains/genesis/testnet-69420.genesis.toml"
-genesis_sha256 = "c94e8f7bf54211610838f62b2bd7192af00664ba409e81b77f360b518fb14283"
+genesis_sha256 = "0a02cabfb7d84cea3e77dcac76990ce3ceda233c7ba0d6f067d2b5b6e53dbb8a"
+
+# Exact mono-core network-registry.toml installed on the accepted R5 fleet and
+# committed by the genesis treasury policy.
+network_registry_sha256 = "ef296a44b8ea83626b9bfcbfff4df6b47049ed0cd910d07defc7dfa2ef7853d4"
 
 # Posture-C milestone authority is rooted in genesis (`milestone_signer_root`,
 # threshold 2). The exact signed milestone artifact is vendored beside genesis.
@@ -17,208 +21,195 @@ genesis_sha256 = "c94e8f7bf54211610838f62b2bd7192af00664ba409e81b77f360b518fb142
 # not a valid re-arm: any future change must be a threshold-authorized signed
 # append accepted by the Posture-C verification path.
 milestones_url    = "https://raw.githubusercontent.com/monolythium/chain-registry/master/chains/milestones/testnet-69420.milestones.toml"
-milestones_sha256 = "03dec827fb6e93c4f3e8ddf9d48b32bc0545b52cee4aa712f90ace6934da683b"
+milestones_sha256 = "7739c3d702b72586dd9880bafedb3967393fab679e4d2e3268d038bcd7c452e7"
 
-# Exact source and executable used to author the V15 candidate.
-binary_sha            = "6d3ab40b8c3d0680242526bc0cb9d221e1055694"
-binary_release_sha256 = "8bf6a99a727947b57f25eb15c1fbb5223cfc932659f4ff11fb0da37d0294f153"
+# Exact source and executable accepted on the V16 R5 fleet. The frozen source
+# tree is 30a34766f75ee74b39ced71d8158666392f8e8e6. The native-PQ public RPC
+# gateway binary is b9eb72497d58e95354a6917d3821009522d98745f5a55cbf9533f3b675c4f428.
+binary_sha            = "f052832c62ad5640fa7a419018bba4b120a18587"
+binary_release_sha256 = "477704b170b620e9b52255b1dc26dddfcadb8664052867c1750ac40e3764851b"
 release_tag           = "v0.4.1-testnet"
 # PENDING (deliberately not invented): `release_tarball_sha256` requires the
 # final signed release asset. Add it only after downloading and hashing the
 # published immutable tarball.
 
-# Foundation RPC endpoints. Ordering is load-bearing for cold-start fast sync:
-# the two relays from the signed network registry lead, followed by the stable
-# public HTTPS gateway used by wallets and SDK examples.
-[[rpc]]
-url      = "http://178.105.45.210:8545"
-provider = "monolythium-foundation"
-region   = "fsn1"
-tier     = "official"
-notes    = "relay-0; complete fast-sync closure"
-
-[[rpc]]
-url      = "http://65.21.252.34:8545"
-provider = "monolythium-foundation"
-region   = "hel1"
-tier     = "official"
-notes    = "relay-1; complete fast-sync closure"
-
+# Wallet-facing JSON-RPC. R5 operator and relay RPC ports require the native-PQ
+# transport and are intentionally not advertised as plaintext HTTP endpoints.
 [[rpc]]
 url      = "https://rpc.monolythium.com"
 provider = "monolythium-foundation"
 tier     = "official"
-notes    = "canonical public RPC gateway"
+notes    = "canonical native-PQ-terminating public RPC gateway"
 
-# P2P bootstrap endpoints from the exact V15 network-registry artifact.
+# P2P bootstrap endpoints from the exact V16 R5 network-registry artifact.
 # Relays lead, followed by validators in node-id order.
 # relay-0
 [[p2p]]
-multiaddr = "/ip4/178.105.45.210/tcp/29898/p2p/12D3KooWBwRRSV5SqbFfNfio4hE7tofNkYXwihAwedKo9gV1kT7e"
+multiaddr = "/ip4/178.105.45.210/tcp/29898/p2p/12D3KooWNwaWFMBCD55D9VoAF7nxva7H8pKzmLcDW7HCKmxbB7Qb"
 
 # relay-1
 [[p2p]]
-multiaddr = "/ip4/65.21.252.34/tcp/29898/p2p/12D3KooWGFQs3NNG8b4x8Sr5yEEFAEjtW3bo3y812f23jPduTp8e"
+multiaddr = "/ip4/65.21.252.34/tcp/29898/p2p/12D3KooWAyeb3mC1q6UL7rTwnJPaZV6fVS3sV6wGNZwVGfaF1UNX"
 
 # node-0
 [[p2p]]
-multiaddr = "/ip4/5.78.236.250/tcp/29898/p2p/12D3KooWCwpUuYz9Z2S4Tx1Tv9c1TDBahqf1FYThAxTvo4FcyC6K"
+multiaddr = "/ip4/5.78.236.250/tcp/29898/p2p/12D3KooWNYwbXvkpNLxnJkWVGLm3HX6nRpsZTqzRxUfVMXBALPFe"
 
 # node-1
 [[p2p]]
-multiaddr = "/ip4/5.78.233.163/tcp/29898/p2p/12D3KooWQdcysuXpAobtXKN8gk8REy4Z2q6nCU9PBXxVhsjFDJ3n"
+multiaddr = "/ip4/5.78.233.163/tcp/29898/p2p/12D3KooWKbZdqF5exics8WCyRjq2osReypoFNtmR4tvZf9JXeCJP"
 
 # node-2
 [[p2p]]
-multiaddr = "/ip4/5.78.226.88/tcp/29898/p2p/12D3KooWRdoJqb3J9vQeFQmVXC2M7b6gpS5S9CviRhDjuYUYhJUX"
+multiaddr = "/ip4/5.78.226.88/tcp/29898/p2p/12D3KooWGem4SUN4BiTeBkTKisACkqTBAFSVc12HP9UFszhjQjnr"
 
 # node-3
 [[p2p]]
-multiaddr = "/ip4/5.78.195.220/tcp/29898/p2p/12D3KooWD29CQjt2J3rnStfCLUQQuQoffXyLamxyBxez6h33aoGb"
+multiaddr = "/ip4/5.78.195.220/tcp/29898/p2p/12D3KooWG9MHCKCSXYxLpLn3SfjwtpqeohhEmMdJDZ2jrNMcqTxf"
 
 # node-4
 [[p2p]]
-multiaddr = "/ip4/5.78.233.251/tcp/29898/p2p/12D3KooWHyjKFM7iG28jb6Wdv84uXCYcNFBwFzXcdBAj7jXzwWkS"
+multiaddr = "/ip4/5.78.233.251/tcp/29898/p2p/12D3KooWQQpSdvMwn62uXohmJ6VgbMdFaerr6qTRVMZS9KW5raZe"
 
 # node-5
 [[p2p]]
-multiaddr = "/ip4/5.78.235.111/tcp/29898/p2p/12D3KooWMFmfcWDvk42tbEQ1Egi8qk5qxADeoMZQZxqSMDSW3Ac5"
+multiaddr = "/ip4/5.78.235.111/tcp/29898/p2p/12D3KooWFiZbB2z5j857xrr8nxJRq8WqF7hmfiwJvyupXHF2r39N"
 
 # node-6
 [[p2p]]
-multiaddr = "/ip4/5.78.236.36/tcp/29898/p2p/12D3KooWBT5ZpTrAfhYrQMpYAamSfZY5joovjfYUh1rxJtFkZd4Q"
+multiaddr = "/ip4/5.78.236.36/tcp/29898/p2p/12D3KooWJvhTXoDFm6cdwA2w4TW8uPtwXVzW2o3Xor8bmNQbMA8c"
 
 # node-7
 [[p2p]]
-multiaddr = "/ip4/5.78.229.250/tcp/29898/p2p/12D3KooWAwUZ7r5nmGcN44Pkgt8Bh9RzcuMTQpnGs45c2WU1SKHZ"
+multiaddr = "/ip4/5.78.229.250/tcp/29898/p2p/12D3KooWBFoDUABqPC7wUqA9bEdMzzgUutULT4rS3NyEiM4Uhbyr"
 
 # node-8
 [[p2p]]
-multiaddr = "/ip4/5.78.231.123/tcp/29898/p2p/12D3KooWEPANYaMGkPnixUd5ok8AWrstp2Vmh6TymS46yoRRnfvz"
+multiaddr = "/ip4/5.78.231.123/tcp/29898/p2p/12D3KooWNZTPoF4zqGHDoJmEHQPxs2iEB8HJUgVeX2CGHbAzfmzy"
 
 # node-9
 [[p2p]]
-multiaddr = "/ip4/5.78.239.10/tcp/29898/p2p/12D3KooWShsBiPn7a3xEbLrM8m57PdxnJaxuS3gkqjT5yEGNfMCi"
+multiaddr = "/ip4/5.78.239.10/tcp/29898/p2p/12D3KooWKZ2crnXfgUkM2P9sAHqR6NXsE9irazRmDGiWsiTpf1yN"
 
 # node-10
 [[p2p]]
-multiaddr = "/ip4/178.105.12.9/tcp/29898/p2p/12D3KooWCekTa5HRSGq73umoGP3MQawWni9L8MkYF5esamZvERwf"
+multiaddr = "/ip4/178.105.12.9/tcp/29898/p2p/12D3KooWM6MWgzvY2c4yWPQC1dnasPV6UBFYbDEkjHnLJkEvgDZb"
 
 # node-11
 [[p2p]]
-multiaddr = "/ip4/65.108.94.1/tcp/29898/p2p/12D3KooWDoMub1v3sUr6N9gQmukajvd4dY1MtTx7QibSWyqd1t4b"
+multiaddr = "/ip4/65.108.94.1/tcp/29898/p2p/12D3KooWQzySK1FcFvF4arfHu8aLUhTWT3LJhNYuerdbGGggdStq"
 
 # node-12
 [[p2p]]
-multiaddr = "/ip4/5.223.85.76/tcp/29898/p2p/12D3KooWAnxVTJnUyM4F2ArXvcg1jpiZwdYWDdwuppxtgv6x3MQn"
+multiaddr = "/ip4/5.223.85.76/tcp/29898/p2p/12D3KooWL5t2PVb17FtZuVK6x5a9vXj5u57ykBKfGCNihWyYiCZ1"
 
 # node-13
 [[p2p]]
-multiaddr = "/ip4/95.217.156.190/tcp/29898/p2p/12D3KooWKd9ZzZGir8PDhGePtbDr3M8HCP3fbYFRY6pctKxMnUav"
+multiaddr = "/ip4/95.217.156.190/tcp/29898/p2p/12D3KooWJ1k5ZXEV6HfrUB53PdRUAqLp24o38GwbG37gDyiJa9Qb"
 
 # node-14
 [[p2p]]
-multiaddr = "/ip4/178.104.98.80/tcp/29898/p2p/12D3KooWEJNeGFzHiVjhx4xdw3hUrZ6CLQiZ8p8zzsE4stgSnJnT"
+multiaddr = "/ip4/178.104.98.80/tcp/29898/p2p/12D3KooWSdGUZ2LsNP16vjuBRTtKpq6yGHe8ktf9AdTkDmib777C"
 
 # node-15
 [[p2p]]
-multiaddr = "/ip4/178.105.218.151/tcp/29898/p2p/12D3KooWKfXaAgUdUjwmdfMimtjRqEfjUNr3jKQf15owVHLkrDtw"
+multiaddr = "/ip4/178.105.218.151/tcp/29898/p2p/12D3KooWHbTACaFBneM7Mmvy5YAkK4btVYgDWjTd4xPs6EfBwVuo"
 
 # node-16
 [[p2p]]
-multiaddr = "/ip4/46.62.214.97/tcp/29898/p2p/12D3KooWFjD8rNM24nYzRFzwjTFrgtkmoDucgQZNuw8muG9h7rWg"
+multiaddr = "/ip4/46.62.214.97/tcp/29898/p2p/12D3KooWEXAhZ6zSi1UawFZiEzTXEkxr3ztvyYtBrVMLG3Ce7sgn"
 
 # node-17
 [[p2p]]
-multiaddr = "/ip4/157.180.92.16/tcp/29898/p2p/12D3KooWABbTVRPiFRu7tWrET9acMcAj69rL8GnsDEPSbNfjnoaH"
+multiaddr = "/ip4/157.180.92.16/tcp/29898/p2p/12D3KooWGXZEk9iwkfEGx1zRjiJZw2nERVK3ChuFSoTMtSE1peFv"
 
 # node-18
 [[p2p]]
-multiaddr = "/ip4/77.42.67.172/tcp/29898/p2p/12D3KooWGNPF7Nc9wr747sdwsL7r3z4pB6uDSJQMdMKrSyj5Jckr"
+multiaddr = "/ip4/77.42.67.172/tcp/29898/p2p/12D3KooWEd7vsUDKGWeBDk9qjBi1rPQSbKNDFCKUMjGRMspM9N8z"
 
 # node-19
 [[p2p]]
-multiaddr = "/ip4/46.62.156.131/tcp/29898/p2p/12D3KooWJVTNEj1v4VPRGsougoMrC7DeSD5EN87AvdQpC1Nv1UTp"
+multiaddr = "/ip4/46.62.156.131/tcp/29898/p2p/12D3KooWNEPYixddf5ATXpPY7CMVr3VWwT5rFtw8irU2ZcfVfT1R"
 
 # node-20
 [[p2p]]
-multiaddr = "/ip4/178.105.15.216/tcp/29898/p2p/12D3KooWD9J49QcseGUNHD5c2Ltkt6NAo2CjhoPNqS97MwqLBkbB"
+multiaddr = "/ip4/178.105.15.216/tcp/29898/p2p/12D3KooWP8L97sUMAujEqt54VyDENjVTTr4d7XcbX4SHqUFajywb"
 
 # node-21
 [[p2p]]
-multiaddr = "/ip4/95.216.154.155/tcp/29898/p2p/12D3KooWDX5efNHV92xNYKLW5mLQ3byzBpib7nQ4EM9pcZmscX38"
+multiaddr = "/ip4/95.216.154.155/tcp/29898/p2p/12D3KooWJaMLyLHzGLxsUGnp1vNUmZgFeQyTRCjDULcrDwCG8gfc"
 
 # node-22
 [[p2p]]
-multiaddr = "/ip4/142.132.180.99/tcp/29898/p2p/12D3KooWSefMfBj4sjGS1qAkSt58gKH7LmSYAAoYC97vTFqanxko"
+multiaddr = "/ip4/142.132.180.99/tcp/29898/p2p/12D3KooWQkQmzEYkMVQYErKhKKCtHmaqy4QuyJLxCY4q4CxSVaaT"
 
 # node-23
 [[p2p]]
-multiaddr = "/ip4/5.223.65.201/tcp/29898/p2p/12D3KooWJgK9GavECkabaLQAbcyBagkdkSZRwzYqzmyBKtmSQTfb"
+multiaddr = "/ip4/5.223.65.201/tcp/29898/p2p/12D3KooWBeHBVeF9F29PP8ZaDVvMkEgAj5MA1XtQG6JidLmQuN72"
 
 # node-24
 [[p2p]]
-multiaddr = "/ip4/49.12.14.148/tcp/29898/p2p/12D3KooWJVBwBUfBme7TrWYz7RPoQpSat3snnVBvp7QBbPp3jS3G"
+multiaddr = "/ip4/49.12.14.148/tcp/29898/p2p/12D3KooWMN99bUVBvZC9bfZiTeUWeCSSrt3EEuMXy5ApzoYiT4gq"
 
 # node-25
 [[p2p]]
-multiaddr = "/ip4/49.12.40.11/tcp/29898/p2p/12D3KooWHWVMH1r6dkvWm5YcnZ8o1PVz5cD5n7EeQhhW8iEGjhzj"
+multiaddr = "/ip4/49.12.40.11/tcp/29898/p2p/12D3KooWJkjA3MT3Mr19YtN8JWKmntisRNphW3Amj6RNYKqe9h9b"
 
 # node-26
 [[p2p]]
-multiaddr = "/ip4/167.233.235.205/tcp/29898/p2p/12D3KooWCZALvUZ7FfFVtX4X2vTMKSun9goi31YKibExhgfNvwq2"
+multiaddr = "/ip4/167.233.235.205/tcp/29898/p2p/12D3KooWBRyDpTcrJ5YoeqbCTrKEhEjtv9U1fwkneijvGjVx8FPv"
 
 # node-27
 [[p2p]]
-multiaddr = "/ip4/167.233.225.50/tcp/29898/p2p/12D3KooWCcn68AyuE8dHGLTiC4q54yF7kH1xcM4takhrhfTyH98P"
+multiaddr = "/ip4/167.233.225.50/tcp/29898/p2p/12D3KooWL1NEYYikKDe1ZxMsahEAndHTRG8qooXv8HDnDjgSZCsL"
 
 # node-28
 [[p2p]]
-multiaddr = "/ip4/138.199.144.111/tcp/29898/p2p/12D3KooWErQf3YWEamGYUkikrRGqzJbdegefVbgK3vcxmtWFFCGW"
+multiaddr = "/ip4/138.199.144.111/tcp/29898/p2p/12D3KooWKR2HTVr8egnkL7Wf23QYMe5kfQ9vpX1x4itEGpEefTf2"
 
 # node-29
 [[p2p]]
-multiaddr = "/ip4/167.233.224.96/tcp/29898/p2p/12D3KooWANUA7a5UH3GzBQGoqdPPjP12xtxDssDwm63T2wF4fc5d"
+multiaddr = "/ip4/167.233.224.96/tcp/29898/p2p/12D3KooWGLvM8b75DFJvE3RGG5pPwG2VtpR6qP8msTzjFnyNZstW"
 
 # node-30
 [[p2p]]
-multiaddr = "/ip4/178.104.233.182/tcp/29898/p2p/12D3KooWLf2xe5ErMEhvWWcTFi97Acvx7yCGrFBXX8eBd4uQcDRA"
+multiaddr = "/ip4/178.104.233.182/tcp/29898/p2p/12D3KooWKdY5FGYq7b4vHZKVcCcFXUBwzPeWsHUYkpzqPgjgtn2R"
 
 # node-31
 [[p2p]]
-multiaddr = "/ip4/87.99.145.48/tcp/29898/p2p/12D3KooWBYx2wyVSc1yvt3KgzZof3vbLCGMUDpTXMWHUF1YdrG4i"
+multiaddr = "/ip4/87.99.145.48/tcp/29898/p2p/12D3KooWDeSVKM3DXctzotB37FhydhGt37qXMKwg6xHbWZDdAYfE"
 
 # node-32
 [[p2p]]
-multiaddr = "/ip4/162.55.54.198/tcp/29898/p2p/12D3KooWGNqdGnWtRaGYLHPwLSMJbKgumufUa8jd2NkBWkawtcie"
+multiaddr = "/ip4/162.55.54.198/tcp/29898/p2p/12D3KooWD9VoKW6j2b74SsmHhRQrytG5NenpHmnGogn6LnjE2RHQ"
 
 # node-33
 [[p2p]]
-multiaddr = "/ip4/116.202.8.181/tcp/29898/p2p/12D3KooWEURPAegjmZsjdUcqpsQBbHfQcpczLQyEPX6Muj9GfX4c"
+multiaddr = "/ip4/116.202.8.181/tcp/29898/p2p/12D3KooWJLRAMpaQS8G27oCfJBgygfgB7QRvCXie4BKd6esoVQ3E"
 
 # node-34
 [[p2p]]
-multiaddr = "/ip4/46.225.26.24/tcp/29898/p2p/12D3KooWQjxaGp4YmQeyUwKfpCj9JWuEcLR3rdgqUXU4fakx5eSL"
+multiaddr = "/ip4/46.225.26.24/tcp/29898/p2p/12D3KooWQH7WKHDWmUzJKcub6nJ2bFGHmzUiZdVr2Q3GWfxcFomd"
 
 # node-35
 [[p2p]]
-multiaddr = "/ip4/168.119.181.105/tcp/29898/p2p/12D3KooWBZtMSTtHDSoFwiP7um7VKkFZAbiGKM3hXZ3pwaNYWmks"
+multiaddr = "/ip4/168.119.181.105/tcp/29898/p2p/12D3KooW9xMLroyMVZgvnEREySBX9hEs9rp8zqT8FLKoamF6GS2G"
 
 # node-36
 [[p2p]]
-multiaddr = "/ip4/157.180.72.92/tcp/29898/p2p/12D3KooWHiJunSEWiN19NL1EaCFpR2JnpZhoim1EbW73iLkWC6yZ"
+multiaddr = "/ip4/157.180.72.92/tcp/29898/p2p/12D3KooWQ4W8QPieYyxzqVfbzwYcu5tN15mXWEPvBqF3ZMno2Muf"
 
 # node-37
 [[p2p]]
-multiaddr = "/ip4/77.42.35.183/tcp/29898/p2p/12D3KooWRharW9PLLWaxoTB2rzfqkd2WaBLYwwuCKqzwXx4etvwv"
+multiaddr = "/ip4/77.42.35.183/tcp/29898/p2p/12D3KooWM9PPsftZSmsjCQ26NGVwErkbRPe6du1oWKKg18uQRUEo"
 
 # node-38
 [[p2p]]
-multiaddr = "/ip4/46.62.132.92/tcp/29898/p2p/12D3KooWDFMgr6Vs9yVvFcEiNnYb5D13gEnMTVGnEGS9jisaAnXi"
+multiaddr = "/ip4/46.62.132.92/tcp/29898/p2p/12D3KooWBDWMzpzbPTtvEccLQ6mBppe4pDGTnJaNf7H6gjTgrPCB"
 
 # node-39
 [[p2p]]
-multiaddr = "/ip4/37.27.35.64/tcp/29898/p2p/12D3KooWN8ffm46rovQMitGaTyjFu9RxokaJGLTMu4dsJ4DETzsp"
+multiaddr = "/ip4/37.27.35.64/tcp/29898/p2p/12D3KooWBTThKnbvKDueKoXy3Ru9n6bL19imCDWiAnCicFWtSm1F"
 
 # Live block explorer for chain 69420.
 [[explorer]]
