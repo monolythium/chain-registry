@@ -1,430 +1,217 @@
 chain_id     = 69420
-# 2026-07-07 v0.4.0 4-CLUSTER (n=4, f=1) 7-of-10 RE-GENESIS: genesis 0xe22733f4, 4 DVT clusters x 10 operators (7-of-10). A whole cluster can fail without halting.
+# 2026-07-25 Posture-C V16 R5 4-cluster / 40-operator (7-of-10)
+# re-genesis, accepted by the live-cut evidence gate.
 network      = "testnet-69420"
 display_name = "Monolythium Testnet"
 description  = "Live development testnet for Monolythium / LythiumDAG-BFT. Foundation-operated. Wipe + regenesis is allowed without notice — do NOT store value on this network."
 
-# Pinned to the genesis the live cluster is currently running. Any
-# wipe + regenesis flips this hash and bumps the registry entry.
-# 2026-07-04 v0.3.4 BRIDGE-FREE RE-GENESIS (protocore v0.3.4-testnet, mono-core
-# master @ 81ff5a2d) set the genesis_hash below, superseding the 2026-07-03
-# v0.3.3 genesis 0x5d5c36ef…. This roll cut a fresh genesis on the lean binary
-# after the in-tree bridge stack was removed (the interop route is an external
-# provider now — the bridge verifier/route/economics code and the
-# sp1-bridge-verifier feature no longer exist; the removal was proven
-# state-root-identical against the prior chain before the cut). The MILESTONE
-# SET IS UNCHANGED from v0.3.3 (milestones_sha256 7efe5018, canonical digest
-# milestone_digest = 0xb9f4a07f2733de49055c171dbbe938f336dfb070d24a83f7af4c64d1b9d2bd7f
-# in genesis.toml — it never referenced the bridge, so it carries over): public-
-# profile nodes hard-refuse to boot with a missing or divergent milestones.toml,
-# closing the divergent-milestone fork hole. Armed at genesis: dynamic DVT
-# cluster lifecycle from height 0, service-weighted operator earning from height
-# 0 (service_score_live_roster_height = 0 + charterless_equal_split_height = 0),
-# block.timestamp wall-clock clamp + parent-monotonicity at height 2000, open-
-# seat marketplace at height 4000. The escrow precompile 0x110A is gated OFF at
-# genesis (re-armed by a future milestone roll once its dispute-timeout paths
-# are proven live); confidential value ops remain gated off (DEC-029). The
-# re-genesis regenerated the 2x10 operator p2p keys from the standard BIP-39 ->
-# ML-DSA-65 mnemonics (fresh [[p2p]] peer IDs below); the two relay p2p
-# identities carried over. Structure — 2 consensus seats, each a 10-operator
-# cluster (threshold 7-of-10) — unchanged; see chains/genesis.
-genesis_hash = "0xe22733f4d7e013b93f0f825667fcf852cbf7ad1ca31a42a1bfcf1ab6d79c89a3"
-
-# ---- Dynamic genesis resolution ----
-# Full genesis content for this network, committed in this repo and served
-# over raw.githubusercontent. A booting node fetches genesis_url, recomputes
-# keccak256 over the raw on-disk bytes, and requires it to equal genesis_hash
-# above BEFORE init. This lets the OS image bake WHO to trust (this registry
-# path) rather than WHAT to run (no baked hash), so a re-genesis is picked up
-# on the next boot with no image rebuild.
-#
-# TRUST NOTE (testnet): genesis_hash is the authoritative pin and the only
-# integrity check on testnet. The expected hash and the served content share
-# one trust root (this repo / GitHub), so the keccak match is CIRCULAR — it is
-# NOT cryptographic integrity against a registry or GitHub compromise. This is
-# acceptable only because testnet is value-less and wiped without notice. See
-# README.md "Dynamic genesis resolution" and the mainnet-only groundwork below.
+# Canonical V16 R5 genesis identity. `genesis_hash` is the value emitted by the
+# mono-core genesis verifier; `genesis_sha256` pins the exact authored bytes.
+genesis_hash   = "0x8dfc309dfe8e35b4ca036631c7dc25b29e618ac8a9694e0e2bbe23d0f98ab1fe"
 genesis_url    = "https://raw.githubusercontent.com/monolythium/chain-registry/master/chains/genesis/testnet-69420.genesis.toml"
-genesis_sha256 = "5e5e6e0301bf742e2b7e81794ac20ca3fb5f39fdadf54230e1e0c625f9bf2cbb"
+genesis_sha256 = "0a02cabfb7d84cea3e77dcac76990ce3ceda233c7ba0d6f067d2b5b6e53dbb8a"
 
-# ---- Canonical milestone config (rolling-upgrade mechanism) ----
-# The canonical, cosigned milestone config for this network, committed in this
-# repo. Milestones activate protocol parameters / precompile gates at chosen
-# heights without a re-genesis. This is the CANONICAL REFERENCE, not a runtime
-# fetch: operators fetch milestones_url at deploy time, `cosign verify-blob` the
-# .sig/.pem published by the milestones-attestation CI to the rolling GitHub
-# Release `milestones-testnet-69420` (master requires PRs, so the bot publishes
-# the cosign artifacts to a Release rather than committing them beside the file),
-# then deploy and roll the fleet before the new activation height. The chain
-# loads the file as plain config (no in-file signature); as of the v0.3.3
-# re-genesis the genesis PINS milestone_digest (entries-only canonical digest),
-# so every node cryptographically refuses a divergent file at boot — this sha
-# pin + the cosign blob remain the deploy-time distribution checks on top.
+# Exact mono-core network-registry.toml installed on the accepted R5 fleet and
+# committed by the genesis treasury policy.
+network_registry_sha256 = "ef296a44b8ea83626b9bfcbfff4df6b47049ed0cd910d07defc7dfa2ef7853d4"
+
+# Posture-C milestone authority is rooted in genesis (`milestone_signer_root`,
+# threshold 2). The exact signed milestone artifact is vendored beside genesis.
+# 0x110A remains disabled at the cut. A plain edit/unsigned "milestone roll" is
+# not a valid re-arm: any future change must be a threshold-authorized signed
+# append accepted by the Posture-C verification path.
 milestones_url    = "https://raw.githubusercontent.com/monolythium/chain-registry/master/chains/milestones/testnet-69420.milestones.toml"
-milestones_sha256 = "7efe5018adb5b2566c732f57f4e440338cf69a05f17fb37e3ad164e9dddc3ec8"
+milestones_sha256 = "7739c3d702b72586dd9880bafedb3967393fab679e4d2e3268d038bcd7c452e7"
 
-# ---- MAINNET-ONLY genesis hardening (groundwork — not used on testnet) ----
-# These fields are documented placeholders for the mainnet trust model and are
-# intentionally left commented. They MUST NOT carry active values on this
-# testnet entry; a node MUST ignore them for testnet-69420. They break the
-# circular testnet trust by adding factors the registry writer does not
-# control. See README.md "Dynamic genesis resolution" for the full model.
-#
-# genesis_sig_url      = "<https URL of the cosign-signed genesis blob signature>"
-#   Detached cosign signature (.sig) over the genesis blob, fetched and
-#   verified with `cosign verify-blob` BEFORE the keccak hash check.
-#
-# genesis_cert_identity = "<cosign certificate identity / SAN regex>"
-#   Expected signing identity (OIDC SAN regex) baked into the signed OS image,
-#   NOT trusted from the registry. The image pins WHO may sign genesis.
-#
-# genesis_cert_issuer   = "<cosign OIDC issuer URL>"
-#   Expected OIDC issuer for the cosign certificate (e.g. the GitHub Actions
-#   OIDC issuer). Also image-baked, used with genesis_cert_identity.
-#
-# registry_rev          = "<full 40-char commit SHA of this registry>"
-#   Commit-SHA pin for this registry, baked per signed image instead of the
-#   moving `master` ref, so a registry-account compromise or stale CDN edge
-#   cannot silently redirect genesis_hash / genesis_url.
+# Exact source and executable accepted on the V16 R5 fleet. The frozen source
+# tree is 30a34766f75ee74b39ced71d8158666392f8e8e6. The native-PQ public RPC
+# gateway binary is b9eb72497d58e95354a6917d3821009522d98745f5a55cbf9533f3b675c4f428.
+binary_sha            = "f052832c62ad5640fa7a419018bba4b120a18587"
+binary_release_sha256 = "477704b170b620e9b52255b1dc26dddfcadb8664052867c1750ac40e3764851b"
+release_tag           = "v0.4.1-testnet"
+# Independently downloaded from the public immutable release and verified
+# against its signed archive and accepted executable identity.
+release_tarball_sha256 = "5d03e6fb7110613b28a18cda013bd16731e5ddb02b0307fea205eacbc97f311e"
 
-# mono-core commit used to build the advertised foundation operator binary.
-# 2026-07-02 v0.3.2 LIFECYCLE RE-GENESIS to `v0.3.2-testnet`, mono-core
-# master @ 3c698c85 (version 0.3.2) — see genesis 0x323399b4… above. v0.3.2
-# keeps the dynamic DVT cluster lifecycle active from genesis and fully purges
-# The cosigned v0.3.4 protocore release binary (built with the BRIDGE-FREE
-# feature set mdbx,indexer-postgres,mesh,sp1-verifier by the boot-smoke-gated
-# release pipeline — the sp1-bridge-verifier feature was removed with the
-# in-tree bridge stack) has sha256 =
-# 8472107f155ce9119ded703c7b6b8b935d66fdb1edba62a7b827d096ece847b8
-# (= binary_release_sha256 below). The live fleet runs THIS release binary.
-#
-# The `v0.3.4-testnet` GitHub release (tarball + cosign attestation) IS
-# published; its EXTRACTED protocore binary sha256 == binary_release_sha256
-# below (8472107f…), and the release .tar.gz sha256 == release_tarball_sha256
-# below. This binary drops the entire in-tree bridge stack (0x1008 verifier /
-# route / economics; SP1-Helios + CCIP) — the interop route becomes an external
-# provider integration. It retains the milestone-digest boot anchor (#111), the
-# round-keyed commit-path service-score settle gate (#212), escrow dispute
-# timeouts (#114/#108), the gated parent-monotonic timestamp clamp (#154),
-# and replay-verify armed by default on public profiles (#118).
-#
-# 2026-07-06 v0.3.5 ROLLING BINARY SWAP (protocore v0.3.5-testnet, mono-core
-# master @ 35b40a79 = 81ff5a2d + #229 + version bump). Genesis 0x25fd542b,
-# milestones 7efe5018, and milestone_digest 0xb9f4a07f are UNCHANGED — this is a
-# cosigned rolling swap, NOT a re-genesis. #229 fixes a tx-DELIVERY bug: the RPC
-# submit path (LiveTxBroadcaster::submit_raw) admitted a locally-submitted tx to
-# the local mempool but never broadcast it to Topic::Tx, so txs sent to any node
-# other than a cluster proposer were never included. v0.3.5 publishes the tx to
-# the gossip topic after admit (+ resurrects the mempool in_flight release). The
-# extracted release binary sha256 = f0dc28c6… (= binary_release_sha256 below);
-# the whole fleet runs THIS binary.
-#
-# Keep `binary_sha` = 35b40a79 in lock-step with the mono-core-sdk pin
-# (packages/ts/src/registry.ts) and the browser-wallet build-info trust pin.
-binary_sha   = "da04f8f5"
-
-# First-class binary provenance keys (machine-readable; consumed by the Monarch
-# OS release-drift guard `scripts/verify-release-matches-registry.sh`). These
-# MUST stay in lock-step with the comment block above on every re-genesis /
-# rolling binary swap. `release_tag` is the signed protocore release operators
-# run; `binary_release_sha256` is the sha256 of the EXTRACTED `protocore`
-# binary from that release's linux tarball (NOT the mono-core commit, which is
-# `binary_sha`).
-release_tag           = "v0.4.0-testnet"
-binary_release_sha256 = "259c67c1c7fc8bc3f8ca22c82953ea7dc54a9e2ceaa02d0fe0879ab5192f8227"
-# sha256 of the published v0.3.2-testnet release .tar.gz (its EXTRACTED binary
-# sha256 = binary_release_sha256 = c633e3a7… above; the .tar.gz carries the
-# cosign .sig/.pem produced by the protocore release.yml tag-workflow identity).
-release_tarball_sha256 = "732874becf4520da1d074969c301a7327cd738127e18b4751799fead32e1aa73"
-
-# ---- Native receipt proof trust policy ----
-# Optional trust metadata for SDK-side native receipt proof verification.
-# This testnet entry intentionally does not publish active signer keys yet.
-# Do not uncomment placeholders; publish only real, intended-active keys.
-#
-# [receipt_proof_trust.archive]
-# signature_threshold = 2
-# valid_from_height = 0
-# valid_to_height = 12345
-#
-# [[receipt_proof_trust.archive.signers]]
-# public_key = "0x..."
-# signer_id = "0x..."
-# valid_from_height = 0
-# valid_to_height = 12345
-# notes = "placeholder only"
-#
-# [receipt_proof_trust.finality]
-# mode = "cluster"
-# chain_id = 69420
-# threshold = 5
-# committee_size = 7
-# cluster_public_key = "0x..."
-# valid_from_round = 0
-# valid_to_round = 12345
-#
-# # Alternative finality policy shape, instead of cluster mode:
-# # [receipt_proof_trust.finality]
-# # mode = "multisig"
-# # threshold = 5
-# # [[receipt_proof_trust.finality.signers]]
-# # authority_index = 0
-# # public_key = "0x..."
-# # valid_from_round = 0
-# # valid_to_round = 12345
-# # notes = "placeholder only"
-
-# ---- Foundation RPC endpoints ----
-# Order = first-touch preference. Clients walk top-to-bottom and pick
-# the first reachable endpoint. After connection the SDK switches to
-# on-chain `node-registry` (precompile 0x1005) for live peer selection.
-#
-# The healthy public foundation node endpoints are advertised below. Each
-# protocore process listens on 0.0.0.0:8545; the cost-based RPC rate-limiter is
-# the DoS mitigation. Reachability of each endpoint below was confirmed by an
-# external provenance, sync, and P2P TCP probes at the v0.1.44 testnet head.
-#
-# RELAYS FIRST (ordering is load-bearing). The relays below run
-# `serve_snapshots = true` and serve the COMPLETE fast-sync closure (the [1,R]
-# `committed-ref-by-height` index). Operators serve only a partial snapshot
-# (`by_height = 0`), which makes a cold-start node fatal-abort on the A2 boot
-# invariant and crash-loop. An un-pinned node resolves its `fast_sync` seeds in
-# THIS file's order, so the relays MUST lead the `[[rpc]]` list. Pinned fleet
-# nodes set their own `[fast_sync].seed_rpc_urls` and ignore this ordering, so
-# this only affects fresh / reprovisioned cold-start nodes — exactly the ones
-# that need a complete closure. Do not move operators above the relays.
-
+# Wallet-facing JSON-RPC. R5 operator and relay RPC ports require the native-PQ
+# transport and are intentionally not advertised as plaintext HTTP endpoints.
 [[rpc]]
-url      = "http://178.105.45.210:8545"
+url      = "https://rpc.monolythium.com"
 provider = "monolythium-foundation"
-region   = "fsn1"
 tier     = "official"
-notes    = "relay-1; serves complete fast-sync closure (cold-start preferred)"
+notes    = "canonical native-PQ-terminating public RPC gateway"
 
-[[rpc]]
-url      = "http://65.21.252.34:8545"
-provider = "monolythium-foundation"
-region   = "hel1"
-tier     = "official"
-notes    = "relay-2; serves complete fast-sync closure (cold-start preferred)"
-
-[[rpc]]
-url      = "http://178.105.12.9:8545"
-provider = "monolythium-foundation"
-region   = "fsn1"
-tier     = "official"
-notes    = "operator-1"
-
-[[rpc]]
-url      = "http://178.105.15.216:8545"
-provider = "monolythium-foundation"
-region   = "fsn1"
-tier     = "official"
-notes    = "operator-2; primary foundation seed"
-
-[[rpc]]
-url      = "http://178.104.233.182:8545"
-provider = "monolythium-foundation"
-region   = "nbg1"
-tier     = "official"
-notes    = "operator-3"
-
-[[rpc]]
-url      = "http://65.108.94.1:8545"
-provider = "monolythium-foundation"
-region   = "hel1"
-tier     = "official"
-notes    = "operator-4"
-
-[[rpc]]
-url      = "http://95.216.154.155:8545"
-provider = "monolythium-foundation"
-region   = "hel1"
-tier     = "official"
-notes    = "operator-5"
-
-[[rpc]]
-url      = "http://87.99.145.48:8545"
-provider = "monolythium-foundation"
-region   = "ash"
-tier     = "official"
-notes    = "operator-6; US east"
-
-[[rpc]]
-url      = "http://5.223.85.76:8545"
-provider = "monolythium-foundation"
-region   = "sin"
-tier     = "official"
-notes    = "operator-7; APAC"
-
-[[rpc]]
-url      = "http://142.132.180.99:8545"
-provider = "monolythium-foundation"
-region   = "fsn1"
-tier     = "official"
-notes    = "operator-8"
-
-[[rpc]]
-url      = "http://95.217.156.190:8545"
-provider = "monolythium-foundation"
-region   = "hel1"
-tier     = "official"
-notes    = "operator-10"
-
-[[rpc]]
-url      = "http://162.55.54.198:8545"
-provider = "monolythium-foundation"
-region   = "fsn1"
-tier     = "official"
-notes    = "operator-9"
-
-# ---- P2P seeds ----
-# libp2p multiaddrs for the healthy foundation endpoints advertised here. Port
-# 29898 is the gossipsub mesh port. Public P2P is permissionless at the network
-# edge; operator/cluster admission remains governed by on-chain registration and
-# cluster policy.
-#
-# PEER-ID NOTE (2026-07-02 v0.3.2 lifecycle re-genesis): the IPs are
-# unchanged and confirmed healthy on the new genesis (0x323399b4…). The
-# /p2p/<peer-id> components were re-collected node-side from each live node's
-# `protocore` libp2p identity after the re-genesis and are current: the 10
-# cluster-0 operator peer IDs were regenerated by the wipe+redeploy cutover
-# (the libp2p identity is a freshly generated ed25519 keypair per redeploy) and
-# have been refreshed here; the two relay peer IDs were preserved by the cutover
-# (their operator/p2p key survived) and are unchanged. genesis_hash remains the
-# authoritative integrity pin; the [[rpc]] fast-sync seeds are IP-only; node
-# discovery is hybrid (DHT + seeds).
-
-# 4-CLUSTER seeds (v0.4.0 re-genesis 2026-07-07): 28 operators = 4 DVT clusters x 7 (cluster-major;
-# cluster A concentrates the 5.78.x Helsinki subnet). Peer IDs collected live post-cutover.
-
-# 4x10 seeds (v0.4.0 7-of-10 re-genesis 2026-07-07): 40 operators = 4 DVT clusters x 10 (cluster-major;
-# cluster A = the 10 Helsinki 5.78.x hosts as one seat). 7-of-10 threshold. Peer IDs collected live post-cutover.
-
+# P2P bootstrap endpoints from the exact V16 R5 network-registry artifact.
+# Relays lead, followed by validators in node-id order.
+# relay-0
 [[p2p]]
-multiaddr = "/ip4/5.78.236.250/tcp/29898/p2p/12D3KooWKhqR2c9ip7bDXN3SHPfMaHDYMooGBUCVEBpKiVfsXzy6"
+multiaddr = "/ip4/178.105.45.210/tcp/29898/p2p/12D3KooWNwaWFMBCD55D9VoAF7nxva7H8pKzmLcDW7HCKmxbB7Qb"
 
+# relay-1
 [[p2p]]
-multiaddr = "/ip4/5.78.233.163/tcp/29898/p2p/12D3KooWDghqff7Bu3xQPAuqVCsmWgSoG8jpYbbawDNavoiPB8yD"
+multiaddr = "/ip4/65.21.252.34/tcp/29898/p2p/12D3KooWAyeb3mC1q6UL7rTwnJPaZV6fVS3sV6wGNZwVGfaF1UNX"
 
+# node-0
 [[p2p]]
-multiaddr = "/ip4/5.78.226.88/tcp/29898/p2p/12D3KooWQsjKqGadAEmVKoUCP347A3xc84JbN1En6GwcsESEMWyP"
+multiaddr = "/ip4/5.78.236.250/tcp/29898/p2p/12D3KooWNYwbXvkpNLxnJkWVGLm3HX6nRpsZTqzRxUfVMXBALPFe"
 
+# node-1
 [[p2p]]
-multiaddr = "/ip4/5.78.195.220/tcp/29898/p2p/12D3KooWPtJZD2ePxNyDWrJ1attjZiA2FiM4kPZiowemYyMM6PX5"
+multiaddr = "/ip4/5.78.233.163/tcp/29898/p2p/12D3KooWKbZdqF5exics8WCyRjq2osReypoFNtmR4tvZf9JXeCJP"
 
+# node-2
 [[p2p]]
-multiaddr = "/ip4/5.78.233.251/tcp/29898/p2p/12D3KooWN6uJqUtb8AEDJNGWeaymp1HrwkJKZawF94o7Xe6C1zBM"
+multiaddr = "/ip4/5.78.226.88/tcp/29898/p2p/12D3KooWGem4SUN4BiTeBkTKisACkqTBAFSVc12HP9UFszhjQjnr"
 
+# node-3
 [[p2p]]
-multiaddr = "/ip4/5.78.235.111/tcp/29898/p2p/12D3KooWFgRDLKrDtJ5oGYDB1vfKxmL5yDJe4jqhrLobr1Th7Tmg"
+multiaddr = "/ip4/5.78.195.220/tcp/29898/p2p/12D3KooWG9MHCKCSXYxLpLn3SfjwtpqeohhEmMdJDZ2jrNMcqTxf"
 
+# node-4
 [[p2p]]
-multiaddr = "/ip4/5.78.236.36/tcp/29898/p2p/12D3KooWAvY4UHyoMd1GCUtB9121CvTvVqJTohL3o6MTvJSCbYPM"
+multiaddr = "/ip4/5.78.233.251/tcp/29898/p2p/12D3KooWQQpSdvMwn62uXohmJ6VgbMdFaerr6qTRVMZS9KW5raZe"
 
+# node-5
 [[p2p]]
-multiaddr = "/ip4/5.78.229.250/tcp/29898/p2p/12D3KooWECSLL2shfVVqAsfr7tSnYmRe1UeuCCxHPzRr3QKHevsS"
+multiaddr = "/ip4/5.78.235.111/tcp/29898/p2p/12D3KooWFiZbB2z5j857xrr8nxJRq8WqF7hmfiwJvyupXHF2r39N"
 
+# node-6
 [[p2p]]
-multiaddr = "/ip4/5.78.231.123/tcp/29898/p2p/12D3KooWJqGhiJPaB4bTqQ1n197va5EfE2NKeTnHyVZtPzMQ5VNv"
+multiaddr = "/ip4/5.78.236.36/tcp/29898/p2p/12D3KooWJvhTXoDFm6cdwA2w4TW8uPtwXVzW2o3Xor8bmNQbMA8c"
 
+# node-7
 [[p2p]]
-multiaddr = "/ip4/5.78.239.10/tcp/29898/p2p/12D3KooWQL2hqkZF4N3yDyb2wPhLFbQihxEcqZJDoo711rEFGyDp"
+multiaddr = "/ip4/5.78.229.250/tcp/29898/p2p/12D3KooWBFoDUABqPC7wUqA9bEdMzzgUutULT4rS3NyEiM4Uhbyr"
 
+# node-8
 [[p2p]]
-multiaddr = "/ip4/178.105.12.9/tcp/29898/p2p/12D3KooWKQtYyLQXDBXapjt2UwmMPV8s9TjDyzgXzmQgvvSKLpLJ"
+multiaddr = "/ip4/5.78.231.123/tcp/29898/p2p/12D3KooWNZTPoF4zqGHDoJmEHQPxs2iEB8HJUgVeX2CGHbAzfmzy"
 
+# node-9
 [[p2p]]
-multiaddr = "/ip4/65.108.94.1/tcp/29898/p2p/12D3KooWQfhPxFknDzw3fn54aqrDMd4TmQLjHRUVPvj8Q1k4ps26"
+multiaddr = "/ip4/5.78.239.10/tcp/29898/p2p/12D3KooWKZ2crnXfgUkM2P9sAHqR6NXsE9irazRmDGiWsiTpf1yN"
 
+# node-10
 [[p2p]]
-multiaddr = "/ip4/5.223.85.76/tcp/29898/p2p/12D3KooWN5eQsz4KW659fXgzzWNqJx5EM3WmQaBHb8qKvVAFyg5z"
+multiaddr = "/ip4/178.105.12.9/tcp/29898/p2p/12D3KooWM6MWgzvY2c4yWPQC1dnasPV6UBFYbDEkjHnLJkEvgDZb"
 
+# node-11
 [[p2p]]
-multiaddr = "/ip4/95.217.156.190/tcp/29898/p2p/12D3KooW9rMkr7zGdxkHJPu67YUYuo2ZpFhaCeMhVvMPf6AcJMe7"
+multiaddr = "/ip4/65.108.94.1/tcp/29898/p2p/12D3KooWQzySK1FcFvF4arfHu8aLUhTWT3LJhNYuerdbGGggdStq"
 
+# node-12
 [[p2p]]
-multiaddr = "/ip4/178.104.98.80/tcp/29898/p2p/12D3KooWCcDGLBvxr2DzjTpoJUfXr3W9xiXCJUaNAfzZtwSoxQjp"
+multiaddr = "/ip4/5.223.85.76/tcp/29898/p2p/12D3KooWL5t2PVb17FtZuVK6x5a9vXj5u57ykBKfGCNihWyYiCZ1"
 
+# node-13
 [[p2p]]
-multiaddr = "/ip4/178.105.218.151/tcp/29898/p2p/12D3KooWNxNRwPip2e8QeAdFp3CKvay2ceq6LXKU7FU1xHEWxPTP"
+multiaddr = "/ip4/95.217.156.190/tcp/29898/p2p/12D3KooWJ1k5ZXEV6HfrUB53PdRUAqLp24o38GwbG37gDyiJa9Qb"
 
+# node-14
 [[p2p]]
-multiaddr = "/ip4/46.62.214.97/tcp/29898/p2p/12D3KooWQ8BwX9AenXzRQEgAJkTG4aCkerQTNa8tKXnro8c5UHGL"
+multiaddr = "/ip4/178.104.98.80/tcp/29898/p2p/12D3KooWSdGUZ2LsNP16vjuBRTtKpq6yGHe8ktf9AdTkDmib777C"
 
+# node-15
 [[p2p]]
-multiaddr = "/ip4/157.180.92.16/tcp/29898/p2p/12D3KooWMv9gvPNEduebqsU1XqE7nHLexdnMm9JgPxGfsZVm368x"
+multiaddr = "/ip4/178.105.218.151/tcp/29898/p2p/12D3KooWHbTACaFBneM7Mmvy5YAkK4btVYgDWjTd4xPs6EfBwVuo"
 
+# node-16
 [[p2p]]
-multiaddr = "/ip4/77.42.67.172/tcp/29898/p2p/12D3KooWJttyrhP2tQeJYSaMHYWkhv97U7Sk1Ztf9xMuRRXzfbcK"
+multiaddr = "/ip4/46.62.214.97/tcp/29898/p2p/12D3KooWEXAhZ6zSi1UawFZiEzTXEkxr3ztvyYtBrVMLG3Ce7sgn"
 
+# node-17
 [[p2p]]
-multiaddr = "/ip4/46.62.156.131/tcp/29898/p2p/12D3KooWCmNszhmMHqcQ4AjChcvRUkYBcCauHSrZ572ih4pCZW5c"
+multiaddr = "/ip4/157.180.92.16/tcp/29898/p2p/12D3KooWGXZEk9iwkfEGx1zRjiJZw2nERVK3ChuFSoTMtSE1peFv"
 
+# node-18
 [[p2p]]
-multiaddr = "/ip4/178.105.15.216/tcp/29898/p2p/12D3KooWEvJ7TXk71x6Qdb2tXLpZwn1jMAybS8jg3BHtsTcv5rRY"
+multiaddr = "/ip4/77.42.67.172/tcp/29898/p2p/12D3KooWEd7vsUDKGWeBDk9qjBi1rPQSbKNDFCKUMjGRMspM9N8z"
 
+# node-19
 [[p2p]]
-multiaddr = "/ip4/95.216.154.155/tcp/29898/p2p/12D3KooWEbqK9AxDS8an6Hr6Botgeapd8tKJ1QKitsiT5XRGrr8N"
+multiaddr = "/ip4/46.62.156.131/tcp/29898/p2p/12D3KooWNEPYixddf5ATXpPY7CMVr3VWwT5rFtw8irU2ZcfVfT1R"
 
+# node-20
 [[p2p]]
-multiaddr = "/ip4/142.132.180.99/tcp/29898/p2p/12D3KooWQqrU7woVz5aV6CmC9Tr9aE1hJZz5fVZe5ftm9tgMaDc9"
+multiaddr = "/ip4/178.105.15.216/tcp/29898/p2p/12D3KooWP8L97sUMAujEqt54VyDENjVTTr4d7XcbX4SHqUFajywb"
 
+# node-21
 [[p2p]]
-multiaddr = "/ip4/116.202.8.181/tcp/29898/p2p/12D3KooWSCMHjawVh1NL5EFPGm2bpVoSFgR6SecQfB2i6XiTD33F"
+multiaddr = "/ip4/95.216.154.155/tcp/29898/p2p/12D3KooWJaMLyLHzGLxsUGnp1vNUmZgFeQyTRCjDULcrDwCG8gfc"
 
+# node-22
 [[p2p]]
-multiaddr = "/ip4/46.225.26.24/tcp/29898/p2p/12D3KooWNHfJsCVHtt1XvsSwfPjiHTiUAhvkwdm89FAo39MkmPrx"
+multiaddr = "/ip4/142.132.180.99/tcp/29898/p2p/12D3KooWQkQmzEYkMVQYErKhKKCtHmaqy4QuyJLxCY4q4CxSVaaT"
 
+# node-23
 [[p2p]]
-multiaddr = "/ip4/168.119.181.105/tcp/29898/p2p/12D3KooWPeuMdrpsinV2dcEJF9ihC6VSZVpyM8UX5nfNHq23NAui"
+multiaddr = "/ip4/5.223.65.201/tcp/29898/p2p/12D3KooWBeHBVeF9F29PP8ZaDVvMkEgAj5MA1XtQG6JidLmQuN72"
 
+# node-24
 [[p2p]]
-multiaddr = "/ip4/167.233.235.205/tcp/29898/p2p/12D3KooWFzGV4cPqJtmpaZPezk8KWMmjtBaexZSvKfQ7yXmcZDTd"
+multiaddr = "/ip4/49.12.14.148/tcp/29898/p2p/12D3KooWMN99bUVBvZC9bfZiTeUWeCSSrt3EEuMXy5ApzoYiT4gq"
 
+# node-25
 [[p2p]]
-multiaddr = "/ip4/167.233.225.50/tcp/29898/p2p/12D3KooWDAP7fjW46z7HjQQSuphfpcSEWPgXrfyg63fN91KE95V9"
+multiaddr = "/ip4/49.12.40.11/tcp/29898/p2p/12D3KooWJkjA3MT3Mr19YtN8JWKmntisRNphW3Amj6RNYKqe9h9b"
 
+# node-26
 [[p2p]]
-multiaddr = "/ip4/138.199.144.111/tcp/29898/p2p/12D3KooWEtzQjzFGtAnHEuMMEonmUDKmZxH3BbZFFU46r2M7Nrzd"
+multiaddr = "/ip4/167.233.235.205/tcp/29898/p2p/12D3KooWBRyDpTcrJ5YoeqbCTrKEhEjtv9U1fwkneijvGjVx8FPv"
 
+# node-27
 [[p2p]]
-multiaddr = "/ip4/167.233.224.96/tcp/29898/p2p/12D3KooWAhyepSDFVMb3TNMJLywK63RNm1vuzq7Hu91xghP9bpQF"
+multiaddr = "/ip4/167.233.225.50/tcp/29898/p2p/12D3KooWL1NEYYikKDe1ZxMsahEAndHTRG8qooXv8HDnDjgSZCsL"
 
+# node-28
 [[p2p]]
-multiaddr = "/ip4/178.104.233.182/tcp/29898/p2p/12D3KooWNLuxyXpzfeR2t3ck3Fn5c34QKpVnRrYTQHgHcf8MhXqE"
+multiaddr = "/ip4/138.199.144.111/tcp/29898/p2p/12D3KooWKR2HTVr8egnkL7Wf23QYMe5kfQ9vpX1x4itEGpEefTf2"
 
+# node-29
 [[p2p]]
-multiaddr = "/ip4/87.99.145.48/tcp/29898/p2p/12D3KooWJuFXaVo6ooedLLgCqP6Aiv5fZBWns38pPgVdv6Z8YFfE"
+multiaddr = "/ip4/167.233.224.96/tcp/29898/p2p/12D3KooWGLvM8b75DFJvE3RGG5pPwG2VtpR6qP8msTzjFnyNZstW"
 
+# node-30
 [[p2p]]
-multiaddr = "/ip4/162.55.54.198/tcp/29898/p2p/12D3KooWMHB1Jnioyn8iqVdcR4e9ShS9itn7vPc8mBMVEspR4Hov"
+multiaddr = "/ip4/178.104.233.182/tcp/29898/p2p/12D3KooWKdY5FGYq7b4vHZKVcCcFXUBwzPeWsHUYkpzqPgjgtn2R"
 
+# node-31
 [[p2p]]
-multiaddr = "/ip4/49.12.14.148/tcp/29898/p2p/12D3KooWMFeuJudHw1akygZBYZ9o93j2TtgPJ6qG8s5MuejKS7Ze"
+multiaddr = "/ip4/87.99.145.48/tcp/29898/p2p/12D3KooWDeSVKM3DXctzotB37FhydhGt37qXMKwg6xHbWZDdAYfE"
 
+# node-32
 [[p2p]]
-multiaddr = "/ip4/49.12.40.11/tcp/29898/p2p/12D3KooWChARBFkhte2A4wbhRikuBNJmVzZ4rK3gyutPq1oynmxf"
+multiaddr = "/ip4/162.55.54.198/tcp/29898/p2p/12D3KooWD9VoKW6j2b74SsmHhRQrytG5NenpHmnGogn6LnjE2RHQ"
 
+# node-33
 [[p2p]]
-multiaddr = "/ip4/157.180.72.92/tcp/29898/p2p/12D3KooWC8wgFpgdkoyA6VKTnVb9YkJRsCRhxn93QcqPANEeezBm"
+multiaddr = "/ip4/116.202.8.181/tcp/29898/p2p/12D3KooWJLRAMpaQS8G27oCfJBgygfgB7QRvCXie4BKd6esoVQ3E"
 
+# node-34
 [[p2p]]
-multiaddr = "/ip4/77.42.35.183/tcp/29898/p2p/12D3KooWA44YB3auTGhPAoMpymzhovnugX22DAMMiVhAWoEALB5A"
+multiaddr = "/ip4/46.225.26.24/tcp/29898/p2p/12D3KooWQH7WKHDWmUzJKcub6nJ2bFGHmzUiZdVr2Q3GWfxcFomd"
 
+# node-35
 [[p2p]]
-multiaddr = "/ip4/46.62.132.92/tcp/29898/p2p/12D3KooWBuJNuPxXFAE5aAwvi8hd1GorHT8CXcF6mDsk2fBeTAB2"
+multiaddr = "/ip4/168.119.181.105/tcp/29898/p2p/12D3KooW9xMLroyMVZgvnEREySBX9hEs9rp8zqT8FLKoamF6GS2G"
 
+# node-36
 [[p2p]]
-multiaddr = "/ip4/37.27.35.64/tcp/29898/p2p/12D3KooWC4HaGjR4N4C1H77dvQ8We18u5s37q6bAbcWkrnGTPQNt"
+multiaddr = "/ip4/157.180.72.92/tcp/29898/p2p/12D3KooWQ4W8QPieYyxzqVfbzwYcu5tN15mXWEPvBqF3ZMno2Muf"
 
+# node-37
 [[p2p]]
-multiaddr = "/ip4/5.223.65.201/tcp/29898/p2p/12D3KooWFDJTuUoJzqojgdkZ8JXTyn1oibxoAJF9JfqiiKZAWsfB"
+multiaddr = "/ip4/77.42.35.183/tcp/29898/p2p/12D3KooWM9PPsftZSmsjCQ26NGVwErkbRPe6du1oWKKg18uQRUEo"
 
-# ---- Explorers ----
-# Live block explorer for the foundation testnet. Serves account, anchor,
-# and transaction views over chain-69420.
+# node-38
+[[p2p]]
+multiaddr = "/ip4/46.62.132.92/tcp/29898/p2p/12D3KooWBDWMzpzbPTtvEccLQ6mBppe4pDGTnJaNf7H6gjTgrPCB"
 
+# node-39
+[[p2p]]
+multiaddr = "/ip4/37.27.35.64/tcp/29898/p2p/12D3KooWBTThKnbvKDueKoXy3Ru9n6bL19imCDWiAnCicFWtSm1F"
+
+# Live block explorer for chain 69420.
 [[explorer]]
 url  = "https://monoscan.xyz"
 name = "Monoscan (testnet)"

@@ -70,8 +70,9 @@ node scripts/validate-chain-registry.mjs  # or: npm run validate
 
 The validator checks every `chains/*.toml` file: native receipt proof trust
 policy completeness, key lengths, thresholds, duplicate signer rows, validity
-bounds, and — for any entry with a `genesis_url` pointing at committed
-`chains/genesis/*.toml` content — that the genesis file exists and its
+bounds, exact-artifact provenance pins (including
+`network_registry_sha256`), and — for any entry with a `genesis_url` pointing
+at committed `chains/genesis/*.toml` content — that the genesis file exists and its
 `keccak256(raw bytes) == genesis_hash` (and `sha256 == genesis_sha256` when
 set). Its only dependency is the audited `@noble/hashes` keccak256, pinned via
 `package-lock.json`. The same check runs in CI
